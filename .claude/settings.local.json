@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --env-file=.env scripts/migrate-images-to-cloudinary.mjs --apply)",
+      "Bash(awk '{print $2}')"
+    ]
+  }
+}

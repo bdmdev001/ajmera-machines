@@ -1,0 +1,208 @@
+.headerWrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  background: rgba(255, 255, 255, .96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+
+.headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 78px;
+}
+
+/* ================= Logo ================= */
+
+.logo {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logoImg {
+  width: 210px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ================= Search ================= */
+
+.centerSearch {
+  flex: 1;
+  max-width: 520px;
+}
+
+.centerSearch>* {
+  width: 100%;
+}
+
+/* ================= Navigation ================= */
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.navLink {
+  position: relative;
+  color: #023047;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: .25s;
+  padding: 8px 0;
+}
+
+.navLink:hover {
+  color: #219ebc;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #ffb703;
+  transition: .3s;
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.navLinkActive {
+  color: #ffb703;
+}
+
+.navLinkActive::after {
+  width: 100%;
+}
+
+/* ================= Right ================= */
+
+.rightArea {
+  display: flex;
+  align-items: center;
+}
+
+.mobileMenuBtn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #023047;
+  padding: 6px;
+}
+
+/* ================= Mobile Drawer ================= */
+
+.mobileDrawer {
+  position: fixed;
+  top: 78px;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, .08);
+  padding: 20px;
+  animation: slideDown .25s ease;
+}
+
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobileNavLink {
+  text-decoration: none;
+  color: #023047;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.mobileNavLink:hover {
+  background: #f5f5f5;
+}
+
+.mobileNavLinkActive {
+  color: #ffb703;
+  background: #fff8e5;
+}
+
+.mobileSearch {
+  margin-top: 18px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= Responsive ================= */
+
+@media(max-width:1100px) {
+
+  .logoImg {
+    width: 180px;
+  }
+
+  .centerSearch {
+    max-width: 380px;
+  }
+
+  .nav {
+    gap: 18px;
+  }
+
+}
+
+@media(max-width:900px) {
+
+  .centerSearch {
+    display: none;
+  }
+
+}
+
+@media(max-width:768px) {
+
+  .headerContainer {
+    height: 72px;
+  }
+
+  .logoImg {
+    width: 150px;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .mobileMenuBtn {
+    display: block;
+  }
+
+  .mobileDrawer {
+    top: 72px;
+  }
+
+}
