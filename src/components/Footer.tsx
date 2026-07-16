@@ -272,13 +272,13 @@ export default function Footer() {
           <div className="container footer-bottom" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, padding: '20px 20px' }}>
             <p style={{ fontSize: 13, color: 'rgba(238,241,244,0.5)', margin: 0 }}>© {year} Ajmera Enterprise. All Rights Reserved.</p>
 
-            <div className="footer-legal" style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: 'rgba(238,241,244,0.58)' }}>
+            {/* <div className="footer-legal" style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: 'rgba(238,241,244,0.58)' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><Shield size={15} style={{ color: 'rgba(238,241,244,0.45)' }} /> Inspected &amp; Verified Stock</span>
               <span style={{ opacity: 0.35 }}>•</span>
               <Link href="/products" className="footer-contact">Stocklist</Link>
               <span style={{ opacity: 0.35 }}>•</span>
               <Link href="/contact" className="footer-contact">Contact</Link>
-            </div>
+            </div> */}
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               <Link href="https://bdm.co.in" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'rgba(238,241,244,0.55)' }}>
