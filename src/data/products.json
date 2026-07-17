@@ -11,11 +11,26 @@
     "technical_specifications": "Length : 1200mm\r\nCapacity : 35 ton",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "2010_1.jpeg",
-      "2010_2.jpeg",
-      "2010_3.jpeg",
-      "2010_4.jpeg",
-      "2010_5.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2010_1",
+        "public_id": "ajmera/machines/2010_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2010_2",
+        "public_id": "ajmera/machines/2010_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2010_3",
+        "public_id": "ajmera/machines/2010_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2010_4",
+        "public_id": "ajmera/machines/2010_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2010_5",
+        "public_id": "ajmera/machines/2010_5"
+      }
     ]
   },
   {
@@ -30,11 +45,26 @@
     "technical_specifications": "Table Size : 1100mm x 250mm\r\nSpindle Taper ISO 40",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "2009_1.jpeg",
-      "2009_2.jpeg",
-      "2009_3.jpeg",
-      "2009_4.jpeg",
-      "2009_5.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2009_1",
+        "public_id": "ajmera/machines/2009_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2009_2",
+        "public_id": "ajmera/machines/2009_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2009_3",
+        "public_id": "ajmera/machines/2009_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2009_4",
+        "public_id": "ajmera/machines/2009_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2009_5",
+        "public_id": "ajmera/machines/2009_5"
+      }
     ]
   },
   {
@@ -49,15 +79,42 @@
     "technical_specifications": "Pressure Capacity : 10 ton\r\nStroke Length : 24/26mm\r\nBlade Width : 250x250 / 50x150mm\r\nMax. Plate Thickness : 3.2mm\r\nHydraulic Motor Power : 2.2Kw\r\nMachine Weight : 1300kg",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "2008_1.jpeg",
-      "2008_2.jpeg",
-      "2008_3.jpeg",
-      "2008_4.jpeg",
-      "2008_5.jpeg",
-      "2008_6.jpeg",
-      "2008_7.jpeg",
-      "2008_8.jpeg",
-      "2008_9.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2008_1",
+        "public_id": "ajmera/machines/2008_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2008_2",
+        "public_id": "ajmera/machines/2008_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2008_3",
+        "public_id": "ajmera/machines/2008_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2008_4",
+        "public_id": "ajmera/machines/2008_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2008_5",
+        "public_id": "ajmera/machines/2008_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2008_6",
+        "public_id": "ajmera/machines/2008_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2008_7",
+        "public_id": "ajmera/machines/2008_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2008_8",
+        "public_id": "ajmera/machines/2008_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2008_9",
+        "public_id": "ajmera/machines/2008_9"
+      }
     ]
   },
   {
@@ -72,11 +129,26 @@
     "technical_specifications": "Centre Height : 125mm\r\nSwing : 250mm\r\nAdmit Between   Centre : 750mm\r\nwith Internal Grinding Attachment\r\nDegree Table. \r\nDegree Work Head\r\nDegree Head Stock",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "2006_1.jpeg",
-      "2006_2.jpeg",
-      "2006_3.jpeg",
-      "2006_4.jpeg",
-      "2006_5.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2006_1",
+        "public_id": "ajmera/machines/2006_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2006_2",
+        "public_id": "ajmera/machines/2006_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2006_3",
+        "public_id": "ajmera/machines/2006_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2006_4",
+        "public_id": "ajmera/machines/2006_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2006_5",
+        "public_id": "ajmera/machines/2006_5"
+      }
     ]
   },
   {
@@ -91,12 +163,30 @@
     "technical_specifications": "Table Size : 600 x 140mm\r\nElectro Degree Magnet Size : 380mm x 120mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "2005_1.jpeg",
-      "2005_2.jpeg",
-      "2005_3.jpeg",
-      "2005_4.jpeg",
-      "2005_5.jpeg",
-      "2005_6.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2005_1",
+        "public_id": "ajmera/machines/2005_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2005_2",
+        "public_id": "ajmera/machines/2005_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2005_3",
+        "public_id": "ajmera/machines/2005_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2005_4",
+        "public_id": "ajmera/machines/2005_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2005_5",
+        "public_id": "ajmera/machines/2005_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2005_6",
+        "public_id": "ajmera/machines/2005_6"
+      }
     ]
   },
   {
@@ -111,8 +201,14 @@
     "technical_specifications": "Table Size : 450mm x 150mm\r\nElectro Magnet Size : 280mm x 100mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "2004_1.jpeg",
-      "2004_2.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2004_1",
+        "public_id": "ajmera/machines/2004_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2004_2",
+        "public_id": "ajmera/machines/2004_2"
+      }
     ]
   },
   {
@@ -127,10 +223,22 @@
     "technical_specifications": "Electro Magnet Size : 600mm x 300mm\r\nX Travel : 680mm\r\nY Travel : 330mm\r\nZ Travel : 330mm\r\nWheel Size : 305mm x 19-32mm  x 76.2mm\r\nwith Dust collector, Coolant Tank.",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "2001_1.jpeg",
-      "2001_2.jpeg",
-      "2001_3.jpeg",
-      "2001_4.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2001_1",
+        "public_id": "ajmera/machines/2001_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2001_2",
+        "public_id": "ajmera/machines/2001_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2001_3",
+        "public_id": "ajmera/machines/2001_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2001_4",
+        "public_id": "ajmera/machines/2001_4"
+      }
     ]
   },
   {
@@ -145,10 +253,22 @@
     "technical_specifications": "Electro Magnet Size : 600mm x 400mm\r\nX Travel : 600mm\r\nY Travel : 500mm\r\nZ Travel : 400mm\r\nGrinding Wheel Dimension : 355mm x 38mm  x 127mm\r\nMain Motor : 7.5Kw\r\nMachine Weight : 4500kg",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "2000_1.jpeg",
-      "2000_2.jpeg",
-      "2000_3.jpeg",
-      "2000_4.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2000_1",
+        "public_id": "ajmera/machines/2000_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2000_2",
+        "public_id": "ajmera/machines/2000_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2000_3",
+        "public_id": "ajmera/machines/2000_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/2000_4",
+        "public_id": "ajmera/machines/2000_4"
+      }
     ]
   },
   {
@@ -163,15 +283,42 @@
     "technical_specifications": "Capacity : 25Ton\r\nNumber of Strokes : 250\r\nStroke Length : 75mm\r\nDie Height : 200mm\r\nSlide Adjustment : 50mm\r\nSlide Dimension : 250 x 150mm\r\nBolster Dimension : 600 x 300 45mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1999_1.jpeg",
-      "1999_2.jpeg",
-      "1999_3.jpeg",
-      "1999_4.jpeg",
-      "1999_5.jpeg",
-      "1999_6.jpeg",
-      "1999_7.jpeg",
-      "1999_8.jpeg",
-      "1999_9.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1999_1",
+        "public_id": "ajmera/machines/1999_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1999_2",
+        "public_id": "ajmera/machines/1999_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1999_3",
+        "public_id": "ajmera/machines/1999_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1999_4",
+        "public_id": "ajmera/machines/1999_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1999_5",
+        "public_id": "ajmera/machines/1999_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1999_6",
+        "public_id": "ajmera/machines/1999_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1999_7",
+        "public_id": "ajmera/machines/1999_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1999_8",
+        "public_id": "ajmera/machines/1999_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1999_9",
+        "public_id": "ajmera/machines/1999_9"
+      }
     ]
   },
   {
@@ -186,11 +333,26 @@
     "technical_specifications": "Spindle size: 75 mm\r\nSpindle speeds: 18-1800 rpm\r\nSpindle taper: MT4 \r\nX-Axis: 1250 mm  \r\nY-Axis: 900 mm  \r\nZ-Axis: 950 mm  \r\nW-Axis: 560 mm\r\nTable size: 950x950 mm\r\nMax. table load: 3000 kg",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1998_1.jpg",
-      "1998_2.jpeg",
-      "1998_3.jpeg",
-      "1998_4.jpg",
-      "1998_5.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1998_1",
+        "public_id": "ajmera/machines/1998_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1998_2",
+        "public_id": "ajmera/machines/1998_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1998_3",
+        "public_id": "ajmera/machines/1998_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1998_4",
+        "public_id": "ajmera/machines/1998_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1998_5",
+        "public_id": "ajmera/machines/1998_5"
+      }
     ]
   },
   {
@@ -205,13 +367,34 @@
     "technical_specifications": "Bending capacity: 175 ton\r\nMax bending length: 4800 mm\r\nMax working height: 710 mm\r\nMax opening: 400 mm\r\nThroat depth: 400 mm\r\nTotal power requirement: 400 V; 15 kW",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1994_1.jpg",
-      "1994_2.jpg",
-      "1994_3.jpg",
-      "1994_4.jpg",
-      "1994_5.jpg",
-      "1994_6.jpg",
-      "1994_7.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1994_1",
+        "public_id": "ajmera/machines/1994_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1994_2",
+        "public_id": "ajmera/machines/1994_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1994_3",
+        "public_id": "ajmera/machines/1994_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1994_4",
+        "public_id": "ajmera/machines/1994_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1994_5",
+        "public_id": "ajmera/machines/1994_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1994_6",
+        "public_id": "ajmera/machines/1994_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1994_7",
+        "public_id": "ajmera/machines/1994_7"
+      }
     ]
   },
   {
@@ -226,8 +409,14 @@
     "technical_specifications": "Chuck : 2500mm, \r\nSwing : 3100mm, \r\nHeight : 2500mm\r\nControl Fanuc OT",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1993_1.jpg",
-      "1993_2.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1993_1",
+        "public_id": "ajmera/machines/1993_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1993_2",
+        "public_id": "ajmera/machines/1993_2"
+      }
     ]
   },
   {
@@ -242,15 +431,42 @@
     "technical_specifications": "Table Size : 2000 x1000mm\r\nMagnet Size : 2000 x1000mm\r\nX Travel : 2100mm\r\nY Travel : 1400mm\r\nZ (Vertical) Travel : 550mm\r\nwith Bed Linear Guideways \r\nBall Screw",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1992_1.jpeg",
-      "1992_2.jpeg",
-      "1992_3.jpeg",
-      "1992_4.jpeg",
-      "1992_5.jpeg",
-      "1992_6.jpeg",
-      "1992_7.jpeg",
-      "1992_8.jpeg",
-      "1992_9.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1992_1",
+        "public_id": "ajmera/machines/1992_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1992_2",
+        "public_id": "ajmera/machines/1992_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1992_3",
+        "public_id": "ajmera/machines/1992_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1992_4",
+        "public_id": "ajmera/machines/1992_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1992_5",
+        "public_id": "ajmera/machines/1992_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1992_6",
+        "public_id": "ajmera/machines/1992_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1992_7",
+        "public_id": "ajmera/machines/1992_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1992_8",
+        "public_id": "ajmera/machines/1992_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1992_9",
+        "public_id": "ajmera/machines/1992_9"
+      }
     ]
   },
   {
@@ -265,10 +481,22 @@
     "technical_specifications": "Table Size : 150mm x 300mm\r\nX Travel : 800mm\r\nY Travel : 300mm\r\nVertical Travel : 500mm\r\nSpindle Taper : ISO 50\r\nwith Vertical Universal Milling Head\r\nand Side Facing Head",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1990_1.jpg",
-      "1990_2.jpg",
-      "1990_3.jpg",
-      "1990_4.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1990_1",
+        "public_id": "ajmera/machines/1990_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1990_2",
+        "public_id": "ajmera/machines/1990_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1990_3",
+        "public_id": "ajmera/machines/1990_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1990_4",
+        "public_id": "ajmera/machines/1990_4"
+      }
     ]
   },
   {
@@ -283,11 +511,26 @@
     "technical_specifications": "Table Size : 2000mm x 450mm\r\nX Travel : 1400mm\r\nY Travel : 500mm\r\nVertical Travel : 700mm\r\nwith Universal Milling Head\r\nSpindle Taper : ISO 50",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1985_1.jpg",
-      "1985_2.jpg",
-      "1985_3.jpg",
-      "1985_4.jpg",
-      "1985_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1985_1",
+        "public_id": "ajmera/machines/1985_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1985_2",
+        "public_id": "ajmera/machines/1985_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1985_3",
+        "public_id": "ajmera/machines/1985_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1985_4",
+        "public_id": "ajmera/machines/1985_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1985_5",
+        "public_id": "ajmera/machines/1985_5"
+      }
     ]
   },
   {
@@ -302,11 +545,26 @@
     "technical_specifications": "Centre Height : 450mm\r\nChuck size : 1000mm\r\nTool Post Travel: 1000mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1980_1.jpeg",
-      "1980_2.jpeg",
-      "1980_3.jpeg",
-      "1980_4.jpeg",
-      "1980_5.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1980_1",
+        "public_id": "ajmera/machines/1980_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1980_2",
+        "public_id": "ajmera/machines/1980_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1980_3",
+        "public_id": "ajmera/machines/1980_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1980_4",
+        "public_id": "ajmera/machines/1980_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1980_5",
+        "public_id": "ajmera/machines/1980_5"
+      }
     ]
   },
   {
@@ -321,15 +579,42 @@
     "technical_specifications": "Capacity : \r\nLength : 3000mm\r\nSwing : 850mm\r\nGrinding Wheel Dia  : 1000mm\r\nGrinding Wheel Width : 100mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1978_1.jpg",
-      "1978_2.jpg",
-      "1978_3.jpg",
-      "1978_4.jpg",
-      "1978_5.jpg",
-      "1978_6.jpg",
-      "1978_7.jpg",
-      "1978_8.jpg",
-      "1978_9.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1978_1",
+        "public_id": "ajmera/machines/1978_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1978_2",
+        "public_id": "ajmera/machines/1978_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1978_3",
+        "public_id": "ajmera/machines/1978_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1978_4",
+        "public_id": "ajmera/machines/1978_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1978_5",
+        "public_id": "ajmera/machines/1978_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1978_6",
+        "public_id": "ajmera/machines/1978_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1978_7",
+        "public_id": "ajmera/machines/1978_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1978_8",
+        "public_id": "ajmera/machines/1978_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1978_9",
+        "public_id": "ajmera/machines/1978_9"
+      }
     ]
   },
   {
@@ -344,15 +629,42 @@
     "technical_specifications": "Chuck Size : 2250mm\r\nSwing : 2500mm\r\nHeight : 1600mm\r\nwith Vertical Two Ram\r\nwith Degree Adjustment",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1972_1.jpeg",
-      "1972_2.jpg",
-      "1972_3.jpeg",
-      "1972_4.jpeg",
-      "1972_5.jpeg",
-      "1972_6.jpeg",
-      "1972_7.jpeg",
-      "1972_8.jpeg",
-      "1972_9.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1972_1",
+        "public_id": "ajmera/machines/1972_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1972_2",
+        "public_id": "ajmera/machines/1972_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1972_3",
+        "public_id": "ajmera/machines/1972_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1972_4",
+        "public_id": "ajmera/machines/1972_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1972_5",
+        "public_id": "ajmera/machines/1972_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1972_6",
+        "public_id": "ajmera/machines/1972_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1972_7",
+        "public_id": "ajmera/machines/1972_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1972_8",
+        "public_id": "ajmera/machines/1972_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1972_9",
+        "public_id": "ajmera/machines/1972_9"
+      }
     ]
   },
   {
@@ -367,9 +679,18 @@
     "technical_specifications": "Capacity : 600mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1970_1.jpg",
-      "1970_2.jpg",
-      "1970_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1970_1",
+        "public_id": "ajmera/machines/1970_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1970_2",
+        "public_id": "ajmera/machines/1970_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1970_3",
+        "public_id": "ajmera/machines/1970_3"
+      }
     ]
   },
   {
@@ -384,12 +705,30 @@
     "technical_specifications": "Capacity : 400mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1969_1.jpg",
-      "1969_2.jpg",
-      "1969_3.jpg",
-      "1969_4.jpg",
-      "1969_5.jpg",
-      "1969_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1969_1",
+        "public_id": "ajmera/machines/1969_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1969_2",
+        "public_id": "ajmera/machines/1969_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1969_3",
+        "public_id": "ajmera/machines/1969_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1969_4",
+        "public_id": "ajmera/machines/1969_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1969_5",
+        "public_id": "ajmera/machines/1969_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1969_6",
+        "public_id": "ajmera/machines/1969_6"
+      }
     ]
   },
   {
@@ -404,11 +743,26 @@
     "technical_specifications": "Stroke : 600mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1967_1.jpg",
-      "1967_2.jpg",
-      "1967_3.jpg",
-      "1967_4.jpg",
-      "1967_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1967_1",
+        "public_id": "ajmera/machines/1967_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1967_2",
+        "public_id": "ajmera/machines/1967_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1967_3",
+        "public_id": "ajmera/machines/1967_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1967_4",
+        "public_id": "ajmera/machines/1967_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1967_5",
+        "public_id": "ajmera/machines/1967_5"
+      }
     ]
   },
   {
@@ -423,11 +777,26 @@
     "technical_specifications": "Capacity : 650mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1966_1.jpg",
-      "1966_2.jpg",
-      "1966_3.jpg",
-      "1966_4.jpg",
-      "1966_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1966_1",
+        "public_id": "ajmera/machines/1966_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1966_2",
+        "public_id": "ajmera/machines/1966_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1966_3",
+        "public_id": "ajmera/machines/1966_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1966_4",
+        "public_id": "ajmera/machines/1966_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1966_5",
+        "public_id": "ajmera/machines/1966_5"
+      }
     ]
   },
   {
@@ -442,11 +811,26 @@
     "technical_specifications": "Capacity : 600mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1965_1.jpg",
-      "1965_2.jpg",
-      "1965_3.jpg",
-      "1965_4.jpg",
-      "1965_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1965_1",
+        "public_id": "ajmera/machines/1965_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1965_2",
+        "public_id": "ajmera/machines/1965_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1965_3",
+        "public_id": "ajmera/machines/1965_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1965_4",
+        "public_id": "ajmera/machines/1965_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1965_5",
+        "public_id": "ajmera/machines/1965_5"
+      }
     ]
   },
   {
@@ -458,17 +842,41 @@
     "country": "Italy",
     "myear": "",
     "title": "NOVA Make Internal Grinder with Face Grinding",
-    "technical_specifications": "Swing over Table - 825 mm \r\nMax. Swing over  Wheel-Head Slide - 700 mm \r\nMax. Grinding Length of Job - 500 mm \r\nMax. Ground-able Internal Diameter - 700 mm \r\nWork-Head Speeds - 70 rpm to 720 rpm \r\nWork-Head Rotating Angle - 0\u00b0 to 30\u00b0 \r\nInternal Grinding Spindle Diameter - 115 mm \r\nFace Grinding Cup Wheel Diameter - 200 mm \r\n\r\n- Equipped with Face Grinding Attachment. \r\n- Equipped with Hydraulic Wheel Dresser & angular wheel dresser.",
+    "technical_specifications": "Swing over Table - 825 mm \r\nMax. Swing over  Wheel-Head Slide - 700 mm \r\nMax. Grinding Length of Job - 500 mm \r\nMax. Ground-able Internal Diameter - 700 mm \r\nWork-Head Speeds - 70 rpm to 720 rpm \r\nWork-Head Rotating Angle - 0° to 30° \r\nInternal Grinding Spindle Diameter - 115 mm \r\nFace Grinding Cup Wheel Diameter - 200 mm \r\n\r\n- Equipped with Face Grinding Attachment. \r\n- Equipped with Hydraulic Wheel Dresser & angular wheel dresser.",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1964_1.jpg",
-      "1964_2.jpg",
-      "1964_3.jpg",
-      "1964_4.jpg",
-      "1964_5.jpg",
-      "1964_6.jpg",
-      "1964_7.jpg",
-      "1964_8.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1964_1",
+        "public_id": "ajmera/machines/1964_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1964_2",
+        "public_id": "ajmera/machines/1964_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1964_3",
+        "public_id": "ajmera/machines/1964_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1964_4",
+        "public_id": "ajmera/machines/1964_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1964_5",
+        "public_id": "ajmera/machines/1964_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1964_6",
+        "public_id": "ajmera/machines/1964_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1964_7",
+        "public_id": "ajmera/machines/1964_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1964_8",
+        "public_id": "ajmera/machines/1964_8"
+      }
     ]
   },
   {
@@ -483,14 +891,38 @@
     "technical_specifications": "",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1961_1.jpg",
-      "1961_2.jpg",
-      "1961_3.jpg",
-      "1961_4.jpg",
-      "1961_5.jpg",
-      "1961_6.jpg",
-      "1961_7.jpg",
-      "1961_8.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1961_1",
+        "public_id": "ajmera/machines/1961_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1961_2",
+        "public_id": "ajmera/machines/1961_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1961_3",
+        "public_id": "ajmera/machines/1961_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1961_4",
+        "public_id": "ajmera/machines/1961_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1961_5",
+        "public_id": "ajmera/machines/1961_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1961_6",
+        "public_id": "ajmera/machines/1961_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1961_7",
+        "public_id": "ajmera/machines/1961_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1961_8",
+        "public_id": "ajmera/machines/1961_8"
+      }
     ]
   },
   {
@@ -502,14 +934,29 @@
     "country": "USA",
     "myear": "",
     "title": "Gleason Make Gear Tester 17A",
-    "technical_specifications": "Maximum offset of gear spindle above or below center of \r\n pinion spindle :  .5\u201d (88.9mm)\r\n Maximum distance from center of gear spindle to nose of\r\n pinion spindle : 12\u201d (304.8mm)\r\n Minimum distance from center of gear spindle to nose of\r\n pinion spindle : 6\u201d (152.4mm)\r\n Maximum distance from center of pinion spindle to nose of\r\n gear spindle : 7.75\u201d (196.85mm)\r\n Minimum distance from center of pinion spindle to nose of\r\n gear spindle : 4.13\u201d (104.8mm)\r\n Maximum diameter of gear with \u201czero\u201d offset of gear spindle.....20\u201d (508mm)\r\n Machine dimensions (approx.) : 60\u201d x 73\u201d x 60\u201d\r\n Machine net weight : 5,300 Lbs.",
+    "technical_specifications": "Maximum offset of gear spindle above or below center of \r\n pinion spindle :  .5” (88.9mm)\r\n Maximum distance from center of gear spindle to nose of\r\n pinion spindle : 12” (304.8mm)\r\n Minimum distance from center of gear spindle to nose of\r\n pinion spindle : 6” (152.4mm)\r\n Maximum distance from center of pinion spindle to nose of\r\n gear spindle : 7.75” (196.85mm)\r\n Minimum distance from center of pinion spindle to nose of\r\n gear spindle : 4.13” (104.8mm)\r\n Maximum diameter of gear with “zero” offset of gear spindle.....20” (508mm)\r\n Machine dimensions (approx.) : 60” x 73” x 60”\r\n Machine net weight : 5,300 Lbs.",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1960_1.jpg",
-      "1960_2.jpg",
-      "1960_3.jpg",
-      "1960_4.jpg",
-      "1960_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1960_1",
+        "public_id": "ajmera/machines/1960_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1960_2",
+        "public_id": "ajmera/machines/1960_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1960_3",
+        "public_id": "ajmera/machines/1960_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1960_4",
+        "public_id": "ajmera/machines/1960_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1960_5",
+        "public_id": "ajmera/machines/1960_5"
+      }
     ]
   },
   {
@@ -524,13 +971,34 @@
     "technical_specifications": "Table Size : 1350mm x 300mm\r\nX Travel : 900mm\r\nY Travel : 300mm\r\nZ Travel : 350mm\r\nSpindle Taper : ISO50",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1957_1.jpg",
-      "1957_2.jpg",
-      "1957_3.jpg",
-      "1957_4.jpg",
-      "1957_5.jpg",
-      "1957_6.jpg",
-      "1957_7.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1957_1",
+        "public_id": "ajmera/machines/1957_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1957_2",
+        "public_id": "ajmera/machines/1957_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1957_3",
+        "public_id": "ajmera/machines/1957_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1957_4",
+        "public_id": "ajmera/machines/1957_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1957_5",
+        "public_id": "ajmera/machines/1957_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1957_6",
+        "public_id": "ajmera/machines/1957_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1957_7",
+        "public_id": "ajmera/machines/1957_7"
+      }
     ]
   },
   {
@@ -545,11 +1013,26 @@
     "technical_specifications": "Chuck Size : 4000mm\r\nSwing : 4500mm\r\nHeight : 1600mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1955_1.jpg",
-      "1955_2.jpg",
-      "1955_3.jpg",
-      "1955_4.jpg",
-      "1955_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1955_1",
+        "public_id": "ajmera/machines/1955_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1955_2",
+        "public_id": "ajmera/machines/1955_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1955_3",
+        "public_id": "ajmera/machines/1955_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1955_4",
+        "public_id": "ajmera/machines/1955_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1955_5",
+        "public_id": "ajmera/machines/1955_5"
+      }
     ]
   },
   {
@@ -564,15 +1047,42 @@
     "technical_specifications": "Centre Height : 825mm\r\nSwing on Bed : 1650mm\r\nSwing over Cross Slide : 1280mm\r\nAdmit Between Centre : 6000mm\r\nBed Width : 1150mm\r\nSpindle Bore : 110mm\r\nChuck Dia : 1300mm\r\nBed Length : 8450mm\r\nSpindle Bore : 110mm\r\nMotor Power : 50HP",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1949_1.jpg",
-      "1949_2.jpg",
-      "1949_3.jpg",
-      "1949_4.jpg",
-      "1949_5.jpg",
-      "1949_6.jpg",
-      "1949_7.jpg",
-      "1949_8.jpg",
-      "1949_9.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1949_1",
+        "public_id": "ajmera/machines/1949_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1949_2",
+        "public_id": "ajmera/machines/1949_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1949_3",
+        "public_id": "ajmera/machines/1949_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1949_4",
+        "public_id": "ajmera/machines/1949_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1949_5",
+        "public_id": "ajmera/machines/1949_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1949_6",
+        "public_id": "ajmera/machines/1949_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1949_7",
+        "public_id": "ajmera/machines/1949_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1949_8",
+        "public_id": "ajmera/machines/1949_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1949_9",
+        "public_id": "ajmera/machines/1949_9"
+      }
     ]
   },
   {
@@ -587,12 +1097,30 @@
     "technical_specifications": "Chuck Dia : 1600mm\r\nSwing : 2000mm\r\nJob Height : 1500mm\r\nCross Rail Travel : 1000mm\r\nRam Travel : 900mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1947_1.jpg",
-      "1947_2.jpg",
-      "1947_3.jpg",
-      "1947_4.jpg",
-      "1947_5.jpg",
-      "1947_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1947_1",
+        "public_id": "ajmera/machines/1947_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1947_2",
+        "public_id": "ajmera/machines/1947_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1947_3",
+        "public_id": "ajmera/machines/1947_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1947_4",
+        "public_id": "ajmera/machines/1947_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1947_5",
+        "public_id": "ajmera/machines/1947_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1947_6",
+        "public_id": "ajmera/machines/1947_6"
+      }
     ]
   },
   {
@@ -607,13 +1135,34 @@
     "technical_specifications": "Max. diameter 40 mm\r\nMax. module 1\r\nWorkpiece length max. 80 mm\r\nMax. gear wheel width 50 mm\r\nNumber of teeth cut pinions: 2-50\r\nPitch 6- 200\r\nMilling stroke 10 mm\r\nGear hob: max. diameter 32 mm\r\nMilling cutter speeds: 8 steps, 660-5300 rpm\r\nFeeds: stepless upto 60.0 mm/r\r\nTotal power required 1.2 HP",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1943_1.jpg",
-      "1943_2.jpg",
-      "1943_3.jpg",
-      "1943_4.jpg",
-      "1943_5.jpg",
-      "1943_6.jpg",
-      "1943_7.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1943_1",
+        "public_id": "ajmera/machines/1943_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1943_2",
+        "public_id": "ajmera/machines/1943_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1943_3",
+        "public_id": "ajmera/machines/1943_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1943_4",
+        "public_id": "ajmera/machines/1943_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1943_5",
+        "public_id": "ajmera/machines/1943_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1943_6",
+        "public_id": "ajmera/machines/1943_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1943_7",
+        "public_id": "ajmera/machines/1943_7"
+      }
     ]
   },
   {
@@ -628,11 +1177,26 @@
     "technical_specifications": "Model : FXLZD160/C\r\nSmallest Workpiece Dia:20mm\r\nLargest Workpiece Dia: 160mm\r\nSmallest Workpiece Length:120mm\r\nLargest Workpiece Length:1600mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1942_1.jfif",
-      "1942_2.jfif",
-      "1942_3.jfif",
-      "1942_4.jfif",
-      "1942_5.jfif"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1942_1",
+        "public_id": "ajmera/machines/1942_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1942_2",
+        "public_id": "ajmera/machines/1942_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1942_3",
+        "public_id": "ajmera/machines/1942_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1942_4",
+        "public_id": "ajmera/machines/1942_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1942_5",
+        "public_id": "ajmera/machines/1942_5"
+      }
     ]
   },
   {
@@ -647,12 +1211,30 @@
     "technical_specifications": "Capacity : 800x200mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1941_1.jfif",
-      "1941_2.jfif",
-      "1941_3.jfif",
-      "1941_4.jfif",
-      "1941_5.jfif",
-      "1941_6.jfif"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1941_1",
+        "public_id": "ajmera/machines/1941_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1941_2",
+        "public_id": "ajmera/machines/1941_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1941_3",
+        "public_id": "ajmera/machines/1941_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1941_4",
+        "public_id": "ajmera/machines/1941_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1941_5",
+        "public_id": "ajmera/machines/1941_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1941_6",
+        "public_id": "ajmera/machines/1941_6"
+      }
     ]
   },
   {
@@ -667,12 +1249,30 @@
     "technical_specifications": "Arm Length : 2000mm\r\nDrilling Capacity : 80mm\r\nVertical Arm Movement : 800mm\r\nMax Gap Between Base to Spindle : 1500mm\r\nMachine Weight Appx. : 8 ton",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1935_1.jpg",
-      "1935_2.jpg",
-      "1935_3.jpg",
-      "1935_4.jpg",
-      "1935_5.jpg",
-      "1935_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1935_1",
+        "public_id": "ajmera/machines/1935_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1935_2",
+        "public_id": "ajmera/machines/1935_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1935_3",
+        "public_id": "ajmera/machines/1935_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1935_4",
+        "public_id": "ajmera/machines/1935_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1935_5",
+        "public_id": "ajmera/machines/1935_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1935_6",
+        "public_id": "ajmera/machines/1935_6"
+      }
     ]
   },
   {
@@ -687,13 +1287,34 @@
     "technical_specifications": "Arm Length : 2600mm\r\nDrilling Capacity : 100mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1934_1.jpeg",
-      "1934_2.jpeg",
-      "1934_3.jpeg",
-      "1934_4.jpeg",
-      "1934_5.jpeg",
-      "1934_6.jpeg",
-      "1934_7.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1934_1",
+        "public_id": "ajmera/machines/1934_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1934_2",
+        "public_id": "ajmera/machines/1934_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1934_3",
+        "public_id": "ajmera/machines/1934_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1934_4",
+        "public_id": "ajmera/machines/1934_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1934_5",
+        "public_id": "ajmera/machines/1934_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1934_6",
+        "public_id": "ajmera/machines/1934_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1934_7",
+        "public_id": "ajmera/machines/1934_7"
+      }
     ]
   },
   {
@@ -708,16 +1329,46 @@
     "technical_specifications": "Chuck : 2300mm, \r\nSwing : 5000mm, \r\nHeight : 1700mm\r\nCross Rail Vertical Travel : 1200mm\r\nRam Travel : 900mm\r\nTable Loading Capacity : 10ton\r\nRam Tilting Angle : 30degree\r\nFanuc 21T Control",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1925_1.jpg",
-      "1925_2.jpg",
-      "1925_3.jpg",
-      "1925_4.jpg",
-      "1925_5.jpg",
-      "1925_6.jpg",
-      "1925_7.jpg",
-      "1925_8.jpg",
-      "1925_9.jpg",
-      "1925_10.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_1",
+        "public_id": "ajmera/machines/1925_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_2",
+        "public_id": "ajmera/machines/1925_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_3",
+        "public_id": "ajmera/machines/1925_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_4",
+        "public_id": "ajmera/machines/1925_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_5",
+        "public_id": "ajmera/machines/1925_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_6",
+        "public_id": "ajmera/machines/1925_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_7",
+        "public_id": "ajmera/machines/1925_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_8",
+        "public_id": "ajmera/machines/1925_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_9",
+        "public_id": "ajmera/machines/1925_9"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1925_10",
+        "public_id": "ajmera/machines/1925_10"
+      }
     ]
   },
   {
@@ -729,17 +1380,41 @@
     "country": "Japan",
     "myear": "1986/2004",
     "title": "HOMMA Japan Make Double Column CNC VTL",
-    "technical_specifications": "Fanuc 21iTB Control. \r\nWith \u2018C\u2019 Axis and\r\n Angular Milling Head\r\nChuck : 2500mm, \r\nSwing : 3000mm/5000mm, \r\nChuck Bed Travel for Milling Operation\r\nHeight : 3000mm, \r\nRam Size : 300mm\r\nChip Conveyor\r\nTwin ATC ( One on Each Side)\r\nOriginal CNC Machine\r\nNew Fanuc 21iTB Control\r\nReplaced by Japanese Company\r\nin year 2004",
+    "technical_specifications": "Fanuc 21iTB Control. \r\nWith ‘C’ Axis and\r\n Angular Milling Head\r\nChuck : 2500mm, \r\nSwing : 3000mm/5000mm, \r\nChuck Bed Travel for Milling Operation\r\nHeight : 3000mm, \r\nRam Size : 300mm\r\nChip Conveyor\r\nTwin ATC ( One on Each Side)\r\nOriginal CNC Machine\r\nNew Fanuc 21iTB Control\r\nReplaced by Japanese Company\r\nin year 2004",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1923_1.jpg",
-      "1923_2.jpg",
-      "1923_3.jpg",
-      "1923_4.jpg",
-      "1923_5.jpg",
-      "1923_6.jpg",
-      "1923_7.jpg",
-      "1923_8.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1923_1",
+        "public_id": "ajmera/machines/1923_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1923_2",
+        "public_id": "ajmera/machines/1923_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1923_3",
+        "public_id": "ajmera/machines/1923_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1923_4",
+        "public_id": "ajmera/machines/1923_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1923_5",
+        "public_id": "ajmera/machines/1923_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1923_6",
+        "public_id": "ajmera/machines/1923_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1923_7",
+        "public_id": "ajmera/machines/1923_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1923_8",
+        "public_id": "ajmera/machines/1923_8"
+      }
     ]
   },
   {
@@ -751,17 +1426,41 @@
     "country": "UK",
     "myear": "2006",
     "title": "Mollart Make CNC Gun Drilling Machine",
-    "technical_specifications": "Spindle Capacity: 2\r\nSpindles (Currently Configured): 2\r\nCapacity: 0.07 \u2013 1\u2033 Dia.\r\nStroke: 30\u2033\r\nKnee Travel:\r\n\u2013 X-Axis Cross: 11-3/4\u2033\r\n\u2013 Y-Axis Vertical: 11-3/4\u2033\r\nSpindle Center:\r\n\u2013 Distance: 19-5/8\u2033\r\n\u2013 Height From Table: 1-1/2\u2033 \u2013 13-3/8\u2033\r\nRapid Traverse Rates:\r\n\u2013 X-Axis: 6.56 IPS\r\n\u2013 Y-Axis: 2.63 IPS\r\n\u2013 Z-Axis: 6.56 IPS\r\nWork Table Dimensions: 23-5/8\u2033 x 30\u2033\r\nTable Capacity \u2013 Maximum: 1,500 Lbs.\r\nSpindle:\r\n\u2013 Power: 5-1/3 HP\r\n\u2013 Speeds \u2013 Variable: 0 \u2013 6,000 RPM\r\nDrill Feed \u2013 Infinitely Variable: 0 \u2013 39.5 IPM\r\nCoolant:\r\n\u2013 Capacity: 317 Gals.\r\n\u2013 Delivery: 15-1/2 GPM\r\n\u2013 Pressure \u2013 Maximum: 1,450 PSI\r\nElectrics: 460V/3Ph/60Hz\r\nMachine Weight \u2013 Approximate: 13,000 Lbs.\r\nCoolant System Weight \u2013 Catalog: 2,200 Lbs.\r\nEQUIPPED WITH:\r\nGE Fanuc Powermate iH\r\nHigh Pressure Coolant\r\nCoolant Chiller\r\nChip Conveyor\r\nEnclosure\r\nOperation, Service, & Electrical Manuals",
+    "technical_specifications": "Spindle Capacity: 2\r\nSpindles (Currently Configured): 2\r\nCapacity: 0.07 – 1″ Dia.\r\nStroke: 30″\r\nKnee Travel:\r\n– X-Axis Cross: 11-3/4″\r\n– Y-Axis Vertical: 11-3/4″\r\nSpindle Center:\r\n– Distance: 19-5/8″\r\n– Height From Table: 1-1/2″ – 13-3/8″\r\nRapid Traverse Rates:\r\n– X-Axis: 6.56 IPS\r\n– Y-Axis: 2.63 IPS\r\n– Z-Axis: 6.56 IPS\r\nWork Table Dimensions: 23-5/8″ x 30″\r\nTable Capacity – Maximum: 1,500 Lbs.\r\nSpindle:\r\n– Power: 5-1/3 HP\r\n– Speeds – Variable: 0 – 6,000 RPM\r\nDrill Feed – Infinitely Variable: 0 – 39.5 IPM\r\nCoolant:\r\n– Capacity: 317 Gals.\r\n– Delivery: 15-1/2 GPM\r\n– Pressure – Maximum: 1,450 PSI\r\nElectrics: 460V/3Ph/60Hz\r\nMachine Weight – Approximate: 13,000 Lbs.\r\nCoolant System Weight – Catalog: 2,200 Lbs.\r\nEQUIPPED WITH:\r\nGE Fanuc Powermate iH\r\nHigh Pressure Coolant\r\nCoolant Chiller\r\nChip Conveyor\r\nEnclosure\r\nOperation, Service, & Electrical Manuals",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1921_1.jpg",
-      "1921_2.jpg",
-      "1921_3.jpg",
-      "1921_4.jpg",
-      "1921_5.jpg",
-      "1921_6.jpg",
-      "1921_7.jpg",
-      "1921_8.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1921_1",
+        "public_id": "ajmera/machines/1921_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1921_2",
+        "public_id": "ajmera/machines/1921_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1921_3",
+        "public_id": "ajmera/machines/1921_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1921_4",
+        "public_id": "ajmera/machines/1921_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1921_5",
+        "public_id": "ajmera/machines/1921_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1921_6",
+        "public_id": "ajmera/machines/1921_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1921_7",
+        "public_id": "ajmera/machines/1921_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1921_8",
+        "public_id": "ajmera/machines/1921_8"
+      }
     ]
   },
   {
@@ -776,12 +1475,30 @@
     "technical_specifications": "Magnet Size : 600mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1914_1.jpeg",
-      "1914_2.jpeg",
-      "1914_3.jpeg",
-      "1914_4.jpeg",
-      "1914_5.jpeg",
-      "1914_6.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1914_1",
+        "public_id": "ajmera/machines/1914_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1914_2",
+        "public_id": "ajmera/machines/1914_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1914_3",
+        "public_id": "ajmera/machines/1914_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1914_4",
+        "public_id": "ajmera/machines/1914_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1914_5",
+        "public_id": "ajmera/machines/1914_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1914_6",
+        "public_id": "ajmera/machines/1914_6"
+      }
     ]
   },
   {
@@ -796,15 +1513,42 @@
     "technical_specifications": "Wheel Dia : 600mm\r\nWheel Width : 300mm\r\nRange 110 to 300 rpm, \r\nLow range 11 to 56 rpm, \r\nHigh range 56 to 300 rpm, \r\n20 hp, 460 V, 3 Ph, 60 Hz, 56 full load amps,",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1901_1.jpeg",
-      "1901_2.jpeg",
-      "1901_3.jpeg",
-      "1901_4.jpeg",
-      "1901_5.jpeg",
-      "1901_6.jpeg",
-      "1901_7.jpeg",
-      "1901_8.jpeg",
-      "1901_9.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1901_1",
+        "public_id": "ajmera/machines/1901_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1901_2",
+        "public_id": "ajmera/machines/1901_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1901_3",
+        "public_id": "ajmera/machines/1901_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1901_4",
+        "public_id": "ajmera/machines/1901_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1901_5",
+        "public_id": "ajmera/machines/1901_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1901_6",
+        "public_id": "ajmera/machines/1901_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1901_7",
+        "public_id": "ajmera/machines/1901_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1901_8",
+        "public_id": "ajmera/machines/1901_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1901_9",
+        "public_id": "ajmera/machines/1901_9"
+      }
     ]
   },
   {
@@ -819,10 +1563,22 @@
     "technical_specifications": "Capacity : 450mm x 150mm\r\nMagnet Size : 350mm x 150mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1899_1.jpeg",
-      "1899_2.jpeg",
-      "1899_3.jpeg",
-      "1899_4.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1899_1",
+        "public_id": "ajmera/machines/1899_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1899_2",
+        "public_id": "ajmera/machines/1899_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1899_3",
+        "public_id": "ajmera/machines/1899_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1899_4",
+        "public_id": "ajmera/machines/1899_4"
+      }
     ]
   },
   {
@@ -837,15 +1593,42 @@
     "technical_specifications": "Press Capacity : 63 Ton\r\nTable Size : 700mm x 450mm\r\nNumber of Slide Strokes Per Minute:90\r\nSlide Strokes : 10-100mm\r\nDie Space Adjustment : 80mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1897_1.jpg",
-      "1897_2.jpg",
-      "1897_3.jpg",
-      "1897_4.jpg",
-      "1897_5.jpg",
-      "1897_6.jpg",
-      "1897_7.jpg",
-      "1897_8.jpg",
-      "1897_9.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1897_1",
+        "public_id": "ajmera/machines/1897_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1897_2",
+        "public_id": "ajmera/machines/1897_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1897_3",
+        "public_id": "ajmera/machines/1897_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1897_4",
+        "public_id": "ajmera/machines/1897_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1897_5",
+        "public_id": "ajmera/machines/1897_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1897_6",
+        "public_id": "ajmera/machines/1897_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1897_7",
+        "public_id": "ajmera/machines/1897_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1897_8",
+        "public_id": "ajmera/machines/1897_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1897_9",
+        "public_id": "ajmera/machines/1897_9"
+      }
     ]
   },
   {
@@ -860,11 +1643,26 @@
     "technical_specifications": "Max. Wheel Diameter: 250 mm\r\nGear width: 125 mm\r\nMax. module: 2,5\r\nMin. module: 0,5\r\nTable bore diameter: MK3\r\nTable diameter: 180 mm\r\nPower capacity: 1,5 kW\r\nDist. cutter spindle - work-piece spindle: 11-160 mm\r\nTurning speed range: 110-220 U/min\r\nMax. milling cutter diameter: 80 mm\r\nTotal power requirement: 3 kW\r\nDimensions:2000x1500x1700 mm\r\nWeight:950 kg",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1894_1.jpg",
-      "1894_2.jpg",
-      "1894_3.jpg",
-      "1894_4.jpg",
-      "1894_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1894_1",
+        "public_id": "ajmera/machines/1894_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1894_2",
+        "public_id": "ajmera/machines/1894_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1894_3",
+        "public_id": "ajmera/machines/1894_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1894_4",
+        "public_id": "ajmera/machines/1894_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1894_5",
+        "public_id": "ajmera/machines/1894_5"
+      }
     ]
   },
   {
@@ -879,9 +1677,18 @@
     "technical_specifications": "Capacity : 450mm x 150mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1893_1.jpg",
-      "1893_2.jpg",
-      "1893_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1893_1",
+        "public_id": "ajmera/machines/1893_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1893_2",
+        "public_id": "ajmera/machines/1893_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1893_3",
+        "public_id": "ajmera/machines/1893_3"
+      }
     ]
   },
   {
@@ -896,14 +1703,38 @@
     "technical_specifications": "Capacity : 3000mm x 10mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1873_1.jfif",
-      "1873_2.jfif",
-      "1873_3.jfif",
-      "1873_4.jfif",
-      "1873_5.jfif",
-      "1873_6.jfif",
-      "1873_7.jfif",
-      "1873_8.jfif"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1873_1",
+        "public_id": "ajmera/machines/1873_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1873_2",
+        "public_id": "ajmera/machines/1873_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1873_3",
+        "public_id": "ajmera/machines/1873_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1873_4",
+        "public_id": "ajmera/machines/1873_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1873_5",
+        "public_id": "ajmera/machines/1873_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1873_6",
+        "public_id": "ajmera/machines/1873_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1873_7",
+        "public_id": "ajmera/machines/1873_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1873_8",
+        "public_id": "ajmera/machines/1873_8"
+      }
     ]
   },
   {
@@ -915,15 +1746,33 @@
     "country": "Italy",
     "myear": "",
     "title": "Alpa Make Hydraulic Surface Grinder Machine",
-    "technical_specifications": "Max. Grinding Length : 2100mm\r\nMax. Longitudinal Traverse : 2300mm\r\nWidth of work surface : 600mm\r\nMax.  Grinding width with wheel engaged : 650mm\r\nMax cross traverse : 600mm\r\nMax. Grinding Height from magnetic check to fine wheel : 500 (700pt)\r\nGrinding Wheel (\u00d8 x width x bore) : 500/450 x 203 x 100mm\r\nTable Size : 2000mm x 600mm\r\nTable Traverse speed per minute : \t3 - 30\r\nCross Slide Traverse speed per minute : \t0 - 1,6\r\nCross feed range per stroke : 0,01 - 50\r\nRange of automatic down feed : 0,001 - 0,07\r\nPower of wheel motor : 20 (HP)\r\nApproximate net weight : 13300kg\r\nwith Vertical Grinding Attachment",
+    "technical_specifications": "Max. Grinding Length : 2100mm\r\nMax. Longitudinal Traverse : 2300mm\r\nWidth of work surface : 600mm\r\nMax.  Grinding width with wheel engaged : 650mm\r\nMax cross traverse : 600mm\r\nMax. Grinding Height from magnetic check to fine wheel : 500 (700pt)\r\nGrinding Wheel (Ø x width x bore) : 500/450 x 203 x 100mm\r\nTable Size : 2000mm x 600mm\r\nTable Traverse speed per minute : \t3 - 30\r\nCross Slide Traverse speed per minute : \t0 - 1,6\r\nCross feed range per stroke : 0,01 - 50\r\nRange of automatic down feed : 0,001 - 0,07\r\nPower of wheel motor : 20 (HP)\r\nApproximate net weight : 13300kg\r\nwith Vertical Grinding Attachment",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1871_1.jpeg",
-      "1871_2.jpeg",
-      "1871_3.jfif",
-      "1871_4.jpeg",
-      "1871_5.jpeg",
-      "1871_6.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1871_1",
+        "public_id": "ajmera/machines/1871_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1871_2",
+        "public_id": "ajmera/machines/1871_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1871_3",
+        "public_id": "ajmera/machines/1871_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1871_4",
+        "public_id": "ajmera/machines/1871_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1871_5",
+        "public_id": "ajmera/machines/1871_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1871_6",
+        "public_id": "ajmera/machines/1871_6"
+      }
     ]
   },
   {
@@ -938,14 +1787,38 @@
     "technical_specifications": "Maximum Working Dia : 280mm\r\nMaximum Module : 8\r\nTool Width : 70mm\r\nStroke Per Minute : 60-300\r\nMain Motor : 3.5 Kw\r\nMachine Weight : 3500 Kgs.",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1864_1.jpg",
-      "1864_2.jpg",
-      "1864_3.jpg",
-      "1864_4.jpg",
-      "1864_5.jpg",
-      "1864_6.jpg",
-      "1864_7.jpg",
-      "1864_8.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1864_1",
+        "public_id": "ajmera/machines/1864_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1864_2",
+        "public_id": "ajmera/machines/1864_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1864_3",
+        "public_id": "ajmera/machines/1864_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1864_4",
+        "public_id": "ajmera/machines/1864_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1864_5",
+        "public_id": "ajmera/machines/1864_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1864_6",
+        "public_id": "ajmera/machines/1864_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1864_7",
+        "public_id": "ajmera/machines/1864_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1864_8",
+        "public_id": "ajmera/machines/1864_8"
+      }
     ]
   },
   {
@@ -960,11 +1833,26 @@
     "technical_specifications": "Stroke Length : 800mm\r\nTable Size : 1100 x 530mm\r\n400mm x 4 Jaw Dog Chuck",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1862_1.jpg",
-      "1862_2.jpg",
-      "1862_3.jpg",
-      "1862_4.jpg",
-      "1862_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1862_1",
+        "public_id": "ajmera/machines/1862_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1862_2",
+        "public_id": "ajmera/machines/1862_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1862_3",
+        "public_id": "ajmera/machines/1862_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1862_4",
+        "public_id": "ajmera/machines/1862_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1862_5",
+        "public_id": "ajmera/machines/1862_5"
+      }
     ]
   },
   {
@@ -979,8 +1867,14 @@
     "technical_specifications": "Working Area : 1400 x 555 mm\r\nCopy Table : 600 x 500 mm\r\nVariable Ratio : 1:1 - 1:4\r\nSpindle Motor : 2 kW\r\nSpindle Speed : 80 - 20.000 rpm\r\nDimensions : 2.200 x 1.700 x 2.200 mm\r\nWeight : 3.000 kg",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1861_1.jpg",
-      "1861_2.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1861_1",
+        "public_id": "ajmera/machines/1861_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1861_2",
+        "public_id": "ajmera/machines/1861_2"
+      }
     ]
   },
   {
@@ -992,12 +1886,21 @@
     "country": "Germany",
     "myear": "",
     "title": "WMW Make Tool & Cutter Grinder",
-    "technical_specifications": "Grinding Diameter : 360 mm\r\nGrinding Length : 450 mm\r\nWorkpiece Length : 600 mm\r\nMax. workpiece Diameter : 250 mm\r\nX/Y : 500/230 mm\r\nGrinding Spindle Speed : 2200 / 3500 / 5200 rpm\r\nDisk Milling Cutter Diameter max. : 360 mm\r\nTable Surface Area : 950 x 120 mm\r\nTable Movement - manual : 500 mm\r\nTable Movement automatic : 300 mm\r\nTable swivelable : 0 - 90 \u00b0\r\nGrinding Head Vertical Adjustable : 250 mm\r\nGrinding Head Turnable : 350 \u00b0\r\nGrinding Head Inclinable : 15 \u00b0\r\nGrinding Wheel Diameter max. : 160 mm\r\nTotal Power requirement : 1,8 kW\r\nWeight of the Machine  : 900 kg",
+    "technical_specifications": "Grinding Diameter : 360 mm\r\nGrinding Length : 450 mm\r\nWorkpiece Length : 600 mm\r\nMax. workpiece Diameter : 250 mm\r\nX/Y : 500/230 mm\r\nGrinding Spindle Speed : 2200 / 3500 / 5200 rpm\r\nDisk Milling Cutter Diameter max. : 360 mm\r\nTable Surface Area : 950 x 120 mm\r\nTable Movement - manual : 500 mm\r\nTable Movement automatic : 300 mm\r\nTable swivelable : 0 - 90 °\r\nGrinding Head Vertical Adjustable : 250 mm\r\nGrinding Head Turnable : 350 °\r\nGrinding Head Inclinable : 15 °\r\nGrinding Wheel Diameter max. : 160 mm\r\nTotal Power requirement : 1,8 kW\r\nWeight of the Machine  : 900 kg",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1860_1.jpg",
-      "1860_2.jpg",
-      "1860_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1860_1",
+        "public_id": "ajmera/machines/1860_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1860_2",
+        "public_id": "ajmera/machines/1860_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1860_3",
+        "public_id": "ajmera/machines/1860_3"
+      }
     ]
   },
   {
@@ -1012,9 +1915,18 @@
     "technical_specifications": "Admit Between Centre : 800mm\r\nCentre Height : 130mm\r\nWheel Size : 500mm Dia, \r\nWheel Width : 100mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1858_1.jpg",
-      "1858_2.jpg",
-      "1858_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1858_1",
+        "public_id": "ajmera/machines/1858_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1858_2",
+        "public_id": "ajmera/machines/1858_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1858_3",
+        "public_id": "ajmera/machines/1858_3"
+      }
     ]
   },
   {
@@ -1029,15 +1941,42 @@
     "technical_specifications": "Blade Dia : 1000mm\r\nCapacity : 650mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1851_1.jpg",
-      "1851_2.jpg",
-      "1851_3.jpg",
-      "1851_4.jpg",
-      "1851_5.jpg",
-      "1851_6.jpg",
-      "1851_7.jpg",
-      "1851_8.jpg",
-      "1851_9.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1851_1",
+        "public_id": "ajmera/machines/1851_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1851_2",
+        "public_id": "ajmera/machines/1851_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1851_3",
+        "public_id": "ajmera/machines/1851_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1851_4",
+        "public_id": "ajmera/machines/1851_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1851_5",
+        "public_id": "ajmera/machines/1851_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1851_6",
+        "public_id": "ajmera/machines/1851_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1851_7",
+        "public_id": "ajmera/machines/1851_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1851_8",
+        "public_id": "ajmera/machines/1851_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1851_9",
+        "public_id": "ajmera/machines/1851_9"
+      }
     ]
   },
   {
@@ -1052,11 +1991,26 @@
     "technical_specifications": "Max. Dia : 40mm\r\nNumber of Teeths : 6 to 260\r\nMax. Pitch in Brass : DP26 - Mod.1\r\nMax. Pitch in Steel : DP32 - Mod.0.75",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1843_1.jpg",
-      "1843_2.jpg",
-      "1843_3.jpg",
-      "1843_4.jpg",
-      "1843_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1843_1",
+        "public_id": "ajmera/machines/1843_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1843_2",
+        "public_id": "ajmera/machines/1843_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1843_3",
+        "public_id": "ajmera/machines/1843_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1843_4",
+        "public_id": "ajmera/machines/1843_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1843_5",
+        "public_id": "ajmera/machines/1843_5"
+      }
     ]
   },
   {
@@ -1068,20 +2022,53 @@
     "country": "Japan",
     "myear": "1992",
     "title": "MIYAGAWA (JAPAN) Gantry Type  High Speed CNC Drilling/Milling Machine",
-    "technical_specifications": "Control : FANUC 15M\r\nMachine Specifications :\r\nNumber of Spindle : 1no\r\nSpindle Hole Taper : BT50\r\nSpindle Diameter : 90mm\r\nTravel : \r\n        X Axis : 32750mm\r\n\tY Axis : 6000mm + 700mm (ATC)\r\n\tZ Axis : 450mm\r\nFloor to Spindle Gap : 800mm\r\n        Z Vertical Gap : 850mm\r\n        Between Column : 6800mm\r\nRapid Speed : X Axis : 18000mm/min\r\nY Axis : 18000mm/min\r\nZ Axis : 10000mm/min\r\nPositioning Speed : Z Axis : 1 \u2013 4,000mm/min\r\nAC Spindle Motor : 15.00 kw\r\nX Axis Servo Motor : 2.8 Kw,  2 Synchronous operation\r\nY Axis Servo Motor : 1.8 Kw\r\nZ Axis Servo Motor : 4.0 Kw with Brake\r\nFor Cutting Oil : 2.2 Kw\r\nFor Lubrication : 0.075 Kw\r\nNumber of Control Axis : 4 Axis ( x1, x2, y, z axis)\r\nNumber of simultaneously controlled Axis : 3 Axis ( x, y Axis)\r\nFloor Plate - 2nos. ( 6300x2500x300mm each)",
+    "technical_specifications": "Control : FANUC 15M\r\nMachine Specifications :\r\nNumber of Spindle : 1no\r\nSpindle Hole Taper : BT50\r\nSpindle Diameter : 90mm\r\nTravel : \r\n        X Axis : 32750mm\r\n\tY Axis : 6000mm + 700mm (ATC)\r\n\tZ Axis : 450mm\r\nFloor to Spindle Gap : 800mm\r\n        Z Vertical Gap : 850mm\r\n        Between Column : 6800mm\r\nRapid Speed : X Axis : 18000mm/min\r\nY Axis : 18000mm/min\r\nZ Axis : 10000mm/min\r\nPositioning Speed : Z Axis : 1 – 4,000mm/min\r\nAC Spindle Motor : 15.00 kw\r\nX Axis Servo Motor : 2.8 Kw,  2 Synchronous operation\r\nY Axis Servo Motor : 1.8 Kw\r\nZ Axis Servo Motor : 4.0 Kw with Brake\r\nFor Cutting Oil : 2.2 Kw\r\nFor Lubrication : 0.075 Kw\r\nNumber of Control Axis : 4 Axis ( x1, x2, y, z axis)\r\nNumber of simultaneously controlled Axis : 3 Axis ( x, y Axis)\r\nFloor Plate - 2nos. ( 6300x2500x300mm each)",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1840_1.jpg",
-      "1840_2.jpg",
-      "1840_3.jpg",
-      "1840_4.jpg",
-      "1840_5.jpg",
-      "1840_6.jpg",
-      "1840_7.jpg",
-      "1840_8.jpg",
-      "1840_9.jpg",
-      "1840_10.jpg",
-      "1840_11.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_1",
+        "public_id": "ajmera/machines/1840_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_2",
+        "public_id": "ajmera/machines/1840_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_3",
+        "public_id": "ajmera/machines/1840_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_4",
+        "public_id": "ajmera/machines/1840_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_5",
+        "public_id": "ajmera/machines/1840_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_6",
+        "public_id": "ajmera/machines/1840_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_7",
+        "public_id": "ajmera/machines/1840_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_8",
+        "public_id": "ajmera/machines/1840_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_9",
+        "public_id": "ajmera/machines/1840_9"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_10",
+        "public_id": "ajmera/machines/1840_10"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1840_11",
+        "public_id": "ajmera/machines/1840_11"
+      }
     ]
   },
   {
@@ -1096,14 +2083,38 @@
     "technical_specifications": "Grinding Diameter - 50..400mm\r\nGrinding Wheel's Diameter - 800mm\r\nGrinding Wheel's Width - 500mm\r\nDimensions - 4970x3400x2140mm\r\nWeight - 13000kg",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1838_1.jpg",
-      "1838_2.jpg",
-      "1838_3.jpg",
-      "1838_4.jpg",
-      "1838_5.jpg",
-      "1838_6.jpg",
-      "1838_7.jpg",
-      "1838_8.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1838_1",
+        "public_id": "ajmera/machines/1838_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1838_2",
+        "public_id": "ajmera/machines/1838_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1838_3",
+        "public_id": "ajmera/machines/1838_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1838_4",
+        "public_id": "ajmera/machines/1838_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1838_5",
+        "public_id": "ajmera/machines/1838_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1838_6",
+        "public_id": "ajmera/machines/1838_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1838_7",
+        "public_id": "ajmera/machines/1838_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1838_8",
+        "public_id": "ajmera/machines/1838_8"
+      }
     ]
   },
   {
@@ -1118,12 +2129,30 @@
     "technical_specifications": "Clamping  : Max 500mm Dia\r\nStroke Length : 3000mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1822_1.jpg",
-      "1822_2.jpg",
-      "1822_3.jpg",
-      "1822_4.jpg",
-      "1822_5.jpg",
-      "1822_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1822_1",
+        "public_id": "ajmera/machines/1822_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1822_2",
+        "public_id": "ajmera/machines/1822_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1822_3",
+        "public_id": "ajmera/machines/1822_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1822_4",
+        "public_id": "ajmera/machines/1822_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1822_5",
+        "public_id": "ajmera/machines/1822_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1822_6",
+        "public_id": "ajmera/machines/1822_6"
+      }
     ]
   },
   {
@@ -1138,15 +2167,42 @@
     "technical_specifications": "Grinding Diameter - 2..300mm\r\nBelt wheel - 508mm\r\nWheel diameter - 610mm\r\nWheel Width : 500mm\r\nWeight - 12000kg\r\nControl : Siemens Sinumerik",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1819_1.JPG",
-      "1819_2.JPG",
-      "1819_3.JPG",
-      "1819_4.JPG",
-      "1819_5.JPG",
-      "1819_6.JPG",
-      "1819_7.JPG",
-      "1819_8.JPG",
-      "1819_9.JPG"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1819_1",
+        "public_id": "ajmera/machines/1819_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1819_2",
+        "public_id": "ajmera/machines/1819_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1819_3",
+        "public_id": "ajmera/machines/1819_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1819_4",
+        "public_id": "ajmera/machines/1819_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1819_5",
+        "public_id": "ajmera/machines/1819_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1819_6",
+        "public_id": "ajmera/machines/1819_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1819_7",
+        "public_id": "ajmera/machines/1819_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1819_8",
+        "public_id": "ajmera/machines/1819_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1819_9",
+        "public_id": "ajmera/machines/1819_9"
+      }
     ]
   },
   {
@@ -1161,9 +2217,18 @@
     "technical_specifications": "8 Module\r\n250mm Dia\r\n600mm Length\r\n52mm Spindle Bore",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1809_1.jpg",
-      "1809_2.jpg",
-      "1809_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1809_1",
+        "public_id": "ajmera/machines/1809_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1809_2",
+        "public_id": "ajmera/machines/1809_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1809_3",
+        "public_id": "ajmera/machines/1809_3"
+      }
     ]
   },
   {
@@ -1178,15 +2243,42 @@
     "technical_specifications": "Admit Between Centre : 300mm\r\nCentre Height : 120mm\r\nGrinding Wheel Dia : 5500mm\r\nGrinding Wheel Width : 75mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1783_1.jpg",
-      "1783_2.jpg",
-      "1783_3.jpg",
-      "1783_4.jpg",
-      "1783_5.jpg",
-      "1783_6.jpg",
-      "1783_7.jpg",
-      "1783_8.jpg",
-      "1783_9.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1783_1",
+        "public_id": "ajmera/machines/1783_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1783_2",
+        "public_id": "ajmera/machines/1783_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1783_3",
+        "public_id": "ajmera/machines/1783_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1783_4",
+        "public_id": "ajmera/machines/1783_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1783_5",
+        "public_id": "ajmera/machines/1783_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1783_6",
+        "public_id": "ajmera/machines/1783_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1783_7",
+        "public_id": "ajmera/machines/1783_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1783_8",
+        "public_id": "ajmera/machines/1783_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1783_9",
+        "public_id": "ajmera/machines/1783_9"
+      }
     ]
   },
   {
@@ -1201,9 +2293,18 @@
     "technical_specifications": "Capacity : 450mm x150mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1771_1.jpg",
-      "1771_2.jpg",
-      "1771_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1771_1",
+        "public_id": "ajmera/machines/1771_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1771_2",
+        "public_id": "ajmera/machines/1771_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1771_3",
+        "public_id": "ajmera/machines/1771_3"
+      }
     ]
   },
   {
@@ -1218,12 +2319,30 @@
     "technical_specifications": "Table Size : 1600mm x 380mm\r\nX Travel : 1200mm\r\nY Travel : 400mm\r\nZ Travel : 565mm\r\nSpindle Taper : ISO 50\r\nSpindle Motor : 10HP \r\nDimension : 2660 x 1865 x 2095mm\r\nMachine Weight : 3100kgs",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1768_1.jpg",
-      "1768_2.jpg",
-      "1768_3.jpg",
-      "1768_4.jpg",
-      "1768_5.jpg",
-      "1768_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1768_1",
+        "public_id": "ajmera/machines/1768_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1768_2",
+        "public_id": "ajmera/machines/1768_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1768_3",
+        "public_id": "ajmera/machines/1768_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1768_4",
+        "public_id": "ajmera/machines/1768_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1768_5",
+        "public_id": "ajmera/machines/1768_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1768_6",
+        "public_id": "ajmera/machines/1768_6"
+      }
     ]
   },
   {
@@ -1238,11 +2357,26 @@
     "technical_specifications": "Working Range :\r\nLength : 8000mm (Work Dia Over 80mm)\r\nOutside Dia : 400mm\r\nInside Dia : 40-160mm\r\nMain Spindle Motor : 5.5Kw\r\nMain Hydraulic Unit : 11Kw",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1744_1.jpg",
-      "1744_2.jpg",
-      "1744_3.jpg",
-      "1744_4.jpg",
-      "1744_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1744_1",
+        "public_id": "ajmera/machines/1744_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1744_2",
+        "public_id": "ajmera/machines/1744_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1744_3",
+        "public_id": "ajmera/machines/1744_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1744_4",
+        "public_id": "ajmera/machines/1744_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1744_5",
+        "public_id": "ajmera/machines/1744_5"
+      }
     ]
   },
   {
@@ -1254,19 +2388,49 @@
     "country": "Germany",
     "myear": "1994",
     "title": "WMW Make Centreless Grinder",
-    "technical_specifications": "Grinding Diameter:\r\n -Min.: 1,5 mm\r\n -Max.: 140 mm\r\nMax. grinding length for infeed griding: 245 mm\r\nGrinding Wheel:\r\n -Max. diameter: 630 mm\r\n -Width: 250 mm\r\n -Bore: 305 mm\r\n -Main motor: 35 kW\r\nRegulating wheel:\r\n -Max. diameter: 315 mm\r\n -Width: 250 mm\r\n -Bore: 127 mm\r\n -Regulating wheel speeds infinitely variable: 10...220 rpm\r\n -Dressing speed: 480 rpm\r\n -Driving power: 2,75 kW\r\n -Axial adjustability: \u010510 mm\r\nTotal machine weight: 5800 kg",
+    "technical_specifications": "Grinding Diameter:\r\n -Min.: 1,5 mm\r\n -Max.: 140 mm\r\nMax. grinding length for infeed griding: 245 mm\r\nGrinding Wheel:\r\n -Max. diameter: 630 mm\r\n -Width: 250 mm\r\n -Bore: 305 mm\r\n -Main motor: 35 kW\r\nRegulating wheel:\r\n -Max. diameter: 315 mm\r\n -Width: 250 mm\r\n -Bore: 127 mm\r\n -Regulating wheel speeds infinitely variable: 10...220 rpm\r\n -Dressing speed: 480 rpm\r\n -Driving power: 2,75 kW\r\n -Axial adjustability: ą10 mm\r\nTotal machine weight: 5800 kg",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1710_1.jpg",
-      "1710_2.jpg",
-      "1710_3.jpg",
-      "1710_4.jpg",
-      "1710_5.jpg",
-      "1710_6.jpg",
-      "1710_7.jpg",
-      "1710_8.jpg",
-      "1710_9.jpg",
-      "1710_10.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_1",
+        "public_id": "ajmera/machines/1710_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_2",
+        "public_id": "ajmera/machines/1710_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_3",
+        "public_id": "ajmera/machines/1710_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_4",
+        "public_id": "ajmera/machines/1710_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_5",
+        "public_id": "ajmera/machines/1710_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_6",
+        "public_id": "ajmera/machines/1710_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_7",
+        "public_id": "ajmera/machines/1710_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_8",
+        "public_id": "ajmera/machines/1710_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_9",
+        "public_id": "ajmera/machines/1710_9"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1710_10",
+        "public_id": "ajmera/machines/1710_10"
+      }
     ]
   },
   {
@@ -1281,15 +2445,42 @@
     "technical_specifications": "Spindle Dia : 125mm\r\nCross TRavel : 3000mm\r\nVertical Travel : 1600mm\r\nWith Facing Chuck, Tail Stock\r\nRotary Table : 1500 x 1500mm\r\nFloor Plate 1no.",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1697_1.jpg",
-      "1697_2.jpg",
-      "1697_3.jpg",
-      "1697_4.jpg",
-      "1697_5.jpg",
-      "1697_6.jpg",
-      "1697_7.jpg",
-      "1697_8.jpg",
-      "1697_9.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1697_1",
+        "public_id": "ajmera/machines/1697_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1697_2",
+        "public_id": "ajmera/machines/1697_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1697_3",
+        "public_id": "ajmera/machines/1697_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1697_4",
+        "public_id": "ajmera/machines/1697_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1697_5",
+        "public_id": "ajmera/machines/1697_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1697_6",
+        "public_id": "ajmera/machines/1697_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1697_7",
+        "public_id": "ajmera/machines/1697_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1697_8",
+        "public_id": "ajmera/machines/1697_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1697_9",
+        "public_id": "ajmera/machines/1697_9"
+      }
     ]
   },
   {
@@ -1304,9 +2495,18 @@
     "technical_specifications": "Facing Chuck Dia: 240mmVertical Travel: 300mmCross Travel: 300mmColumn Movement Travel: 300mmTable Size: 560x400mmLength Travel: 600mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1616_1.jpg",
-      "1616_2.jpg",
-      "1616_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1616_1",
+        "public_id": "ajmera/machines/1616_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1616_2",
+        "public_id": "ajmera/machines/1616_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1616_3",
+        "public_id": "ajmera/machines/1616_3"
+      }
     ]
   },
   {
@@ -1321,16 +2521,46 @@
     "technical_specifications": "Spindle Diameter - 200 MMRam Size- 520 x 520 MMVertical Head Travel, Y- 3300 MMHorizontal Column Travel, X - 4500 MM Ram Travel -1600 MM Spindle Travel - 2000 MM Spindle Speeds: 1.5 to 630 RPM Spindle Taper:  #120 Metic W/#50 Adapter Rapid Traverse:  3200 mm/min Feeds: Spindle- 0.5 - 3200 MM Ram - 05 - 3200 MM Vertical - 1 - 3200 MM Longitudinal - 1 - 3200 MMEquipped With: Rotary table model E20 , size : 2000x2000mm, 20Tons Loading capacityFloor Plates : 3750 x 1250 x 300 MM, 2 Nos.",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1511_1.jpg",
-      "1511_2.jpg",
-      "1511_3.jpg",
-      "1511_4.jpg",
-      "1511_5.jpg",
-      "1511_6.jpg",
-      "1511_7.jpg",
-      "1511_8.jpg",
-      "1511_9.jpg",
-      "1511_10.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_1",
+        "public_id": "ajmera/machines/1511_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_2",
+        "public_id": "ajmera/machines/1511_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_3",
+        "public_id": "ajmera/machines/1511_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_4",
+        "public_id": "ajmera/machines/1511_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_5",
+        "public_id": "ajmera/machines/1511_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_6",
+        "public_id": "ajmera/machines/1511_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_7",
+        "public_id": "ajmera/machines/1511_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_8",
+        "public_id": "ajmera/machines/1511_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_9",
+        "public_id": "ajmera/machines/1511_9"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1511_10",
+        "public_id": "ajmera/machines/1511_10"
+      }
     ]
   },
   {
@@ -1341,13 +2571,22 @@
     "category": "Leveler",
     "country": "Japan",
     "myear": "",
-    "title": "PALS Leveler & feeder & uncoiler\u00a0Machine",
+    "title": "PALS Leveler & feeder & uncoiler Machine",
     "technical_specifications": "Feeder\r\nMax width: 650mm\r\nMax Thickness : 2.3mm\r\nLength:1600mm\r\nWidth:2200mm\r\nHeight:1800mm\r\n\r\nLeveler\r\nLength:1600mm\r\nWidth:1400mm\r\nHeight:1900mm\r\n11 Rolls\r\n\r\nUncoiler\r\nLength:1400mm\r\nWidth:1600mm\r\nHeight:1800mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1486_1.jpg",
-      "1486_2.jpg",
-      "1486_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1486_1",
+        "public_id": "ajmera/machines/1486_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1486_2",
+        "public_id": "ajmera/machines/1486_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1486_3",
+        "public_id": "ajmera/machines/1486_3"
+      }
     ]
   },
   {
@@ -1362,9 +2601,18 @@
     "technical_specifications": "Magnet Size: 450mm X 150mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1446_1.jpg",
-      "1446_2.jpg",
-      "1446_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1446_1",
+        "public_id": "ajmera/machines/1446_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1446_2",
+        "public_id": "ajmera/machines/1446_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1446_3",
+        "public_id": "ajmera/machines/1446_3"
+      }
     ]
   },
   {
@@ -1375,15 +2623,30 @@
     "category": "Thread Rolling",
     "country": "Germany",
     "myear": "",
-    "title": "WMW Make Model UPW 12,5x70 Thread Rolling Machine\u00a0 M2",
+    "title": "WMW Make Model UPW 12,5x70 Thread Rolling Machine  M2",
     "technical_specifications": "Pressure:12,5 t\r\nMax. work piece diameter:70 mm\r\nThreading length:125 / 2000 mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1419_1.jpg",
-      "1419_2.jpg",
-      "1419_3.jpg",
-      "1419_4.jpg",
-      "1419_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1419_1",
+        "public_id": "ajmera/machines/1419_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1419_2",
+        "public_id": "ajmera/machines/1419_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1419_3",
+        "public_id": "ajmera/machines/1419_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1419_4",
+        "public_id": "ajmera/machines/1419_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1419_5",
+        "public_id": "ajmera/machines/1419_5"
+      }
     ]
   },
   {
@@ -1394,15 +2657,30 @@
     "category": "Thread Rolling",
     "country": "Germany",
     "myear": "",
-    "title": "WMW Make Model UPW 12,5x70 Thread Rolling Machine\u00a0M1",
+    "title": "WMW Make Model UPW 12,5x70 Thread Rolling Machine M1",
     "technical_specifications": "Max. Rolling Force - 12.5 Tons\r\nJob Diameter Range - 3 mm to 70 mm\r\nMax. Thread Length - 8000 mm\r\nMax. Thread Length (in Plunge Method) - 125 mm\r\nMaximum Pitch - 4 mm\r\nThread Roll Size - Width 125 mm x 195 mm Diameter\r\nSpindle Speeds - 20 rpm to 90 rpm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1418_1.jpg",
-      "1418_2.jpg",
-      "1418_3.jpg",
-      "1418_4.jpg",
-      "1418_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1418_1",
+        "public_id": "ajmera/machines/1418_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1418_2",
+        "public_id": "ajmera/machines/1418_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1418_3",
+        "public_id": "ajmera/machines/1418_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1418_4",
+        "public_id": "ajmera/machines/1418_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1418_5",
+        "public_id": "ajmera/machines/1418_5"
+      }
     ]
   },
   {
@@ -1417,11 +2695,26 @@
     "technical_specifications": "Max. Rolling Force - 12.5 Tons\r\nJob Diameter Range - 3 mm to 70 mm\r\nMax. Thread Length - 8000 mm\r\nMax. Thread Length (in Plunge Method) - 125 mm\r\nMaximum Pitch - 4 mm\r\nThread Roll Size - Width 125 mm x 195 mm Diameter\r\nSpindle Speeds - 20 rpm to 90 rpm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1345_1.jpg",
-      "1345_2.jpg",
-      "1345_3.jpg",
-      "1345_4.jpg",
-      "1345_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1345_1",
+        "public_id": "ajmera/machines/1345_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1345_2",
+        "public_id": "ajmera/machines/1345_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1345_3",
+        "public_id": "ajmera/machines/1345_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1345_4",
+        "public_id": "ajmera/machines/1345_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1345_5",
+        "public_id": "ajmera/machines/1345_5"
+      }
     ]
   },
   {
@@ -1436,12 +2729,30 @@
     "technical_specifications": "Grinding length... 900 mmWorkpiece clamping length... 1190 mmWorkpiece diameter range... 10 - 250 mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1340_1.jpg",
-      "1340_2.jpg",
-      "1340_3.jpg",
-      "1340_4.jpg",
-      "1340_5.jpg",
-      "1340_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1340_1",
+        "public_id": "ajmera/machines/1340_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1340_2",
+        "public_id": "ajmera/machines/1340_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1340_3",
+        "public_id": "ajmera/machines/1340_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1340_4",
+        "public_id": "ajmera/machines/1340_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1340_5",
+        "public_id": "ajmera/machines/1340_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1340_6",
+        "public_id": "ajmera/machines/1340_6"
+      }
     ]
   },
   {
@@ -1456,10 +2767,22 @@
     "technical_specifications": "Capacity: 15 Tons\r\nStroke : 1200mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1322_1.jpg",
-      "1322_2.jpg",
-      "1322_3.jpg",
-      "1322_4.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1322_1",
+        "public_id": "ajmera/machines/1322_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1322_2",
+        "public_id": "ajmera/machines/1322_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1322_3",
+        "public_id": "ajmera/machines/1322_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1322_4",
+        "public_id": "ajmera/machines/1322_4"
+      }
     ]
   },
   {
@@ -1474,12 +2797,30 @@
     "technical_specifications": "Capacity 8`` X 24`` (203mm X 610mm)\r\nSwing 8`` (203mm)\r\nBetween Centres 24`` (610mm) \r\nTable Swivels 7-0-7 Degrees\r\nTable Traverse Speed 3``-144`` (76-3658mm) \r\nWork Head Input 380/420/3/50 Ac 0.33 Hp\r\nWork Head Speeds 30-415 Rpm\r\nWork Head Swivels 10-0-90 Degrees\r\nWheel Head Input 380/420/3/50 Ac 1 Hp\r\nNominal Stone Size 8`` (203mm) Diameter X 3/4`` (19mm) Face\r\nInternal Grinding Attachment Yes\r\nWheel Head Infeed Rate 0.0002``-0.0012`` (0.01-0.03mm) \r\nFitted With Wheel Dresser\r\nLength 7' (2.13m) \r\nWidth 5' (1.52m) \r\nHeight 5'10`` (1.78m) \r\nNett Weight Approx. 2 Tons (2032 Kgs)",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1271_1.jpg",
-      "1271_2.jpg",
-      "1271_3.jpg",
-      "1271_4.jpg",
-      "1271_5.jpg",
-      "1271_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1271_1",
+        "public_id": "ajmera/machines/1271_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1271_2",
+        "public_id": "ajmera/machines/1271_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1271_3",
+        "public_id": "ajmera/machines/1271_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1271_4",
+        "public_id": "ajmera/machines/1271_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1271_5",
+        "public_id": "ajmera/machines/1271_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1271_6",
+        "public_id": "ajmera/machines/1271_6"
+      }
     ]
   },
   {
@@ -1494,10 +2835,22 @@
     "technical_specifications": "Center Height: 125mm\r\nSwing: 250mm\r\nBetween Centre: 750mm\r\nWheel Dia : 580mm\r\nWheel Width : 100mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1265_1.jpg",
-      "1265_2.jpg",
-      "1265_3.jpg",
-      "1265_4.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1265_1",
+        "public_id": "ajmera/machines/1265_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1265_2",
+        "public_id": "ajmera/machines/1265_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1265_3",
+        "public_id": "ajmera/machines/1265_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1265_4",
+        "public_id": "ajmera/machines/1265_4"
+      }
     ]
   },
   {
@@ -1512,10 +2865,22 @@
     "technical_specifications": "",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1216_1.jpg",
-      "1216_2.jpg",
-      "1216_3.jpg",
-      "1216_4.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1216_1",
+        "public_id": "ajmera/machines/1216_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1216_2",
+        "public_id": "ajmera/machines/1216_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1216_3",
+        "public_id": "ajmera/machines/1216_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1216_4",
+        "public_id": "ajmera/machines/1216_4"
+      }
     ]
   },
   {
@@ -1530,9 +2895,18 @@
     "technical_specifications": "Max Diameter : 320 mm\r\nMax module : 6\r\nWeight of Machine : Appx 5500 kg",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1211_1.jpg",
-      "1211_2.jpg",
-      "1211_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1211_1",
+        "public_id": "ajmera/machines/1211_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1211_2",
+        "public_id": "ajmera/machines/1211_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1211_3",
+        "public_id": "ajmera/machines/1211_3"
+      }
     ]
   },
   {
@@ -1547,14 +2921,38 @@
     "technical_specifications": "Spindle Dia.: 150mm\r\nSpindle Movement: 1300mm\r\nCross Travel : 3500mm\r\nVertical Travel : 2300mm\r\nRotary Table Size: 2000mm X 1800mm\r\nFloor Plate Size: 3000mm X 1500mm - 2 Pcs",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1173_1.jpg",
-      "1173_2.JPG",
-      "1173_3.jpg",
-      "1173_4.jpg",
-      "1173_5.JPG",
-      "1173_6.JPG",
-      "1173_7.JPG",
-      "1173_8.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1173_1",
+        "public_id": "ajmera/machines/1173_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1173_2",
+        "public_id": "ajmera/machines/1173_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1173_3",
+        "public_id": "ajmera/machines/1173_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1173_4",
+        "public_id": "ajmera/machines/1173_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1173_5",
+        "public_id": "ajmera/machines/1173_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1173_6",
+        "public_id": "ajmera/machines/1173_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1173_7",
+        "public_id": "ajmera/machines/1173_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1173_8",
+        "public_id": "ajmera/machines/1173_8"
+      }
     ]
   },
   {
@@ -1569,13 +2967,34 @@
     "technical_specifications": "Capacity 8`` X 24`` (203mm X 610mm)\r\nSwing 8`` (203mm)\r\nBetween Centres 24`` (610mm) \r\nTable Swivels 7-0-7 Degrees\r\nTable Traverse Speed 3``-144`` (76-3658mm) \r\nWork Head Input 380/420/3/50 Ac 0.33 Hp\r\nWork Head Speeds 30-415 Rpm\r\nWork Head Swivels 10-0-90 Degrees\r\nWheel Head Input 380/420/3/50 Ac 1 Hp\r\nNominal Stone Size 8`` (203mm) Diameter X 3/4`` (19mm) Face\r\nInternal Grinding Attachment Yes\r\nWheel Head Infeed Rate 0.0002``-0.0012`` (0.01-0.03mm) \r\nFitted With Wheel Dresser\r\nLength 7' (2.13m) \r\nWidth 5' (1.52m) \r\nHeight 5'10`` (1.78m) \r\nNett Weight Approx. 2 Tons (2032 Kgs)",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1133_1.jpg",
-      "1133_2.jpg",
-      "1133_3.jpg",
-      "1133_4.jpg",
-      "1133_5.jpg",
-      "1133_6.jpg",
-      "1133_7.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1133_1",
+        "public_id": "ajmera/machines/1133_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1133_2",
+        "public_id": "ajmera/machines/1133_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1133_3",
+        "public_id": "ajmera/machines/1133_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1133_4",
+        "public_id": "ajmera/machines/1133_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1133_5",
+        "public_id": "ajmera/machines/1133_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1133_6",
+        "public_id": "ajmera/machines/1133_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1133_7",
+        "public_id": "ajmera/machines/1133_7"
+      }
     ]
   },
   {
@@ -1587,12 +3006,21 @@
     "country": "Germany",
     "myear": "",
     "title": "Klingelnberg Make Hob Sharpning Machine",
-    "technical_specifications": "Between Centre: 600mm\r\nCentre Height:150mm\r\nLongitudinal Travel \u2013 500 mm\r\nGrinding Diameter \u2013 300 mm\r\n Grinding Length \u2013 400 mm\r\n Helical Pitch \u2013 10 \u2013 70\u2033",
+    "technical_specifications": "Between Centre: 600mm\r\nCentre Height:150mm\r\nLongitudinal Travel – 500 mm\r\nGrinding Diameter – 300 mm\r\n Grinding Length – 400 mm\r\n Helical Pitch – 10 – 70″",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1078_1.jpg",
-      "1078_2.jpg",
-      "1078_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1078_1",
+        "public_id": "ajmera/machines/1078_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1078_2",
+        "public_id": "ajmera/machines/1078_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1078_3",
+        "public_id": "ajmera/machines/1078_3"
+      }
     ]
   },
   {
@@ -1607,10 +3035,22 @@
     "technical_specifications": "Max Work Dia.: 100 mmMax Module (pitch) 4 mm 6 DPMax Axial Slide Travel 120 mmMin/Max Number of Teeth-Standard 2 Start Index Drive 5/36-Optional 2 Start Index Drive 4/24-Optional 4 Start Index Drive 2/12Max Hob Head Swivel +/-40 degrees\r\nMax Table Speed 50 - 150/minHob Shift Travel 120 mmHob Speeds 180 - 400/minAxial Feed 12 Steps Via Change Gears .5 - 6.96 mm/revCenter Distance Btwn Work & Hobb 25-110 mmWork Table Dia. 150 mmTable Bore Dia 63 mmHobb Arbor Dia. 27 mmMax Hobb Size 100 mm x 140 mm length",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1071_1.jpg",
-      "1071_2.jpg",
-      "1071_3.jpg",
-      "1071_4.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1071_1",
+        "public_id": "ajmera/machines/1071_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1071_2",
+        "public_id": "ajmera/machines/1071_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1071_3",
+        "public_id": "ajmera/machines/1071_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1071_4",
+        "public_id": "ajmera/machines/1071_4"
+      }
     ]
   },
   {
@@ -1625,16 +3065,46 @@
     "technical_specifications": "Max. Wheel Diameter: 300 mmGear width: 170 mmMax. module: 5, Min. module: 0,5Clamping length max.: 420 mmMax. angle of teeth: 45 gradMin. number of teeth: 12, Max. number of teeth: 130Slide stroke: 200 mmHelical lead min./max: 200-6.000 mmMax. dia. of grinding wheel 350 mmMax. width of grinding wheel: 84 mmWeight of machine.: 4 600 kg\r\nFassler Attachment and Change gear set available",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1063_1.jpg",
-      "1063_2.jpg",
-      "1063_3.jpg",
-      "1063_4.jpg",
-      "1063_5.jpg",
-      "1063_6.jpg",
-      "1063_7.jpg",
-      "1063_8.jpg",
-      "1063_9.jpeg",
-      "1063_10.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_1",
+        "public_id": "ajmera/machines/1063_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_2",
+        "public_id": "ajmera/machines/1063_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_3",
+        "public_id": "ajmera/machines/1063_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_4",
+        "public_id": "ajmera/machines/1063_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_5",
+        "public_id": "ajmera/machines/1063_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_6",
+        "public_id": "ajmera/machines/1063_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_7",
+        "public_id": "ajmera/machines/1063_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_8",
+        "public_id": "ajmera/machines/1063_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_9",
+        "public_id": "ajmera/machines/1063_9"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1063_10",
+        "public_id": "ajmera/machines/1063_10"
+      }
     ]
   },
   {
@@ -1649,15 +3119,42 @@
     "technical_specifications": "Table Size: 650mm X 1000mm Capacity: 40mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "1028_1.jpg",
-      "1028_2.jpg",
-      "1028_3.jpg",
-      "1028_4.jpg",
-      "1028_5.jpg",
-      "1028_6.jpg",
-      "1028_7.jpg",
-      "1028_8.jpg",
-      "1028_9.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1028_1",
+        "public_id": "ajmera/machines/1028_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1028_2",
+        "public_id": "ajmera/machines/1028_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1028_3",
+        "public_id": "ajmera/machines/1028_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1028_4",
+        "public_id": "ajmera/machines/1028_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1028_5",
+        "public_id": "ajmera/machines/1028_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1028_6",
+        "public_id": "ajmera/machines/1028_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1028_7",
+        "public_id": "ajmera/machines/1028_7"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1028_8",
+        "public_id": "ajmera/machines/1028_8"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/1028_9",
+        "public_id": "ajmera/machines/1028_9"
+      }
     ]
   },
   {
@@ -1672,11 +3169,26 @@
     "technical_specifications": "Drilling Capacity: 32mm\r\nFront Table: 800mm X 500mm\r\nRear Table:1050mm X 400mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "971_1.jpg",
-      "971_2.jpg",
-      "971_3.jpg",
-      "971_4.jpg",
-      "971_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/971_1",
+        "public_id": "ajmera/machines/971_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/971_2",
+        "public_id": "ajmera/machines/971_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/971_3",
+        "public_id": "ajmera/machines/971_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/971_4",
+        "public_id": "ajmera/machines/971_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/971_5",
+        "public_id": "ajmera/machines/971_5"
+      }
     ]
   },
   {
@@ -1691,9 +3203,18 @@
     "technical_specifications": "With Rack Cutting Attachment",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "917_1.jpg",
-      "917_2.jpg",
-      "917_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/917_1",
+        "public_id": "ajmera/machines/917_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/917_2",
+        "public_id": "ajmera/machines/917_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/917_3",
+        "public_id": "ajmera/machines/917_3"
+      }
     ]
   },
   {
@@ -1708,13 +3229,34 @@
     "technical_specifications": "Tapping Capacity: 16mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "889_1.jpg",
-      "889_2.jpg",
-      "889_3.jpg",
-      "889_4.jpg",
-      "889_5.jpg",
-      "889_6.jpg",
-      "889_7.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/889_1",
+        "public_id": "ajmera/machines/889_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/889_2",
+        "public_id": "ajmera/machines/889_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/889_3",
+        "public_id": "ajmera/machines/889_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/889_4",
+        "public_id": "ajmera/machines/889_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/889_5",
+        "public_id": "ajmera/machines/889_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/889_6",
+        "public_id": "ajmera/machines/889_6"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/889_7",
+        "public_id": "ajmera/machines/889_7"
+      }
     ]
   },
   {
@@ -1729,12 +3271,30 @@
     "technical_specifications": "Table Diameter : 915mm\r\nSegmental Wheel Dia. : 560mm\r\nMax. Height Capacity : 280mm\r\nSpindle Speed : 700rpm\r\nTable Speed : 8 & 24rpm\r\nAuto Feed : 0.004-0.04 ins/min\r\n0.1-1.0 mm/min\r\nSpindle Motor : 40HP/30Kw\r\nFloor Space : 3353 x 2184mm\r\nApprox. Net Weight: 7.5T\r\nApprox. Gross Weight : 8.25T",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "885_1.jpg",
-      "885_2.jpg",
-      "885_3.jpg",
-      "885_4.jpg",
-      "885_5.jpg",
-      "885_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/885_1",
+        "public_id": "ajmera/machines/885_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/885_2",
+        "public_id": "ajmera/machines/885_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/885_3",
+        "public_id": "ajmera/machines/885_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/885_4",
+        "public_id": "ajmera/machines/885_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/885_5",
+        "public_id": "ajmera/machines/885_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/885_6",
+        "public_id": "ajmera/machines/885_6"
+      }
     ]
   },
   {
@@ -1749,12 +3309,30 @@
     "technical_specifications": "Workpiece Outer Dia : 630mm\r\nWorkpiece Inner : -\r\nDia : Largest : 500mm\r\nSmallest : 200mm\r\nMax. Width : 240mm\r\nModule : 7\r\nTable Dia : 550mm\r\nTable Hole Dia : 125mm\r\nMax. Clampable Skiving Wheel Dia : 150mm\r\nAxle Distance b/w Skiving Wheel and workpiece :\r\nMax. Distance : 280mm\r\nMin. Distance : 40mm\r\nMachine Weight : 7800kgs\r\nSpace Requirement : L - 6000mm,  W - 3000mm,  H - 3500mm\r\nThe largest skiving slide path depends on the dia of the skiving wheel and internal toothing.\r\nWe make every effort to provide accurate information however not binding  variation, change, typographical errors, specifications.",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "860_1.jpg",
-      "860_2.jpg",
-      "860_3.jpg",
-      "860_4.jpg",
-      "860_5.jpg",
-      "860_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/860_1",
+        "public_id": "ajmera/machines/860_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/860_2",
+        "public_id": "ajmera/machines/860_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/860_3",
+        "public_id": "ajmera/machines/860_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/860_4",
+        "public_id": "ajmera/machines/860_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/860_5",
+        "public_id": "ajmera/machines/860_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/860_6",
+        "public_id": "ajmera/machines/860_6"
+      }
     ]
   },
   {
@@ -1769,9 +3347,18 @@
     "technical_specifications": "Capacity:70Tons\r\nW/Air Clutch\r\nBed Size : 813mm x 534mm\r\n64mm Bolster Plate\r\nStraightener/Feeder\r\nMinster Clutch Control",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "856_1.jpg",
-      "856_2.jpg",
-      "856_3.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/856_1",
+        "public_id": "ajmera/machines/856_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/856_2",
+        "public_id": "ajmera/machines/856_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/856_3",
+        "public_id": "ajmera/machines/856_3"
+      }
     ]
   },
   {
@@ -1786,10 +3373,22 @@
     "technical_specifications": "Capacity: 140 Ton\r\nTable Size:780mm x 600mm\r\nStroke : 80mm\r\nStrokes Per Minute : 120\r\nRam Adjustment : 60mm\r\nMotor : 20hp",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "849_1.jpg",
-      "849_2.jpg",
-      "849_3.jpg",
-      "849_4.jpeg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/849_1",
+        "public_id": "ajmera/machines/849_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/849_2",
+        "public_id": "ajmera/machines/849_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/849_3",
+        "public_id": "ajmera/machines/849_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/849_4",
+        "public_id": "ajmera/machines/849_4"
+      }
     ]
   },
   {
@@ -1804,11 +3403,26 @@
     "technical_specifications": "With Optical Attachment",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "523_1.jpg",
-      "523_2.jpg",
-      "523_3.jpg",
-      "523_4.jpg",
-      "523_5.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/523_1",
+        "public_id": "ajmera/machines/523_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/523_2",
+        "public_id": "ajmera/machines/523_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/523_3",
+        "public_id": "ajmera/machines/523_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/523_4",
+        "public_id": "ajmera/machines/523_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/523_5",
+        "public_id": "ajmera/machines/523_5"
+      }
     ]
   },
   {
@@ -1823,12 +3437,30 @@
     "technical_specifications": "Table Size: 600mm X 700mm\r\nSpindle Size:60mm",
     "video_url": "https://www.youtube.com/channel/UC5T7NF6DRqDvlj224nO_fbg/videos",
     "images": [
-      "402_1.jpg",
-      "402_2.jpg",
-      "402_3.jpg",
-      "402_4.jpg",
-      "402_5.jpg",
-      "402_6.jpg"
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/402_1",
+        "public_id": "ajmera/machines/402_1"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/402_2",
+        "public_id": "ajmera/machines/402_2"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/402_3",
+        "public_id": "ajmera/machines/402_3"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/402_4",
+        "public_id": "ajmera/machines/402_4"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/402_5",
+        "public_id": "ajmera/machines/402_5"
+      },
+      {
+        "url": "https://res.cloudinary.com/z5xktswf/image/upload/ajmera/machines/402_6",
+        "public_id": "ajmera/machines/402_6"
+      }
     ]
   }
 ]

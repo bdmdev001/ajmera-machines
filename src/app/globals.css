@@ -1661,7 +1661,7 @@ th {
       rgba(248, 249, 251, 0) 24%,
       rgba(248, 249, 251, 0) 76%,
       rgba(248, 249, 251, 0.3) 100%),
-    url('/hero-light.jpg');
+    url('https://res.cloudinary.com/z5xktswf/image/upload/v1784268553/ajmera/homepage/hero-light.png');
   background-size: cover, cover, cover;
   background-position: center, center, center;
   background-repeat: no-repeat;
@@ -1677,7 +1677,7 @@ th {
         rgba(248, 249, 251, 0.86) 30%,
         rgba(248, 249, 251, 0.5) 58%,
         rgba(248, 249, 251, 0.22) 100%),
-      url('/hero-light.jpg');
+      url('https://res.cloudinary.com/z5xktswf/image/upload/v1784268553/ajmera/homepage/hero-light.png');
     background-size: cover, cover;
     background-position: center, center;
   }

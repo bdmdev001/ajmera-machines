@@ -1,6 +1,6 @@
 import dbConnect from '@/lib/dbConnect';
 import Product, { type IProduct } from '@/models/Product';
-import { imageUrl, normalizeImages } from '@/lib/images';
+import { imageUrl, normalizeImages, type ImageRef } from '@/lib/images';
 import rawProducts from '@/data/products.json';
 
 /**
@@ -19,7 +19,9 @@ interface RawProduct {
   title: string;
   technical_specifications: string;
   video_url: string;
-  images: string[];
+  // Structured Cloudinary refs ({ url, public_id }); legacy string filenames
+  // are still tolerated by the image helpers during any partial migration.
+  images: ImageRef[];
 }
 
 const seed = rawProducts as RawProduct[];
@@ -91,8 +93,8 @@ export async function getAllProducts(): Promise<IProduct[]> {
 export interface CategoryStat {
   category: string;
   count: number;
-  /** A representative machine image for the category card */
-  image?: string;
+  /** A representative machine image for the category card (Cloudinary ref) */
+  image?: ImageRef;
 }
 
 /**
