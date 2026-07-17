@@ -38,3 +38,49 @@ export function imageUrl(ref: ImageRef): string {
   if (url.startsWith('/')) return url; // already root-relative
   return `/machines/${url}`; // legacy file in /public/machines
 }
+
+/* ============================================================================
+   Cloudinary delivery transforms — inject f_auto (modern format: AVIF/WebP),
+   q_auto (perceptual compression) and an explicit width so the browser never
+   downloads a multi-megapixel original for a small rendered box. Pure string
+   work, so this stays client-safe (no SDK import).
+   ========================================================================= */
+
+export interface CldOpts {
+  /** Target intrinsic width in px. */
+  width?: number;
+  /** Target intrinsic height in px (pair with crop:'fill' for fixed boxes). */
+  height?: number;
+  /** Cloudinary crop mode. 'limit' = never upscale (default when only width). */
+  crop?: 'fill' | 'limit' | 'fit' | 'scale';
+  /** Quality: 'auto' (default) or a fixed 1–100. */
+  quality?: number | 'auto';
+}
+
+const CLD_UPLOAD = '/image/upload/';
+
+/** True for a Cloudinary delivery URL we can safely rewrite. */
+function isCloudinary(url: string): boolean {
+  return /res\.cloudinary\.com/i.test(url) && url.includes(CLD_UPLOAD);
+}
+
+/**
+ * Resolve a reference to an OPTIMIZED Cloudinary URL. Non-Cloudinary URLs
+ * (placeholder, legacy local paths) are returned untouched.
+ */
+export function cldUrl(ref: ImageRef, opts: CldOpts = {}): string {
+  const url = imageUrl(ref);
+  if (!isCloudinary(url)) return url;
+  const t: string[] = ['f_auto', `q_${opts.quality ?? 'auto'}`];
+  if (opts.width) t.push(`w_${opts.width}`);
+  if (opts.height) t.push(`h_${opts.height}`);
+  t.push(`c_${opts.crop ?? (opts.width && opts.height ? 'fill' : 'limit')}`);
+  return url.replace(CLD_UPLOAD, `${CLD_UPLOAD}${t.join(',')}/`);
+}
+
+/** Build a width-descriptor srcset for responsive <img srcset>. */
+export function cldSrcSet(ref: ImageRef, widths: number[], opts: Omit<CldOpts, 'width'> = {}): string {
+  const url = imageUrl(ref);
+  if (!isCloudinary(url)) return '';
+  return widths.map((w) => `${cldUrl(ref, { ...opts, width: w })} ${w}w`).join(', ');
+}

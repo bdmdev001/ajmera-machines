@@ -5,7 +5,8 @@
    Enquiry-first: no prices / no cart. Legacy class names preserved.
    ========================================================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+/* Fonts are loaded (self-hosted) via next/font in app/layout.tsx and exposed as
+   the CSS variables --font-inter / --font-poppins consumed below. */
 
 :root {
 
@@ -84,8 +85,8 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* ---- Type ---------------------------------------------------------- */
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Poppins', 'Inter', system-ui, sans-serif;
+  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-display: var(--font-poppins), var(--font-inter), 'Poppins', 'Inter', system-ui, sans-serif;
 
   --container: 1320px;
   --header-h: 84px;
@@ -1646,9 +1647,31 @@ th {
 }
 
 /* ---- Homepage hero: full-bleed machine photo, dark copy over a light
-   gradient that fades in from the left (bright machines stay visible right). */
+   gradient that fades in from the left (bright machines stay visible right).
+
+   The photo is a real <img class="hero-photo-img"> (the LCP element) so it is
+   discovered by the preload scanner in the initial HTML. The light gradient
+   sits in .hero-photo-overlay above it; the copy container is z-index 2. */
 .hero-photo {
+  position: relative;
   background-color: #eef1f4;
+}
+
+.hero-photo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+.hero-photo-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
   background-image:
     linear-gradient(90deg,
       rgba(248, 249, 251, 0.98) 0%,
@@ -1660,25 +1683,18 @@ th {
       rgba(248, 249, 251, 0.4) 0%,
       rgba(248, 249, 251, 0) 24%,
       rgba(248, 249, 251, 0) 76%,
-      rgba(248, 249, 251, 0.3) 100%),
-    url('https://res.cloudinary.com/z5xktswf/image/upload/v1784268553/ajmera/homepage/hero-light.png');
-  background-size: cover, cover, cover;
-  background-position: center, center, center;
-  background-repeat: no-repeat;
+      rgba(248, 249, 251, 0.3) 100%);
 }
 
 /* On narrow screens the copy spans full width, so fade from the top instead
    of the left to keep dark text legible over the photo. */
 @media (max-width: 900px) {
-  .hero-photo {
+  .hero-photo-overlay {
     background-image:
       linear-gradient(180deg,
         rgba(248, 249, 251, 0.97) 0%,
         rgba(248, 249, 251, 0.86) 30%,
         rgba(248, 249, 251, 0.5) 58%,
-        rgba(248, 249, 251, 0.22) 100%),
-      url('https://res.cloudinary.com/z5xktswf/image/upload/v1784268553/ajmera/homepage/hero-light.png');
-    background-size: cover, cover;
-    background-position: center, center;
+        rgba(248, 249, 251, 0.22) 100%);
   }
 }

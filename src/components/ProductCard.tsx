@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { IProduct } from '@/models/Product';
 import { ArrowRight, Eye, Heart, MessageCircle, MapPin, CheckCircle2 } from 'lucide-react';
-import { imageUrl } from '@/lib/images';
+import { cldUrl, cldSrcSet } from '@/lib/images';
 
 interface ProductCardProps {
   product: IProduct;
@@ -17,10 +17,10 @@ const WA = '919322401398';
 export default function ProductCard({ product, badge }: ProductCardProps) {
   const [saved, setSaved] = useState(false);
 
-  const mainImage =
-    product.images && product.images.length > 0
-      ? imageUrl(product.images[0])
-      : 'https://placehold.co/600x450/eef1f4/93a0af?text=Machine';
+  const hasImage = product.images && product.images.length > 0;
+  const PLACEHOLDER = 'https://placehold.co/600x450/eef1f4/93a0af?text=Machine';
+  const mainImage = hasImage ? cldUrl(product.images[0], { width: 600 }) : PLACEHOLDER;
+  const mainSrcSet = hasImage ? cldSrcSet(product.images[0], [300, 450, 600, 800]) : undefined;
 
   const detailHref = `/products/${product.id}`;
   const quoteHref = `/contact?enquiry=${encodeURIComponent(product.title)}&stock=${encodeURIComponent(product.stockNo)}`;
@@ -36,9 +36,14 @@ export default function ProductCard({ product, badge }: ProductCardProps) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={mainImage}
+            srcSet={mainSrcSet}
+            sizes="(max-width: 560px) 90vw, (max-width: 1024px) 45vw, 300px"
             alt={product.title}
+            loading="lazy"
+            decoding="async"
             onError={(e) => {
-              e.currentTarget.src = 'https://placehold.co/600x450/eef1f4/93a0af?text=Machine';
+              e.currentTarget.srcset = '';
+              e.currentTarget.src = PLACEHOLDER;
             }}
           />
         </Link>

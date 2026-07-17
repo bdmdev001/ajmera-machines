@@ -13,11 +13,16 @@ import type { IProduct } from '@/models/Product';
 import {
   getFeaturedProducts, getCategoryStats, getTotalMachines, getFilterOptions,
 } from '@/lib/products';
-import { imageUrl } from '@/lib/images';
+import { cldUrl, cldSrcSet } from '@/lib/images';
 
 export const revalidate = 3600;
 
 const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20would%20like%20to%20enquire%20about%20a%20machine.';
+
+/* Hero LCP photo (Cloudinary). Rendered as a real <img> — see below — so the
+   browser's preload scanner discovers it in the initial HTML instead of waiting
+   for the CSSOM (which is what made the old CSS background a 14.6s LCP). */
+const HERO_IMG = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784268553/ajmera/homepage/hero-light';
 
 const CATEGORY_META: Record<string, string> = {
   'Grinder Surface': 'Surface grinders',
@@ -46,6 +51,20 @@ export default async function Home() {
     <div>
       {/* ================= 1 — HERO ================= */}
       <section className="hero-photo" style={{ position: 'relative', overflow: 'hidden' }}>
+        {/* LCP element: real <img> (not a CSS background) so it is discovered by
+            the preload scanner immediately and marked high priority. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="hero-photo-img"
+          src={cldUrl(HERO_IMG, { width: 1280 })}
+          srcSet={cldSrcSet(HERO_IMG, [640, 960, 1280, 1600])}
+          sizes="100vw"
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          decoding="async"
+        />
+        <div className="hero-photo-overlay" aria-hidden />
         <div className="container" style={{ position: 'relative', zIndex: 2, padding: 'clamp(52px, 7vw, 96px) 20px clamp(60px, 7vw, 130px)' }}>
           <div className="hero-copy" style={{ maxWidth: 640 }}>
             <Reveal>
@@ -116,7 +135,15 @@ export default async function Home() {
                   <div style={{ width: 92, height: 92, borderRadius: 'var(--radius-md)', overflow: 'hidden', flexShrink: 0, background: '#eef1f4' }}>
                     {cat.image && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={imageUrl(cat.image)} alt={cat.category} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img
+                        src={cldUrl(cat.image, { width: 184, height: 184, crop: 'fill' })}
+                        alt={cat.category}
+                        width={92}
+                        height={92}
+                        loading="lazy"
+                        decoding="async"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
                     )}
                   </div>
                   <div>

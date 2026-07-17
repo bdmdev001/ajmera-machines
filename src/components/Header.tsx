@@ -10,7 +10,7 @@ import {
 import SearchBar from './SearchBar';
 import type { SearchIndex } from '@/lib/products';
 
-const LOGO = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784268554/ajmera/homepage/ajmera-logo.webp';
+const LOGO = 'https://res.cloudinary.com/z5xktswf/image/upload/f_auto,q_auto,w_640/v1784268554/ajmera/homepage/ajmera-logo.webp';
 const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20would%20like%20to%20enquire%20about%20a%20machine.';
 
 const NAV = [

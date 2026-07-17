@@ -1,9 +1,25 @@
 import type { Metadata } from 'next';
+import { Poppins, Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import { getSearchIndex } from '@/lib/products';
+
+/* Self-hosted via next/font — no render-blocking Google Fonts @import round-trip,
+   automatic font-display: swap, and preload of the actual font files. */
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-poppins',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Ajmera Enterprise - Used Industrial Machinery Dealer',
@@ -18,7 +34,7 @@ export default function RootLayout({
 }>) {
   const searchIndex = getSearchIndex();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${poppins.variable}`} suppressHydrationWarning>
       <body
         suppressHydrationWarning
         style={{

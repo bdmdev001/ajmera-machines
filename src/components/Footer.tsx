@@ -155,7 +155,7 @@ export default function Footer() {
             {/* Brand */}
             <div className="footer-brand">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="https://res.cloudinary.com/z5xktswf/image/upload/v1784268556/ajmera/homepage/ajmera-logo-footer.png" alt="Ajmera Enterprise" style={{ height: 90, width: 'auto', objectFit: 'contain', display: 'block', marginBottom: 22 }} />
+              <img src="https://res.cloudinary.com/z5xktswf/image/upload/f_auto,q_auto,w_760/v1784268556/ajmera/homepage/ajmera-logo-footer.png" alt="Ajmera Enterprise" width={362} height={90} loading="lazy" decoding="async" style={{ height: 90, width: 'auto', objectFit: 'contain', display: 'block', marginBottom: 22 }} />
               <p style={{ fontSize: 14, lineHeight: 1.7, maxWidth: 320, marginBottom: 24, color: 'rgba(238,241,244,0.66)', textAlign: 'justify' }}>
                 Trusted importer &amp; dealer of quality used machinery including CNC, VMC,
                 Press Brakes, Lathes, and more. We deliver performance, value, and reliability
@@ -283,7 +283,7 @@ export default function Footer() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               <Link href="https://bdm.co.in" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'rgba(238,241,244,0.55)' }}>
                 <span>Designed by</span>
-                <Image src="https://res.cloudinary.com/z5xktswf/image/upload/v1784268557/ajmera/homepage/bdm-logo.png" alt="BDM CLOUDTECH" width={104} height={22} style={{ height: 22, width: 'auto' }} />
+                <Image src="https://res.cloudinary.com/z5xktswf/image/upload/f_auto,q_auto,w_208/v1784268557/ajmera/homepage/bdm-logo.png" alt="BDM CLOUDTECH" width={104} height={22} unoptimized style={{ height: 22, width: 'auto' }} />
               </Link>
               <motion.button
                 type="button" onClick={scrollTop} aria-label="Back to top"
