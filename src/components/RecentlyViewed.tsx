@@ -9,6 +9,8 @@ export interface RecentItem {
   title: string;
   image?: string;
   category?: string;
+  /** Canonical SEO product URL (stored so history links stay SEO-friendly). */
+  url?: string;
 }
 
 const KEY = 'aj_recent_machines';
@@ -47,7 +49,7 @@ export default function RecentlyViewed({ current }: { current: RecentItem }) {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
           {items.map((p) => (
-            <Link key={p.id} href={`/products/${p.id}`} className="surface" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 10, borderRadius: 'var(--radius-md)' }}>
+            <Link key={p.id} href={p.url ?? `/products/${p.id}`} className="surface" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 10, borderRadius: 'var(--radius-md)' }}>
               <div style={{ width: 60, height: 60, borderRadius: 'var(--radius-sm)', overflow: 'hidden', background: '#eef1f4', flexShrink: 0 }}>
                 {p.image && (
                   // eslint-disable-next-line @next/next/no-img-element

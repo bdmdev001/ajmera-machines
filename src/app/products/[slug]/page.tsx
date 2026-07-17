@@ -1,5 +1,6 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import {
   ChevronRight, MapPin, MessageCircle, ShieldCheck, Truck,
   Gauge, Tag, Settings, HardDrive, Layers, Globe, Calendar, ArrowRight,
@@ -10,17 +11,58 @@ import EnquiryForm from '@/components/EnquiryForm';
 import RecentlyViewed from '@/components/RecentlyViewed';
 import ProductCard from '@/components/ProductCard';
 import ShareProduct from '@/components/ShareProduct';
-import { getAllProducts } from '@/lib/products';
+import { getAllProducts, getProductByStockNo } from '@/lib/products';
 import { imageUrl } from '@/lib/images';
+import {
+  getProductSlug, getProductUrl, getProductAbsoluteUrl, extractIdToken,
+} from '@/lib/productUrl';
 import type { IProduct } from '@/models/Product';
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export const dynamic = 'force-dynamic';
 
 const WA_BASE = 'https://api.whatsapp.com/send?phone=919322401398&text=';
+
+/** Marketing description reused by the page body, metadata and JSON-LD. */
+function buildDescription(p: IProduct): string {
+  return `The ${p.make !== 'N/A' ? `${p.make} ` : ''}${p.title} is a quality used ${p.category.toLowerCase()} machine${p.country && p.country !== 'N/A' ? ` of ${p.country} origin` : ''}, available from our Navi Mumbai stockyard. Each machine in our inventory is inspected and tested under power before it is listed, with its make, model, year and specifications documented transparently. Request a quote for best pricing, condition photos and export logistics.`;
+}
+
+/** Dynamic, per-product SEO metadata (canonical + Open Graph + Twitter). */
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProductByStockNo(extractIdToken(slug));
+  if (!product) return { title: 'Machine not found — Ajmera Enterprise' };
+
+  const url = getProductAbsoluteUrl(product);
+  const brand = product.make && product.make !== 'N/A' ? ` ${product.make}` : '';
+  const title = `${product.title}${brand ? ` —${brand}` : ''} (Stock ${product.stockNo}) | Ajmera Enterprise`;
+  const description = buildDescription(product).slice(0, 300);
+  const image = product.images?.[0] ? imageUrl(product.images[0]) : undefined;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: 'Ajmera Enterprise',
+      type: 'website',
+      images: image ? [{ url: image }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
+  };
+}
 
 function youtubeEmbed(url?: string): string {
   if (!url) return '';
@@ -68,11 +110,20 @@ const SectionHead = ({ icon: Icon, title, sub }: { icon: typeof ListChecks; titl
 );
 
 export default async function ProductDetailPage({ params }: Props) {
-  const { id } = await params;
-  const all = await getAllProducts();
-  const product = all.find((p) => p.id === id);
+  const { slug } = await params;
+
+  // Resolve efficiently by the trailing identifier token (indexed stockNo/id) —
+  // no full-collection scan.
+  const product = await getProductByStockNo(extractIdToken(slug));
   if (!product) notFound();
 
+  // Enforce the canonical SEO slug: any legacy numeric URL (/products/2010) or a
+  // stale/incorrect descriptive slug with a valid stock number is permanently
+  // redirected to the single canonical URL — never rendering duplicate content.
+  const canonicalSlug = getProductSlug(product);
+  if (slug !== canonicalSlug) permanentRedirect(`/products/${canonicalSlug}`);
+
+  const all = await getAllProducts();
   const related = all.filter((p) => p.id !== product.id && p.category === product.category).slice(0, 4);
   const fill = related.length < 4
     ? all.filter((p) => p.id !== product.id && !related.includes(p)).slice(0, 4 - related.length)
@@ -98,10 +149,28 @@ export default async function ProductDetailPage({ params }: Props) {
     { icon: CheckCircle2, label: 'Availability', value: 'In stock' },
   ];
 
-  const description = `The ${product.make !== 'N/A' ? `${product.make} ` : ''}${product.title} is a quality used ${product.category.toLowerCase()} machine${product.country && product.country !== 'N/A' ? ` of ${product.country} origin` : ''}, available from our Navi Mumbai stockyard. Each machine in our inventory is inspected and tested under power before it is listed, with its make, model, year and specifications documented transparently. Request a quote for best pricing, condition photos and export logistics.`;
+  const description = buildDescription(product);
+
+  // Product JSON-LD (no invented price/offers — only real, known fields).
+  const jsonLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description,
+    sku: product.stockNo,
+    url: getProductAbsoluteUrl(product),
+    ...(product.make && product.make !== 'N/A' ? { brand: { '@type': 'Brand', name: product.make } } : {}),
+    ...(product.model && product.model !== 'N/A' ? { model: product.model } : {}),
+    ...(product.category && product.category !== 'N/A' ? { category: product.category } : {}),
+    ...(product.images.length ? { image: product.images.map((im) => imageUrl(im)) } : {}),
+  };
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumb */}
       <div className="band-paper" style={{ borderBottom: '1px solid var(--border-light)' }}>
         <div className="container" style={{ padding: '16px 20px' }}>
@@ -347,7 +416,7 @@ export default async function ProductDetailPage({ params }: Props) {
         </section>
       )}
 
-      <RecentlyViewed current={{ id: product.id, title: product.title, image: mainImg, category: product.category }} />
+      <RecentlyViewed current={{ id: product.id, title: product.title, image: mainImg, category: product.category, url: getProductUrl(product) }} />
 
       {/* Sticky mobile CTA */}
       <div

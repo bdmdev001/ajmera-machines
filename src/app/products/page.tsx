@@ -6,7 +6,7 @@ import ProductCard from '@/components/ProductCard';
 import SortSelect from '@/components/SortSelect';
 import FiltersPanel from '@/components/FiltersPanel';
 import FiltersDrawer from '@/components/FiltersDrawer';
-import { getAllProducts, getSearchIndex } from '@/lib/products';
+import { getAllProducts } from '@/lib/products';
 import type { IProduct } from '@/models/Product';
 
 export const dynamic = 'force-dynamic';
@@ -24,7 +24,6 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const { search, category, make, country, year, sort } = sp;
 
   const all = await getAllProducts();
-  const searchIndex = getSearchIndex();
 
   // ---- Filter (in-memory; resilient to DB being offline) ----
   const q = search?.trim().toLowerCase();
@@ -82,7 +81,6 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   // mobile drawer so no filter JSX is duplicated.
   const filtersProps = {
     sp,
-    searchIndex,
     values: { category, make, country, year },
     options: { categories, makes, countries, years },
     hasFilters,

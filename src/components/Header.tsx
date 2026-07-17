@@ -69,7 +69,7 @@ export default function Header({ searchIndex }: { searchIndex: SearchIndex }) {
             />
           </Link>
 
-          <div className="hdr-search" style={{ flex: 1, maxWidth: 620 }}>
+          <div className="hdr-search" style={{ flex: 1, minWidth: 0, maxWidth: 620 }}>
             <SearchBar index={searchIndex} />
           </div>
 
@@ -189,7 +189,7 @@ export default function Header({ searchIndex }: { searchIndex: SearchIndex }) {
       {mobileOpen && (
         <div style={{ background: 'var(--bg-surface)', borderBottom: '1px solid var(--border-light)', boxShadow: 'var(--shadow-lg)', padding: '18px 0 24px' }}>
           <div className="container">
-            <div style={{ marginBottom: 16 }}><SearchBar index={searchIndex} /></div>
+            <div className="hdr-drawer-search" style={{ marginBottom: 16 }}><SearchBar index={searchIndex} /></div>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 18 }}>
               {NAV.map((item) => {
                 const active = pathname === item.path || (item.path !== '/' && pathname.startsWith(item.path));
@@ -237,20 +237,24 @@ export default function Header({ searchIndex }: { searchIndex: SearchIndex }) {
       {/* Responsive header behaviour */}
       <style>{`
         .menu-btn { display: none; }
-        /* Tablet & below: collapse the desktop mega-nav + phone into the hamburger */
+        /* Tablet & below (≤1024): collapse the desktop mega-nav + phone into the
+           hamburger and drop the header WhatsApp button. */
         @media (max-width: 1024px) {
           .hdr-catnav { display: none !important; }
           .hdr-phone { display: none !important; }
+          .hdr-wa { display: none !important; }
           .menu-btn { display: inline-flex !important; }
         }
-        /* Small tablet: drop the dark utility top bar */
+        /* Larger tablet (769–1024) + desktop: the search box is shown directly in
+           the header, so the hamburger drawer must NOT duplicate it. */
+        @media (min-width: 769px) {
+          .hdr-drawer-search { display: none !important; }
+        }
+        /* Small tablet + phones (≤768): the search moves OUT of the header and
+           into the hamburger drawer; the dark utility top bar is also dropped. */
         @media (max-width: 768px) {
           .hdr-topbar { display: none !important; }
-        }
-        /* Phones: move search + WhatsApp button into the drawer */
-        @media (max-width: 560px) {
           .hdr-search { display: none !important; }
-          .hdr-wa { display: none !important; }
         }
       `}</style>
     </header>

@@ -54,7 +54,7 @@ export default function SearchBar({ index, placeholder = 'Search machines, categ
   const allItems: Item[] = useMemo(() => {
     const products = index.products.map((p) => ({
       key: `p-${p.id}`, label: p.title, section: 'Machines' as Section,
-      href: `/products/${p.id}`, image: p.image, sub: p.category,
+      href: p.href, image: p.image, sub: p.category,
     }));
     const cats = index.categories.map((c) => ({
       key: `c-${c}`, label: c, section: 'Categories' as Section,

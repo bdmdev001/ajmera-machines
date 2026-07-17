@@ -5,6 +5,7 @@ import { Share2, Loader2, Check, AlertCircle } from 'lucide-react';
 import { generateBrochure } from '@/components/pdf/generateBrochure';
 import type { BrochureData } from '@/components/pdf/brochure';
 import { sanitizeFileName } from '@/components/pdf/assets';
+import { getProductSlug, getSiteUrl } from '@/lib/productUrl';
 
 /* ------------------------------------------------------------------ *
  * Share Product — builds a premium A4 PDF brochure entirely on the
@@ -37,8 +38,8 @@ export interface ShareProductProps {
 }
 
 /* Production site URL — never leak localhost into the brochure/QR.
-   Override per-environment via NEXT_PUBLIC_SITE_URL. */
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.ajmeramachines.com').replace(/\/+$/, '');
+   Centralized in productUrl.ts; override per-environment via NEXT_PUBLIC_SITE_URL. */
+const SITE_URL = getSiteUrl();
 
 function siteHost(): string {
   try { return new URL(SITE_URL).host; } catch { return SITE_URL.replace(/^https?:\/\//, ''); }
@@ -130,7 +131,7 @@ export default function ShareProduct({ product, description, specs, notes, featu
     notes,
     features,
     applications,
-    productUrl: `${SITE_URL}/products/${product.id}`,
+    productUrl: `${SITE_URL}/products/${getProductSlug(product)}`,
     generatedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
   }), [product, description, specs, notes, features, applications]);
 

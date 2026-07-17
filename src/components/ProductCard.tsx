@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { IProduct } from '@/models/Product';
 import { ArrowRight, Eye, Heart, MessageCircle, MapPin, CheckCircle2 } from 'lucide-react';
 import { cldUrl, cldSrcSet } from '@/lib/images';
+import { getProductUrl } from '@/lib/productUrl';
 
 interface ProductCardProps {
   product: IProduct;
@@ -22,7 +23,7 @@ export default function ProductCard({ product, badge }: ProductCardProps) {
   const mainImage = hasImage ? cldUrl(product.images[0], { width: 600 }) : PLACEHOLDER;
   const mainSrcSet = hasImage ? cldSrcSet(product.images[0], [300, 450, 600, 800]) : undefined;
 
-  const detailHref = `/products/${product.id}`;
+  const detailHref = getProductUrl(product);
   const quoteHref = `/contact?enquiry=${encodeURIComponent(product.title)}&stock=${encodeURIComponent(product.stockNo)}`;
   const waHref = `https://api.whatsapp.com/send?phone=${WA}&text=${encodeURIComponent(
     `Hi, I'd like the best price for ${product.title} (Stock ${product.stockNo}).`

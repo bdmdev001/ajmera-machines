@@ -1,6 +1,8 @@
+import { cache } from 'react';
 import dbConnect from '@/lib/dbConnect';
 import Product, { type IProduct } from '@/models/Product';
 import { imageUrl, normalizeImages, type ImageRef } from '@/lib/images';
+import { getProductUrl } from '@/lib/productUrl';
 import rawProducts from '@/data/products.json';
 
 /**
@@ -90,6 +92,30 @@ export async function getAllProducts(): Promise<IProduct[]> {
   return seed.map(fromRaw);
 }
 
+/**
+ * Resolve a single product by the identifier token parsed from an SEO slug —
+ * the stockNo ("stk0002010") or, for legacy numeric URLs, the original id.
+ * Uses the indexed `stockNo`/`id` fields (no full-collection scan). Request-
+ * cached so the detail page + generateMetadata share one lookup. Falls back to
+ * the bundled seed when the DB is unavailable (parity with the rest of the app).
+ */
+export const getProductByStockNo = cache(async (token: string): Promise<IProduct | null> => {
+  const t = (token || '').trim();
+  if (!t) return null;
+  try {
+    await dbConnect();
+    const doc = await Product.findOne({
+      $or: [{ stockNo: t.toUpperCase() }, { id: t }],
+    }).lean();
+    if (doc) return normalize(doc as unknown as IProduct);
+  } catch (error) {
+    console.error('getProductByStockNo: DB unavailable, using seed fallback.', error);
+  }
+  const lower = t.toLowerCase();
+  const r = seed.find((s) => (s.stock_no || '').toLowerCase() === lower || String(s.id).toLowerCase() === lower);
+  return r ? fromRaw(r) : null;
+});
+
 export interface CategoryStat {
   category: string;
   count: number;
@@ -127,6 +153,8 @@ export interface SearchSuggestion {
   title: string;
   category: string;
   image?: string;
+  /** Precomputed SEO product URL so the client never rebuilds it. */
+  href: string;
 }
 
 export interface SearchIndex {
@@ -146,6 +174,7 @@ export function getSearchIndex(): SearchIndex {
     title: r.title,
     category: r.category,
     image: r.images?.[0] ? imageUrl(r.images[0]) : undefined,
+    href: getProductUrl({ id: String(r.id), stockNo: r.stock_no, make: r.make, model: r.model, title: r.title }),
   }));
   const cat = new Set<string>();
   const make = new Set<string>();

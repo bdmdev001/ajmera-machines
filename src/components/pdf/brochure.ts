@@ -256,29 +256,63 @@ export function ProductInfoGrid(kit: PdfKit, product: BrochureProduct) {
   const cols = 4;
   const gap = 4;
   const cardW = (CONTENT_W - gap * (cols - 1)) / cols;
-  const cardH = 17;
+  const chip = 8;
+  const txOff = 4 + chip + 3.5;          // value/label x offset from card left
+  const availW = cardW - txOff - 3;      // wrap width for the value text
+  const valueSize = 11;
+  const valueLH = 4.7;                   // mm per wrapped value line (11pt bold)
+  const baseH = 17;                      // height of a single-line card
   const top = kit.y;
+
+  // Pre-wrap every value at its REAL render size (jsPDF measures with the active
+  // font size) so long values like "Grinder Tool Cutter" wrap to multiple lines
+  // instead of being truncated. splitTextToSize also hard-breaks any single
+  // token wider than the cell, so nothing can spill outside the card.
+  kit.doc.setFont('helvetica', 'bold');
+  kit.doc.setFontSize(valueSize);
+  const wrapped = cards.map((c) => kit.doc.splitTextToSize(c.value || 'N/A', availW) as string[]);
+
+  // Each row grows to fit its tallest card so rows never overlap.
+  const rowCount = Math.ceil(cards.length / cols);
+  const rowH: number[] = [];
+  const rowY: number[] = [];
+  let acc = top;
+  for (let r = 0; r < rowCount; r += 1) {
+    let maxLines = 1;
+    for (let col = 0; col < cols; col += 1) {
+      const idx = r * cols + col;
+      if (idx < wrapped.length) maxLines = Math.max(maxLines, wrapped[idx].length);
+    }
+    rowH[r] = baseH + (maxLines - 1) * valueLH;
+    rowY[r] = acc;
+    acc += rowH[r] + gap;
+  }
+
   cards.forEach((c, i) => {
     const col = i % cols;
     const row = Math.floor(i / cols);
     const cx = x + col * (cardW + gap);
-    const cy = top + row * (cardH + gap);
-    kit.card(cx, cy, cardW, cardH, { radius: 2.8, fill: C.light, stroke: C.border, lineWidth: 0.3 });
-    // icon chip
-    const chip = 8;
+    const cy = rowY[row];
+    const h = rowH[row];
+    kit.card(cx, cy, cardW, h, { radius: 2.8, fill: C.light, stroke: C.border, lineWidth: 0.3 });
+
+    const lines = wrapped[i];
+    // Vertically centre the label + value block (and the icon) within the card.
+    const blockH = 3.2 + lines.length * valueLH;
+    const blockTop = cy + (h - blockH) / 2;
+
     const chipX = cx + 4;
-    const chipY = cy + (cardH - chip) / 2 - 1.5;
+    const chipY = cy + (h - chip) / 2;
     kit.doc.setFillColor(...C.accentSoft);
     kit.doc.roundedRect(chipX, chipY, chip, chip, 2, 2, 'F');
     fieldIcon(kit.doc, c.icon, chipX + 1.2, chipY + 1.2, chip - 2.4, C.primary);
-    // text
-    const tx = chipX + chip + 3.5;
-    kit.text(c.label.toUpperCase(), tx, cy + 6.4, { size: 7, weight: 'bold', color: C.muted, letterSpacing: 0.2 });
-    const value = (kit.doc.splitTextToSize(c.value, cardW - (tx - cx) - 3) as string[])[0];
-    kit.text(value, tx, cy + 12, { size: 11, weight: 'bold', color: C.text });
+
+    const tx = cx + txOff;
+    kit.text(c.label.toUpperCase(), tx, blockTop + 2.6, { size: 7, weight: 'bold', color: C.muted, letterSpacing: 0.2 });
+    lines.forEach((ln, li) => kit.text(ln, tx, blockTop + 6.4 + li * valueLH, { size: valueSize, weight: 'bold', color: C.text }));
   });
 
-  kit.y = top + Math.ceil(cards.length / cols) * (cardH + gap) - gap + 9;
+  kit.y = rowY[rowCount - 1] + rowH[rowCount - 1] + 9;
 }
 
 /* ================================================================== *

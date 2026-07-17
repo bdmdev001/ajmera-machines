@@ -35,12 +35,12 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number | 'all'>(25);
-  
+
   // Modal / Form States
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
   const [editingId, setEditingId] = useState('');
-  
+
   // Form Fields
   const [title, setTitle] = useState('');
   const [make, setMake] = useState('');
@@ -268,7 +268,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                 <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>Title / Manufacturer</th>
                 <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>Category</th>
                 <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>Model</th>
-                <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>Origin</th>
+                <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>Country</th>
                 <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)', textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
@@ -534,7 +534,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                   )}
                 </div>
                 <div className="form-group">
-                  <label>Origin Country</label>
+                  <label>Country</label>
                   <input
                     type="text"
                     value={country}
@@ -585,7 +585,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                 <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)', display: 'block', marginBottom: '8px' }}>
                   Machinery Images
                 </label>
-                
+
                 {/* Images list previews */}
                 {photos.length > 0 && (
                   <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '16px' }}>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import dbConnect from '@/lib/dbConnect';
 import Product from '@/models/Product';
+import { getProductUrl } from '@/lib/productUrl';
 
 export const dynamic = 'force-dynamic';
 
@@ -132,7 +133,7 @@ export default async function SearchPage({
               {products.map((p: any) => (
                 <Link
                   key={p.id}
-                  href={`/products/${p.id}`}
+                  href={getProductUrl(p)}
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <div

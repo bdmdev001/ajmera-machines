@@ -1,7 +1,5 @@
 import Link from 'next/link';
 import { RotateCcw, SlidersHorizontal, MessageCircle } from 'lucide-react';
-import SearchBar from '@/components/SearchBar';
-import type { SearchIndex } from '@/lib/products';
 
 type SP = { [k: string]: string | undefined };
 
@@ -9,7 +7,6 @@ const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20need
 
 interface FiltersPanelProps {
   sp: SP;
-  searchIndex: SearchIndex;
   values: { category?: string; make?: string; country?: string; year?: string };
   options: { categories: string[]; makes: string[]; countries: string[]; years: string[] };
   hasFilters: boolean;
@@ -22,7 +19,7 @@ interface FiltersPanelProps {
  * can supply its own chrome. No filtering logic lives here; every option is a
  * plain <Link> that changes the URL, exactly as before.
  */
-export default function FiltersPanel({ sp, searchIndex, values, options, hasFilters }: FiltersPanelProps) {
+export default function FiltersPanel({ sp, values, options, hasFilters }: FiltersPanelProps) {
   const { category, make, country, year } = values;
   const { categories, makes, countries, years } = options;
 
@@ -63,10 +60,6 @@ export default function FiltersPanel({ sp, searchIndex, values, options, hasFilt
             <RotateCcw size={13} /> Reset
           </Link>
         )}
-      </div>
-
-      <div style={{ marginBottom: 22 }}>
-        <SearchBar index={searchIndex} placeholder="Search machines…" maxWidth="100%" />
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>

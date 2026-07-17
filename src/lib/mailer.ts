@@ -1,4 +1,5 @@
 import nodemailer, { type Transporter } from 'nodemailer';
+import { getProductSlug, getSiteUrl } from '@/lib/productUrl';
 
 /* ============================================================================
    Nodemailer (SMTP) — all config from .env. Never throws to the caller: mail is
@@ -25,7 +26,7 @@ function getTransporter(): Transporter | null {
   return cached;
 }
 
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.ajmeramachines.com').replace(/\/+$/, '');
+const SITE_URL = getSiteUrl();
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string
 ));
@@ -60,7 +61,14 @@ export async function sendEnquiryNotification(data: EnquiryMail): Promise<{ sent
   ];
   if (data.company) rows.push(['Company', data.company]);
   if (isProduct) rows.push(['Machine', `${data.productTitle || ''}${data.stockNo ? ` (Stock ${data.stockNo})` : ''}`.trim()]);
-  if (data.productId) rows.push(['Link', `${SITE_URL}/products/${data.productId}`]);
+  // Prefer the canonical SEO URL (resolvable by stockNo); the raw _id link the
+  // route can't resolve is only a last-resort fallback.
+  if (data.stockNo || data.productId) {
+    const path = data.stockNo
+      ? `/products/${getProductSlug({ title: data.productTitle, stockNo: data.stockNo })}`
+      : `/products/${data.productId}`;
+    rows.push(['Link', `${SITE_URL}${path}`]);
+  }
 
   const html = `
     <div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:auto;color:#111">

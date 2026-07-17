@@ -1,8 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { Search, Trash2, Mail, Phone, Calendar, User, ExternalLink, Building } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Search, Trash2, Mail, Phone, Calendar, User, ExternalLink, Building,
+  ChevronLeft, ChevronRight,
+} from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
+import { getProductUrl } from '@/lib/productUrl';
 
 interface EnquiryData {
   _id: string;
@@ -21,6 +25,9 @@ interface EnquiryData {
 interface Props {
   initialEnquiries: EnquiryData[];
 }
+
+type PageSize = 25 | 50 | 100 | 'all';
+const PAGE_SIZE_OPTIONS: PageSize[] = [25, 50, 100, 'all'];
 
 /**
  * Format a timestamp deterministically (fixed locale + IST timezone) so the
@@ -41,6 +48,13 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
   const [enquiries, setEnquiries] = useState<EnquiryData[]>(initialEnquiries);
   const [filterStatus, setFilterStatus] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  // Selection is a set of explicitly-chosen ids that persists across page
+  // navigation (so cross-page bulk delete works). Nothing is ever deleted
+  // unless its id is in this set.
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState<PageSize>(25);
+  const [bulkDeleting, setBulkDeleting] = useState(false);
 
   const { modal, showError, showSuccess, confirm } = useAdminAlert();
 
@@ -71,6 +85,12 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
       const response = await fetch(`/api/enquiries/${id}`, { method: 'DELETE' });
       if (response.ok) {
         setEnquiries((prev) => prev.filter((e) => e._id !== id));
+        setSelected((prev) => {
+          if (!prev.has(id)) return prev;
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
         showSuccess('Enquiry deleted', 'The enquiry has been removed.');
       } else {
         showError('Could not delete enquiry', 'Please try again.');
@@ -80,19 +100,116 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
     }
   };
 
-  // Filter & Search Logic
-  const filteredEnquiries = enquiries.filter((e) => {
-    const matchesStatus = filterStatus === 'All' || e.status === filterStatus;
-    const matchesSearch =
-      e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.message.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (e.productTitle && e.productTitle.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (e.stockNo && e.stockNo.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (e.company && e.company.toLowerCase().includes(searchQuery.toLowerCase()));
+  // ---- Filter & search (operate on the full dataset, unchanged) ----
+  const filteredEnquiries = useMemo(() => {
+    const q = searchQuery.toLowerCase();
+    return enquiries.filter((e) => {
+      const matchesStatus = filterStatus === 'All' || e.status === filterStatus;
+      const matchesSearch =
+        e.name.toLowerCase().includes(q) ||
+        e.email.toLowerCase().includes(q) ||
+        e.message.toLowerCase().includes(q) ||
+        (e.productTitle && e.productTitle.toLowerCase().includes(q)) ||
+        (e.stockNo && e.stockNo.toLowerCase().includes(q)) ||
+        (e.company && e.company.toLowerCase().includes(q));
+      return matchesStatus && matchesSearch;
+    });
+  }, [enquiries, filterStatus, searchQuery]);
 
-    return matchesStatus && matchesSearch;
-  });
+  // ---- Pagination (client-side over the filtered list) ----
+  const totalFiltered = filteredEnquiries.length;
+  const totalPages = pageSize === 'all' ? 1 : Math.max(1, Math.ceil(totalFiltered / pageSize));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const pageItems = pageSize === 'all'
+    ? filteredEnquiries
+    : filteredEnquiries.slice((safePage - 1) * pageSize, safePage * pageSize);
+
+  // Changing the filter, search or page size resets to page 1 and clears the
+  // selection (the visible grouping changes, so a stale selection would be
+  // confusing / risky). Done here — not in an effect — so page navigation can
+  // preserve the selection. `page` is never clamped in state: rendering always
+  // uses the derived `safePage`, so a shrinking list can't leave it stranded.
+  const resetView = () => { setPage(1); setSelected(new Set()); };
+  const onSearchChange = (v: string) => { setSearchQuery(v); resetView(); };
+  const applyStatusFilter = (s: string) => { setFilterStatus(s); resetView(); };
+  const changePageSize = (size: PageSize) => { setPageSize(size); resetView(); };
+
+  // ---- Selection helpers ----
+  const pageIds = pageItems.map((e) => e._id);
+  const allOnPageSelected = pageIds.length > 0 && pageIds.every((id) => selected.has(id));
+  const someOnPageSelected = pageIds.some((id) => selected.has(id));
+
+  const selectAllRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (selectAllRef.current) {
+      selectAllRef.current.indeterminate = someOnPageSelected && !allOnPageSelected;
+    }
+  }, [someOnPageSelected, allOnPageSelected]);
+
+  const toggleOne = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAllOnPage = () => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) pageIds.forEach((id) => next.delete(id));
+      else pageIds.forEach((id) => next.add(id));
+      return next;
+    });
+  };
+
+  const handleBulkDelete = async () => {
+    const ids = Array.from(selected);
+    if (ids.length === 0) return;
+
+    const ok = await confirm({
+      title: `Delete ${ids.length} selected enquir${ids.length === 1 ? 'y' : 'ies'}?`,
+      message: 'The selected enquiries will be permanently removed. This action cannot be undone.',
+      confirmLabel: `Delete ${ids.length}`,
+      danger: true,
+    });
+    if (!ok) return;
+
+    setBulkDeleting(true);
+    try {
+      const res = await fetch('/api/enquiries', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        const removed = new Set(ids);
+        setEnquiries((prev) => prev.filter((e) => !removed.has(e._id)));
+        setSelected(new Set());
+        const n = data.deletedCount ?? ids.length;
+        showSuccess('Enquiries deleted', `${n} enquir${n === 1 ? 'y' : 'ies'} removed.`);
+      } else {
+        showError('Could not delete enquiries', data.error || 'Please try again.');
+      }
+    } catch {
+      showError('Network error', 'Could not delete the enquiries. Please try again.');
+    } finally {
+      setBulkDeleting(false);
+    }
+  };
+
+  const goToPage = (n: number) => {
+    if (n < 1 || n > totalPages || n === safePage) return;
+    setPage(n); // selection intentionally preserved across pages
+  };
+
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
+    .filter((n) => n === 1 || n === totalPages || Math.abs(n - safePage) <= 1);
+
+  const rangeStart = totalFiltered === 0 ? 0 : (safePage - 1) * (pageSize === 'all' ? totalFiltered : pageSize) + 1;
+  const rangeEnd = pageSize === 'all' ? totalFiltered : Math.min(safePage * pageSize, totalFiltered);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -114,7 +231,7 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
             type="text"
             placeholder="Search enquiries..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
             style={{
               width: '100%',
               padding: '10px 14px 10px 38px',
@@ -139,7 +256,7 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
           {['All', 'Pending', 'Reviewed', 'Resolved'].map((status) => (
             <button
               key={status}
-              onClick={() => setFilterStatus(status)}
+              onClick={() => applyStatusFilter(status)}
               className={`tab ${filterStatus === status ? 'is-active' : ''}`}
             >
               {status}
@@ -148,20 +265,73 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
         </div>
       </div>
 
+      {/* Selection / bulk actions bar */}
+      {filteredEnquiries.length > 0 && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px',
+            padding: '12px 16px',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-light)',
+            borderRadius: 'var(--radius-md)',
+          }}
+        >
+          <label style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', cursor: 'pointer' }}>
+            <input
+              ref={selectAllRef}
+              type="checkbox"
+              checked={allOnPageSelected}
+              onChange={toggleSelectAllOnPage}
+              aria-label="Select all enquiries on this page"
+              style={{ width: 16, height: 16, cursor: 'pointer', accentColor: 'var(--accent)' }}
+            />
+            Select all on this page
+            {selected.size > 0 && (
+              <span style={{ fontWeight: 500, color: 'var(--text-muted)' }}>· {selected.size} selected</span>
+            )}
+          </label>
+
+          <button
+            type="button"
+            onClick={handleBulkDelete}
+            disabled={selected.size === 0 || bulkDeleting}
+            className="btn"
+            style={{
+              padding: '9px 16px',
+              fontSize: 13.5,
+              color: '#fff',
+              background: 'var(--hot)',
+              opacity: selected.size === 0 || bulkDeleting ? 0.5 : 1,
+              cursor: selected.size === 0 || bulkDeleting ? 'not-allowed' : 'pointer',
+            }}
+          >
+            <Trash2 size={15} /> {bulkDeleting ? 'Deleting…' : `Delete selected${selected.size > 0 ? ` (${selected.size})` : ''}`}
+          </button>
+        </div>
+      )}
+
       {/* Enquiries Grid/List */}
       {filteredEnquiries.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {filteredEnquiries.map((enq) => (
+          {pageItems.map((enq) => {
+            const isSelected = selected.has(enq._id);
+            return (
             <div
               key={enq._id}
               style={{
                 backgroundColor: 'var(--bg-surface)',
-                border: '1px solid var(--border-light)',
+                border: `1px solid ${isSelected ? 'var(--accent)' : 'var(--border-light)'}`,
+                boxShadow: isSelected ? '0 0 0 1px var(--accent)' : 'none',
                 borderRadius: 'var(--radius-md)',
                 padding: '30px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '20px',
+                transition: 'border-color var(--transition-fast), box-shadow var(--transition-fast)',
               }}
             >
               {/* Header Info */}
@@ -176,22 +346,31 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
                   paddingBottom: '16px',
                 }}
               >
-                <div>
-                  <h4 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <User size={16} style={{ color: 'var(--accent)' }} /> {enq.name}
-                  </h4>
-                  <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <Mail size={13} /> {enq.email}
-                    </span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <Phone size={13} /> {enq.phone}
-                    </span>
-                    {enq.company && (
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', minWidth: 0 }}>
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => toggleOne(enq._id)}
+                    aria-label={`Select enquiry from ${enq.name}`}
+                    style={{ width: 16, height: 16, marginTop: 4, cursor: 'pointer', flexShrink: 0, accentColor: 'var(--accent)' }}
+                  />
+                  <div style={{ minWidth: 0 }}>
+                    <h4 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <User size={16} style={{ color: 'var(--accent)' }} /> {enq.name}
+                    </h4>
+                    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', fontSize: '13px', color: 'var(--text-secondary)' }}>
                       <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <Building size={13} /> {enq.company}
+                        <Mail size={13} /> {enq.email}
                       </span>
-                    )}
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <Phone size={13} /> {enq.phone}
+                      </span>
+                      {enq.company && (
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <Building size={13} /> {enq.company}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -269,9 +448,11 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
                     <strong style={{ color: 'var(--text-primary)' }}>{enq.productTitle}</strong>
                     <span style={{ color: 'var(--accent)', marginLeft: '10px', fontWeight: '700' }}>({enq.stockNo})</span>
                   </div>
-                  {enq.productId && (
+                  {(enq.stockNo || enq.productId) && (
                     <a
-                      href={`/products/${enq.productId}`}
+                      href={enq.stockNo
+                        ? getProductUrl({ title: enq.productTitle, stockNo: enq.stockNo })
+                        : `/products/${enq.productId}`}
                       target="_blank"
                       rel="noreferrer"
                       style={{
@@ -315,7 +496,8 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
                 <span suppressHydrationWarning>{formatSubmitted(enq.createdAt)}</span>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div
@@ -329,6 +511,69 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
           }}
         >
           No enquiries found matching your selections.
+        </div>
+      )}
+
+      {/* Footer: page size + pagination */}
+      {totalFiltered > 0 && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 12,
+            padding: '14px 18px',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-light)',
+            borderRadius: 'var(--radius-md)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+              Showing {rangeStart.toLocaleString('en-US')}–{rangeEnd.toLocaleString('en-US')} of {totalFiltered.toLocaleString('en-US')}
+            </span>
+            <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-muted)' }}>
+              Per page
+              <select
+                value={String(pageSize)}
+                onChange={(e) => changePageSize(e.target.value === 'all' ? 'all' : (Number(e.target.value) as PageSize))}
+                style={{ width: 'auto', height: 36, padding: '0 30px 0 12px', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-display)' }}
+              >
+                {PAGE_SIZE_OPTIONS.map((opt) => (
+                  <option key={String(opt)} value={String(opt)}>{opt === 'all' ? 'All' : opt}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          {pageSize !== 'all' && totalPages > 1 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <button
+                type="button" onClick={() => goToPage(safePage - 1)} disabled={safePage === 1} aria-label="Previous page"
+                style={{ width: 36, height: 36, display: 'grid', placeItems: 'center', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)', background: 'var(--bg-surface)', color: safePage === 1 ? 'var(--text-muted)' : 'var(--text-primary)', cursor: safePage === 1 ? 'not-allowed' : 'pointer', opacity: safePage === 1 ? 0.5 : 1 }}
+              >
+                <ChevronLeft size={16} />
+              </button>
+              {pageNumbers.map((n, idx) => (
+                <span key={n} style={{ display: 'inline-flex', alignItems: 'center' }}>
+                  {idx > 0 && pageNumbers[idx - 1] !== n - 1 && <span style={{ color: 'var(--text-muted)', padding: '0 4px' }}>…</span>}
+                  <button
+                    type="button" onClick={() => goToPage(n)}
+                    style={{ minWidth: 36, height: 36, padding: '0 8px', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13.5, cursor: 'pointer', border: '1px solid ' + (n === safePage ? 'var(--accent)' : 'var(--border-light)'), background: n === safePage ? 'var(--accent)' : 'var(--bg-surface)', color: n === safePage ? '#fff' : 'var(--text-primary)' }}
+                  >
+                    {n}
+                  </button>
+                </span>
+              ))}
+              <button
+                type="button" onClick={() => goToPage(safePage + 1)} disabled={safePage === totalPages} aria-label="Next page"
+                style={{ width: 36, height: 36, display: 'grid', placeItems: 'center', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)', background: 'var(--bg-surface)', color: safePage === totalPages ? 'var(--text-muted)' : 'var(--text-primary)', cursor: safePage === totalPages ? 'not-allowed' : 'pointer', opacity: safePage === totalPages ? 0.5 : 1 }}
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

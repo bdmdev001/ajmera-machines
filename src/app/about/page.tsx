@@ -29,7 +29,7 @@ const RANGE = [
 const TIMELINE = [
   { n: '01', title: 'Global sourcing', body: 'We acquire directly from closing plants and OEMs across Japan and Europe.' },
   { n: '02', title: 'Inspection & testing', body: 'Each unit is run under power, geometry-verified and photographed in detail.' },
-  { n: '03', title: 'Documentation', body: 'Make, model, year, specs and origin recorded transparently.' },
+  { n: '03', title: 'Documentation', body: 'Make, model, year, specifications and country recorded transparently.' },
   { n: '04', title: 'Export & delivery', body: 'Professional crating, export paperwork and freight to your facility.' },
   { n: '05', title: 'Installation support', body: 'Guidance on rigging, commissioning and spares so it earns from day one.' },
 ];
@@ -52,8 +52,7 @@ export default async function AboutPage() {
             Three decades in <span className="text-accent">used machinery</span>
           </h1>
           <p style={{ fontSize: 16, maxWidth: 640 }}>
-            Ajmera Enterprise buys, inspects and exports quality secondhand engineering,
-            tool-room, sheet-metal and CNC machinery — trusted since 1990.
+            Ajmera Enterprise buys, inspects, and exports quality pre-owned engineering, tool-room, sheet-metal, and CNC machinery—trusted by industries since 1990.
           </p>
         </div>
       </div>
@@ -69,16 +68,10 @@ export default async function AboutPage() {
                   A dealer&apos;s eye for machines with <span className="text-accent">decades</span> left in them
                 </h2>
                 <p style={{ fontSize: 16, marginBottom: 16 }}>
-                  Built on client-centric values and a long-standing reputation, the
-                  <strong> Ajmera</strong> name sits at the top of India&apos;s secondhand
-                  machinery dealers. We buy, check and store used equipment from engineering
-                  workshops, tool rooms, sheet-metal plants, forge shops and complete
-                  industrial plants — offered at fair, value-driven pricing.
+                  Built on client-centric values and a long-standing reputation, <strong>Ajmera Machines</strong> is one of India’s leading dealers of pre-owned industrial machinery. We source, inspect, and stock quality used equipment from engineering workshops, tool-room, sheet-metal plants, forge shops, and complete industrial facilities—offering reliable machinery at fair, value-driven prices.
                 </p>
                 <p style={{ fontSize: 16, marginBottom: 24 }}>
-                  We purchase entire plants and individual machines from forging, gear-making,
-                  bearing, grinding, turning and fabrication centres, maintaining a large,
-                  ready-to-inspect physical inventory in Navi Mumbai.
+                  We purchase both complete industrial plants and individual machines from forging, gear manufacturing, bearing, grinding, turning, and fabrication facilities. With a large, ready-to-inspect physical inventory in Navi Mumbai, we make it easier for buyers to find dependable second-hand machinery that meets their operational requirements.
                 </p>
                 <div style={{ display: 'grid', gap: 12, marginBottom: 28 }}>
                   {['Sourced from Japan, Germany, Switzerland & Italy', 'Every machine tested under power & geometry-checked', 'Transparent make, model, year & origin records', 'Full export crating, documentation & logistics'].map((t) => (
@@ -88,7 +81,7 @@ export default async function AboutPage() {
                     </div>
                   ))}
                 </div>
-                <Link href="/products" className="btn btn-primary">Browse the stocklist <ArrowRight size={16} /></Link>
+                <Link href="/products" className="btn btn-primary">Browse Products <ArrowRight size={16} /></Link>
               </div>
             </Reveal>
 

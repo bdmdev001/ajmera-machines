@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
+import { Types } from 'mongoose';
 import dbConnect from '@/lib/dbConnect';
 import Enquiry from '@/models/Enquiry';
 import { sendEnquiryNotification } from '@/lib/mailer';
+import { isAdminAuthenticated } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
@@ -60,7 +62,7 @@ export async function POST(request: Request) {
 export async function GET() {
   try {
     await dbConnect();
-    
+
     // In production, you would authenticate this route so only admins can read it.
     // For our admin dashboard, we can fetch all enquiries sorted by date.
     const enquiries = await Enquiry.find({}).sort({ createdAt: -1 }).lean();
@@ -68,5 +70,36 @@ export async function GET() {
   } catch (error: any) {
     console.error('Enquiry Fetch API Error:', error);
     return NextResponse.json({ error: 'Failed to fetch enquiries' }, { status: 500 });
+  }
+}
+
+/**
+ * Bulk-delete enquiries (admin only).
+ * Body: { ids: string[] }. Ids are validated as Mongo ObjectIds before use, so
+ * malformed input can never affect the query. Returns how many were removed.
+ */
+export async function DELETE(request: Request) {
+  try {
+    if (!(await isAdminAuthenticated())) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json().catch(() => ({}));
+    const rawIds = Array.isArray(body?.ids) ? body.ids : [];
+    const ids = rawIds.filter(
+      (id: unknown): id is string => typeof id === 'string' && Types.ObjectId.isValid(id),
+    );
+
+    if (ids.length === 0) {
+      return NextResponse.json({ error: 'No valid enquiry ids provided' }, { status: 400 });
+    }
+
+    await dbConnect();
+    const result = await Enquiry.deleteMany({ _id: { $in: ids } });
+
+    return NextResponse.json({ success: true, deletedCount: result.deletedCount ?? 0 });
+  } catch (error: any) {
+    console.error('Enquiry Bulk Delete API Error:', error);
+    return NextResponse.json({ error: error.message || 'Failed to delete enquiries' }, { status: 500 });
   }
 }
