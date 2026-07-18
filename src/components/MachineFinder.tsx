@@ -38,7 +38,7 @@ export default function MachineFinder({ categories, makes, countries, years }: P
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
         <Search size={18} style={{ color: 'var(--accent)' }} />
         <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: 'var(--accent)' }}>Find your machine</span>
-        <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>Filter our stocklist in seconds</span>
+        <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>Filter our product list in seconds</span>
       </div>
       <div className="finder-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr) auto', gap: 12 }}>
         <select value={category} onChange={(e) => setCategory(e.target.value)} suppressHydrationWarning style={selStyle}>

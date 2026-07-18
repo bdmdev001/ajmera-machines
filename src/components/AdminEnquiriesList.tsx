@@ -3,10 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Search, Trash2, Mail, Phone, Calendar, User, ExternalLink, Building,
-  ChevronLeft, ChevronRight,
+  ChevronLeft, ChevronRight, UserPlus, CheckCircle2,
 } from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
 import { getProductUrl } from '@/lib/productUrl';
+import CustomerFormModal, { type CustomerData } from '@/components/CustomerFormModal';
 
 interface EnquiryData {
   _id: string;
@@ -17,8 +18,12 @@ interface EnquiryData {
   email: string;
   phone: string;
   company?: string;
+  companyAddress?: string;
+  gstNumber?: string;
+  panNumber?: string;
   message: string;
   status: 'Pending' | 'Reviewed' | 'Resolved';
+  customerId?: string;
   createdAt: string;
 }
 
@@ -55,8 +60,71 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<PageSize>(25);
   const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [converting, setConverting] = useState(false);
+  const [convertOpen, setConvertOpen] = useState(false);
+  const [convertEnquiryId, setConvertEnquiryId] = useState<string | null>(null);
+  const [convertInitial, setConvertInitial] = useState<Partial<CustomerData> | undefined>(undefined);
 
   const { modal, showError, showSuccess, confirm } = useAdminAlert();
+
+  // Prefill a Customer from an enquiry's data for the single-conversion modal.
+  const toCustomer = (e: EnquiryData): Partial<CustomerData> => ({
+    companyName: e.company || e.name,
+    gstNumber: e.gstNumber || '',
+    panNumber: e.panNumber || '',
+    companyAddress: e.companyAddress || '',
+    fullName: e.name,
+    email: e.email,
+    phone: e.phone,
+    whatsapp: e.phone,
+  });
+
+  const markConverted = (ids: string[], customerId: string) => {
+    const s = new Set(ids);
+    setEnquiries((prev) => prev.map((e) => (s.has(e._id) ? { ...e, customerId: e.customerId || customerId } : e)));
+  };
+
+  const openConvert = (e: EnquiryData) => {
+    setConvertEnquiryId(e._id);
+    setConvertInitial(toCustomer(e));
+    setConvertOpen(true);
+  };
+
+  const handleConverted = (customer: CustomerData) => {
+    if (convertEnquiryId) markConverted([convertEnquiryId], customer._id || 'linked');
+    setConvertOpen(false);
+    setConvertEnquiryId(null);
+    showSuccess('Customer created', `“${customer.companyName}” has been added from this enquiry.`);
+  };
+
+  const handleBulkConvert = async () => {
+    const ids = Array.from(selected);
+    if (ids.length === 0) return;
+    const ok = await confirm({
+      title: `Convert ${ids.length} enquir${ids.length === 1 ? 'y' : 'ies'} to customers?`,
+      message: 'A customer is created for each enquiry. Enquiries whose email already matches an existing customer are linked to it (never duplicated), and already-converted enquiries are skipped.',
+      confirmLabel: 'Convert',
+    });
+    if (!ok) return;
+    setConverting(true);
+    try {
+      const res = await fetch('/api/enquiries/convert', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ids }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        markConverted(ids, 'linked');
+        setSelected(new Set());
+        showSuccess('Enquiries converted', `${data.created} created · ${data.linked} linked to existing · ${data.skipped} skipped.`);
+      } else {
+        showError('Could not convert enquiries', data.error || 'Please try again.');
+      }
+    } catch {
+      showError('Network error', 'Could not convert the enquiries. Please try again.');
+    } finally {
+      setConverting(false);
+    }
+  };
 
   const handleStatusChange = async (id: string, newStatus: 'Pending' | 'Reviewed' | 'Resolved') => {
     try {
@@ -214,6 +282,16 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {modal}
+      {convertOpen && (
+        <CustomerFormModal
+          mode="add"
+          initial={convertInitial}
+          linkEnquiryId={convertEnquiryId ?? undefined}
+          onClose={() => { setConvertOpen(false); setConvertEnquiryId(null); }}
+          onSaved={handleConverted}
+          onError={showError}
+        />
+      )}
       {/* Search and Filters Bar */}
       <div
         style={{
@@ -295,22 +373,38 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
             )}
           </label>
 
-          <button
-            type="button"
-            onClick={handleBulkDelete}
-            disabled={selected.size === 0 || bulkDeleting}
-            className="btn"
-            style={{
-              padding: '9px 16px',
-              fontSize: 13.5,
-              color: '#fff',
-              background: 'var(--hot)',
-              opacity: selected.size === 0 || bulkDeleting ? 0.5 : 1,
-              cursor: selected.size === 0 || bulkDeleting ? 'not-allowed' : 'pointer',
-            }}
-          >
-            <Trash2 size={15} /> {bulkDeleting ? 'Deleting…' : `Delete selected${selected.size > 0 ? ` (${selected.size})` : ''}`}
-          </button>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={handleBulkConvert}
+              disabled={selected.size === 0 || converting}
+              className="btn btn-secondary"
+              style={{
+                padding: '9px 16px',
+                fontSize: 13.5,
+                opacity: selected.size === 0 || converting ? 0.5 : 1,
+                cursor: selected.size === 0 || converting ? 'not-allowed' : 'pointer',
+              }}
+            >
+              <UserPlus size={15} /> {converting ? 'Converting…' : `Move to Customer${selected.size > 0 ? ` (${selected.size})` : ''}`}
+            </button>
+            <button
+              type="button"
+              onClick={handleBulkDelete}
+              disabled={selected.size === 0 || bulkDeleting}
+              className="btn"
+              style={{
+                padding: '9px 16px',
+                fontSize: 13.5,
+                color: '#fff',
+                background: 'var(--hot)',
+                opacity: selected.size === 0 || bulkDeleting ? 0.5 : 1,
+                cursor: selected.size === 0 || bulkDeleting ? 'not-allowed' : 'pointer',
+              }}
+            >
+              <Trash2 size={15} /> {bulkDeleting ? 'Deleting…' : `Delete selected${selected.size > 0 ? ` (${selected.size})` : ''}`}
+            </button>
+          </div>
         </div>
       )}
 
@@ -401,6 +495,23 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
                     <option value="Resolved" style={{ color: '#25D366', background: 'var(--bg-surface)' }}>Resolved</option>
                   </select>
 
+                  {enq.customerId ? (
+                    <span className="badge" style={{ background: 'rgba(31,175,82,0.12)', color: '#1faf52', fontSize: 11, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                      <CheckCircle2 size={12} /> Customer
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => openConvert(enq)}
+                      title="Convert to customer"
+                      aria-label="Convert to customer"
+                      style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '8px', borderRadius: '6px', transition: 'var(--transition-fast)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.backgroundColor = 'var(--accent-soft)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
+                    >
+                      <UserPlus size={16} />
+                    </button>
+                  )}
+
                   <button
                     onClick={() => handleDelete(enq._id)}
                     style={{
@@ -467,6 +578,30 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
                     >
                       View Specs <ExternalLink size={12} />
                     </a>
+                  )}
+                </div>
+              )}
+
+              {/* Company details (address / GST / PAN) */}
+              {(enq.companyAddress || enq.gstNumber || enq.panNumber) && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px 28px' }}>
+                  {enq.companyAddress && (
+                    <div style={{ flex: '1 1 260px', minWidth: 0 }}>
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>Company Address</span>
+                      <span style={{ fontSize: '14px', color: 'var(--text-primary)', whiteSpace: 'pre-wrap' }}>{enq.companyAddress}</span>
+                    </div>
+                  )}
+                  {enq.gstNumber && (
+                    <div>
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>GST Number</span>
+                      <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{enq.gstNumber}</span>
+                    </div>
+                  )}
+                  {enq.panNumber && (
+                    <div>
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>PAN Number</span>
+                      <span style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{enq.panNumber}</span>
+                    </div>
                   )}
                 </div>
               )}

@@ -9,8 +9,13 @@ export interface IEnquiry {
   email: string;
   phone: string;
   company?: string;
+  companyAddress?: string;
+  gstNumber?: string;
+  panNumber?: string;
   message: string;
   status: 'Pending' | 'Reviewed' | 'Resolved';
+  /** Set when this enquiry has been converted into a Customer record. */
+  customerId?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -24,7 +29,11 @@ const EnquirySchema = new Schema<IEnquiry>(
     email: { type: String, required: true },
     phone: { type: String, required: true },
     company: { type: String },
+    companyAddress: { type: String },
+    gstNumber: { type: String },
+    panNumber: { type: String },
     message: { type: String, required: true },
+    customerId: { type: Schema.Types.ObjectId, ref: 'Customer' },
     status: {
       type: String,
       enum: ['Pending', 'Reviewed', 'Resolved'],

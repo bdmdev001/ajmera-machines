@@ -23,6 +23,7 @@ interface ProductData {
   videoUrl?: string;
   technicalSpecifications?: string;
   images: ProductImage[]; // structured { url, public_id }
+  isLatestArrival?: boolean;
 }
 
 interface Props {
@@ -51,6 +52,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
   const [videoUrl, setVideoUrl] = useState('');
   const [technicalSpecifications, setTechnicalSpecifications] = useState('');
   const [photos, setPhotos] = useState<ProductImage[]>([]);
+  const [isLatestArrival, setIsLatestArrival] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -70,6 +72,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     setVideoUrl('');
     setTechnicalSpecifications('');
     setPhotos([]);
+    setIsLatestArrival(false);
     setIsFormOpen(true);
   };
 
@@ -86,6 +89,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     setVideoUrl(p.videoUrl || '');
     setTechnicalSpecifications(p.technicalSpecifications || '');
     setPhotos(normalizeImages(p.images));
+    setIsLatestArrival(Boolean(p.isLatestArrival));
     setIsFormOpen(true);
   };
 
@@ -142,6 +146,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
       videoUrl,
       technicalSpecifications,
       images: photos, // structured [{ url, public_id }]
+      isLatestArrival,
     };
 
     try {
@@ -289,7 +294,12 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                       {p.stockNo}
                     </td>
                     <td style={{ padding: '14px 20px' }}>
-                      <div style={{ fontWeight: '600', color: 'var(--text-primary)', fontSize: '14px' }}>{p.title}</div>
+                      <div style={{ fontWeight: '600', color: 'var(--text-primary)', fontSize: '14px', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        {p.title}
+                        {p.isLatestArrival && (
+                          <span className="badge" style={{ background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 10.5, fontWeight: 700 }}>Latest</span>
+                        )}
+                      </div>
                       <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Make: {p.make}</div>
                     </td>
                     <td style={{ padding: '14px 20px', fontSize: '14px' }}>{p.category}</td>
@@ -579,6 +589,20 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                   style={{ padding: '10px 14px', fontSize: '14px', resize: 'vertical' }}
                 />
               </div>
+
+              {/* Latest Arrival toggle */}
+              <label style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', background: 'var(--bg-surface-2)', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={isLatestArrival}
+                  onChange={(e) => setIsLatestArrival(e.target.checked)}
+                  style={{ width: 16, height: 16, cursor: 'pointer', accentColor: 'var(--accent)' }}
+                />
+                <span style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>Mark as Latest Arrival</span>
+                  <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Featured in the homepage &ldquo;Latest Arrivals&rdquo; section.</span>
+                </span>
+              </label>
 
               {/* Image Upload Gallery */}
               <div>

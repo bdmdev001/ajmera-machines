@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, ShieldCheck, LogOut, Package, ClipboardList, ExternalLink, Tag, Users } from 'lucide-react';
+import { LayoutDashboard, ShieldCheck, LogOut, Package, ClipboardList, ExternalLink, Tag, Users, Contact, Building2 } from 'lucide-react';
 
 export default function AdminNav() {
   const pathname = usePathname();
@@ -23,6 +23,8 @@ export default function AdminNav() {
     { name: 'Inventory', path: '/admin/inventory', icon: Package },
     { name: 'Categories', path: '/admin/categories', icon: Tag },
     { name: 'Enquiries', path: '/admin/enquiries', icon: ClipboardList },
+    { name: 'Customers', path: '/admin/customers', icon: Contact },
+    { name: 'Vendors', path: '/admin/vendors', icon: Building2 },
     { name: 'Subscribers', path: '/admin/subscribers', icon: Users },
   ];
 

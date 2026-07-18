@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
+// import SiteFrame from '@/components/SiteFrame';
 import { getSearchIndex } from '@/lib/products';
 
 /* Self-hosted via next/font — no render-blocking Google Fonts @import round-trip,
@@ -47,6 +48,7 @@ export default function RootLayout({
         <main style={{ flex: '1 0 auto' }}>{children}</main>
         <Footer />
         <WhatsAppFloat />
+        {/* <SiteFrame searchIndex={searchIndex}>{children}</SiteFrame> */}
       </body>
     </html>
   );

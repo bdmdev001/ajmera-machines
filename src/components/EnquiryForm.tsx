@@ -18,6 +18,9 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [company, setCompany] = useState('');
+  const [companyAddress, setCompanyAddress] = useState('');
+  const [gstNumber, setGstNumber] = useState('');
+  const [panNumber, setPanNumber] = useState('');
   const [quantity, setQuantity] = useState('1');
   const [preferred, setPreferred] = useState(CONTACT_TIMES[0]);
   const [message, setMessage] = useState(
@@ -39,7 +42,7 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
       const response = await fetch('/api/enquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, productTitle, stockNo, name, email, phone, company, message: composedMessage }),
+        body: JSON.stringify({ productId, productTitle, stockNo, name, email, phone, company, companyAddress, gstNumber, panNumber, message: composedMessage }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -126,6 +129,22 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <label style={fieldLabel}>Quantity</label>
             <input suppressHydrationWarning type="number" min={1} value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <label style={fieldLabel}>Company address *</label>
+          <textarea suppressHydrationWarning required rows={2} value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} placeholder="Billing / delivery address" style={{ resize: 'vertical' }} />
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="enquiry-row">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <label style={fieldLabel}>GST number</label>
+            <input suppressHydrationWarning type="text" value={gstNumber} onChange={(e) => setGstNumber(e.target.value)} placeholder="Optional" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <label style={fieldLabel}>PAN number</label>
+            <input suppressHydrationWarning type="text" value={panNumber} onChange={(e) => setPanNumber(e.target.value)} placeholder="Optional" />
           </div>
         </div>
 

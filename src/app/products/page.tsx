@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import {
-  Search as SearchIcon, X, ChevronRight, ChevronLeft,
+  Search as SearchIcon, X, ChevronRight, ChevronLeft, ArrowRight, MessageCircle, Sparkles,
 } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import SortSelect from '@/components/SortSelect';
 import FiltersPanel from '@/components/FiltersPanel';
 import FiltersDrawer from '@/components/FiltersDrawer';
+import WhyChooseProducts from '@/components/WhyChooseProducts';
 import { getAllProducts } from '@/lib/products';
 import type { IProduct } from '@/models/Product';
 
@@ -14,6 +15,8 @@ export const dynamic = 'force-dynamic';
 type SP = { [k: string]: string | undefined };
 
 const PAGE_SIZE = 12;
+
+const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20would%20like%20to%20enquire%20about%20a%20machine.';
 
 function distinct(items: (string | undefined)[]): string[] {
   return Array.from(new Set(items.filter((v): v is string => !!v && v !== 'N/A'))).sort();
@@ -94,14 +97,21 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
           <nav style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, color: 'var(--text-muted)', marginBottom: 14 }}>
             <Link href="/">Home</Link>
             <ChevronRight size={14} />
-            <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Stocklist</span>
+            <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Product List</span>
             {category && (<><ChevronRight size={14} /><span style={{ color: 'var(--accent)', fontWeight: 600 }}>{category}</span></>)}
           </nav>
-          <h1 className="display" style={{ fontSize: 'clamp(26px, 3.4vw, 40px)', marginBottom: 8 }}>
-            {category ? category : 'Machinery Stocklist'}
+          <h1 className="display" style={{ fontSize: 'clamp(26px, 3.4vw, 40px)', marginBottom: 12, maxWidth: 900 }}>
+            {category ? category : 'Quality-Inspected Industrial Machines Ready for Immediate Supply'}
           </h1>
-          <p style={{ fontSize: 15, maxWidth: 560 }}>
-            {filtered.length} inspected machine{filtered.length === 1 ? '' : 's'} available. Filter the catalogue, then request a best price on anything that fits.
+          {!category && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 14 }}>
+              <p style={{ fontSize: 15, textAlign: 'justify' }}>
+                Browse our extensive product list featuring professionally inspected industrial machines, carefully selected to deliver reliable performance, maximum productivity, and excellent value for your business. Whether you&apos;re expanding your production capacity, replacing existing equipment, or investing in cost-effective machinery, our inventory offers a wide range of trusted solutions for manufacturers, fabricators, engineering companies, and industrial businesses.
+              </p>
+            </div>
+          )}
+          <p style={{ fontSize: 15, textAlign: 'justify' }}>
+            Explore quality-inspected industrial machines. Filter the product list to find the right equipment, then request your best price on any machine that fits your requirements.
           </p>
         </div>
       </div>
@@ -185,6 +195,60 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
               </div>
             )}
           </main>
+        </div>
+
+        {/* ===== Editorial content — sits BELOW the listing and never affects
+             the product grid, search, filters, sorting or pagination above. ===== */}
+        <div style={{ marginTop: 'clamp(48px, 7vw, 80px)', display: 'flex', flexDirection: 'column', gap: 'clamp(40px, 6vw, 64px)' }}>
+          {/* Why Choose Our Products? (shared component) */}
+          <WhyChooseProducts />
+
+          {/* Find the Right Machine Faster */}
+          <section>
+            <span className="eyebrow" style={{ marginBottom: 10 }}>Smarter sourcing</span>
+            <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 34px)', marginBottom: 12 }}>Find the Right Machine Faster</h2>
+            <p style={{ fontSize: 15.5, maxWidth: 760 }}>
+              Compare multiple machines, review detailed specifications, and identify the equipment that best matches your production requirements.
+            </p>
+          </section>
+
+          {/* Request Your Best Price — CTA */}
+          <section>
+            <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--dark)', color: '#fff', padding: 'clamp(28px, 4vw, 48px)' }}>
+              <div aria-hidden style={{ position: 'absolute', top: -70, right: -50, width: 240, height: 240, borderRadius: '50%', background: 'var(--accent)', opacity: 0.18 }} />
+              <span className="eyebrow" style={{ color: '#7ea6d8', marginBottom: 10 }}>For buyers</span>
+              <h2 style={{ position: 'relative', color: '#fff', fontSize: 'clamp(24px, 3.2vw, 34px)', marginBottom: 14, maxWidth: 640 }}>Request Your Best Price</h2>
+              <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 680, marginBottom: 24 }}>
+                <p style={{ color: 'rgba(238,241,244,0.82)', textAlign: 'justify' }}>
+                  Found the machine you&apos;re looking for? Simply submit a Best Price Request, and our sales team will provide a competitive quotation, availability details, delivery timelines, and any additional information you need to make an informed purchasing decision.
+                </p>
+                <p style={{ color: 'rgba(238,241,244,0.82)', textAlign: 'justify' }}>
+                  Whether you&apos;re purchasing a single machine or multiple units, we&apos;ll work to provide the best possible commercial offer.
+                </p>
+              </div>
+              <div style={{ position: 'relative', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <Link href="/contact" className="btn btn-primary btn-lg">Request Best Price <ArrowRight size={18} /></Link>
+              </div>
+            </div>
+          </section>
+
+          {/* Need Expert Assistance? */}
+          <section>
+            <div className="surface" style={{ padding: 'clamp(24px, 4vw, 40px)', borderRadius: 'var(--radius-lg)' }}>
+              <span style={{ display: 'grid', placeItems: 'center', width: 48, height: 48, borderRadius: 14, background: 'var(--accent-soft)', color: 'var(--accent)', marginBottom: 16 }}>
+                <Sparkles size={24} />
+              </span>
+              <h2 style={{ fontSize: 'clamp(22px, 3vw, 30px)', marginBottom: 14 }}>Need Expert Assistance?</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 720, marginBottom: 22 }}>
+                <p style={{ fontSize: 15.5, textAlign: 'justify' }}>Not sure which machine is right for your application?</p>
+                <p style={{ fontSize: 15.5, textAlign: 'justify' }}>Our experienced team is here to help you choose the most suitable equipment based on your production requirements, budget, and technical specifications.</p>
+                <p style={{ fontSize: 15.5, textAlign: 'justify' }}>Browse our product list, filter your options, and request your best price today.</p>
+              </div>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp"><MessageCircle size={16} /> WhatsApp us</a>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>

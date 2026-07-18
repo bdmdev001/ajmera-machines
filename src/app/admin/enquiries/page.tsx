@@ -34,8 +34,12 @@ export default async function AdminEnquiriesPage() {
       email: enq.email,
       phone: enq.phone,
       company: enq.company || '',
+      companyAddress: enq.companyAddress || '',
+      gstNumber: enq.gstNumber || '',
+      panNumber: enq.panNumber || '',
       message: enq.message,
       status: enq.status,
+      customerId: enq.customerId ? enq.customerId.toString() : '',
       createdAt: enq.createdAt.toISOString(),
     };
   });

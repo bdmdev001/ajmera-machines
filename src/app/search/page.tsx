@@ -70,7 +70,7 @@ export default async function SearchPage({
             <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 8 }}>Type at least 2 characters</h3>
             <p style={{ fontSize: 14, color: 'var(--text-secondary)' }}>Use the search bar in the header to find machines and categories.</p>
             <Link href="/products" className="btn btn-secondary" style={{ marginTop: 18 }}>
-              Browse Stocklist
+              Browse Product List
             </Link>
           </div>
         ) : products.length === 0 ? (

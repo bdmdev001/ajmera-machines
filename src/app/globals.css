@@ -369,7 +369,7 @@ a {
 }
 
 .btn-whatsapp {
-  background: #25d366;
+  background: #1bb153;
   color: #fff;
 }
 
@@ -1119,11 +1119,11 @@ th {
   }
 }
 
-@media (min-width: 1400px) {
+/* @media (min-width: 1400px) {
   .products-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-}
+} */
 
 /* Toolbar: results left, sort right on desktop; wraps neatly below. */
 .products-toolbar {

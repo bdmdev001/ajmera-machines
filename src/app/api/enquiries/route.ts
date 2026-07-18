@@ -10,12 +10,12 @@ export async function POST(request: Request) {
     await dbConnect();
     const body = await request.json();
 
-    const { productId, productTitle, stockNo, name, email, phone, company, message } = body;
+    const { productId, productTitle, stockNo, name, email, phone, company, companyAddress, gstNumber, panNumber, message } = body;
 
-    // Validation
-    if (!name || !email || !phone || !message) {
+    // Validation — Company Address is now required alongside the core fields.
+    if (!name || !email || !phone || !message || !companyAddress) {
       return NextResponse.json(
-        { error: 'Missing required fields. Name, email, phone, and message are required.' },
+        { error: 'Missing required fields. Name, email, phone, company address, and message are required.' },
         { status: 400 }
       );
     }
@@ -28,6 +28,9 @@ export async function POST(request: Request) {
       email,
       phone,
       company,
+      companyAddress,
+      gstNumber,
+      panNumber,
       message,
       status: 'Pending',
     });
@@ -38,7 +41,7 @@ export async function POST(request: Request) {
     // mail failure must never fail the request; it's logged, not surfaced.
     try {
       const result = await sendEnquiryNotification({
-        name, email, phone, company, message,
+        name, email, phone, company, companyAddress, gstNumber, panNumber, message,
         productTitle, stockNo, productId,
       });
       if (!result.sent) console.error('[enquiry] admin email not sent:', result.error);

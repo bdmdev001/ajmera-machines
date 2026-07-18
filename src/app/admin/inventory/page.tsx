@@ -43,6 +43,7 @@ export default async function AdminInventoryPage() {
       technicalSpecifications: p.technicalSpecifications || '',
       categoryId: p.categoryId ? String(p.categoryId) : '',
       images: normalizeImages(p.images),
+      isLatestArrival: Boolean(p.isLatestArrival),
     };
   });
 

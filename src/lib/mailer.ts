@@ -36,6 +36,9 @@ export interface EnquiryMail {
   email: string;
   phone: string;
   company?: string;
+  companyAddress?: string;
+  gstNumber?: string;
+  panNumber?: string;
   message: string;
   productTitle?: string;
   stockNo?: string;
@@ -60,6 +63,9 @@ export async function sendEnquiryNotification(data: EnquiryMail): Promise<{ sent
     ['Phone', data.phone],
   ];
   if (data.company) rows.push(['Company', data.company]);
+  if (data.companyAddress) rows.push(['Company Address', data.companyAddress]);
+  if (data.gstNumber) rows.push(['GST Number', data.gstNumber]);
+  if (data.panNumber) rows.push(['PAN Number', data.panNumber]);
   if (isProduct) rows.push(['Machine', `${data.productTitle || ''}${data.stockNo ? ` (Stock ${data.stockNo})` : ''}`.trim()]);
   // Prefer the canonical SEO URL (resolvable by stockNo); the raw _id link the
   // route can't resolve is only a last-resort fallback.

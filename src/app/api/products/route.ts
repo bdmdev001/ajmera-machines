@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       title, make, model, categoryId, category, country, myear,
-      technicalSpecifications, videoUrl, images,
+      technicalSpecifications, videoUrl, images, isLatestArrival,
     } = body;
 
     if (!title) {
@@ -67,6 +67,7 @@ export async function POST(request: Request) {
       technicalSpecifications: technicalSpecifications || '',
       videoUrl: videoUrl || '',
       images: cleanImages,
+      isLatestArrival: Boolean(isLatestArrival),
     });
 
     await newProduct.save();

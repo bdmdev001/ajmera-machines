@@ -19,6 +19,8 @@ export interface IProduct {
   technicalSpecifications?: string;
   /** Structured Cloudinary references: { url: secure_url, public_id }. */
   images: ProductImage[];
+  /** Admin-controlled flag: surfaces the product in the homepage "Latest Arrivals". */
+  isLatestArrival?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -48,6 +50,7 @@ const ProductSchema = new Schema<IProduct>(
     videoUrl: { type: String },
     technicalSpecifications: { type: String },
     images: { type: [ProductImageSchema], default: [] },
+    isLatestArrival: { type: Boolean, default: false, index: true },
   },
   { timestamps: true }
 );

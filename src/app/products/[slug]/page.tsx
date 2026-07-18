@@ -176,7 +176,7 @@ export default async function ProductDetailPage({ params }: Props) {
         <div className="container" style={{ padding: '16px 20px' }}>
           <nav style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--text-muted)', flexWrap: 'wrap' }}>
             <Link href="/">Home</Link><ChevronRight size={14} />
-            <Link href="/products">Stocklist</Link><ChevronRight size={14} />
+            <Link href="/products">Product List</Link><ChevronRight size={14} />
             <Link href={`/products?category=${encodeURIComponent(product.category)}`} style={{ color: 'var(--text-secondary)' }}>{product.category}</Link>
             <ChevronRight size={14} />
             <span style={{

@@ -27,7 +27,7 @@ export async function PATCH(
     const body = await request.json();
     const {
       title, make, model, categoryId, category, country, myear,
-      technicalSpecifications, videoUrl, images,
+      technicalSpecifications, videoUrl, images, isLatestArrival,
     } = body;
 
     if (!title) {
@@ -54,6 +54,7 @@ export async function PATCH(
         technicalSpecifications: technicalSpecifications || '',
         videoUrl: videoUrl || '',
         images: nextImages,
+        isLatestArrival: Boolean(isLatestArrival),
       },
       { new: true }
     );

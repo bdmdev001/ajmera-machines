@@ -41,6 +41,7 @@ function fromRaw(r: RawProduct): IProduct {
     videoUrl: r.video_url ?? '',
     technicalSpecifications: r.technical_specifications ?? '',
     images: normalizeImages(r.images),
+    isLatestArrival: false,
   };
 }
 
@@ -57,6 +58,7 @@ function normalize(p: IProduct): IProduct {
     videoUrl: p.videoUrl ?? '',
     technicalSpecifications: p.technicalSpecifications ?? '',
     images: normalizeImages(p.images),
+    isLatestArrival: Boolean(p.isLatestArrival),
     createdAt: p.createdAt,
   };
 }
@@ -77,8 +79,27 @@ export async function getFeaturedProducts(limit = 6): Promise<IProduct[]> {
 }
 
 /**
+ * Homepage "Latest Arrivals" — ONLY products an admin has flagged
+ * (isLatestArrival). Falls back to the newest products when nothing is flagged
+ * (or the DB is unavailable) so the section is never empty.
+ */
+export async function getLatestArrivals(limit = 8): Promise<IProduct[]> {
+  try {
+    await dbConnect();
+    const flagged = await Product.find({ isLatestArrival: true }).sort({ createdAt: -1 }).limit(limit).lean();
+    if (flagged.length > 0) return flagged.map((d) => normalize(d as unknown as IProduct));
+    // Fallback: no products flagged yet → show the newest so the section renders.
+    const newest = await Product.find({}).sort({ createdAt: -1 }).limit(limit).lean();
+    if (newest.length > 0) return newest.map((d) => normalize(d as unknown as IProduct));
+  } catch (error) {
+    console.error('getLatestArrivals: DB unavailable, using seed fallback.', error);
+  }
+  return seed.slice(0, limit).map(fromRaw);
+}
+
+/**
  * The full catalogue. Prefers live MongoDB; falls back to the bundled seed so
- * the stocklist always renders (and stays filterable) during local dev.
+ * the product list always renders (and stays filterable) during local dev.
  */
 export async function getAllProducts(): Promise<IProduct[]> {
   try {

@@ -9,9 +9,10 @@ import Counter from '@/components/Counter';
 import MachineFinder from '@/components/MachineFinder';
 import FeaturedTabs from '@/components/FeaturedTabs';
 import ProductCard from '@/components/ProductCard';
+import WhyChooseProducts from '@/components/WhyChooseProducts';
 import type { IProduct } from '@/models/Product';
 import {
-  getFeaturedProducts, getCategoryStats, getTotalMachines, getFilterOptions,
+  getFeaturedProducts, getLatestArrivals, getCategoryStats, getTotalMachines, getFilterOptions,
 } from '@/lib/products';
 import { cldUrl, cldSrcSet } from '@/lib/images';
 
@@ -43,6 +44,7 @@ const INSIGHTS = [
 
 export default async function Home() {
   const products = await getFeaturedProducts(12);
+  const latestArrivals = await getLatestArrivals(8);
   const categories = getCategoryStats().slice(0, 6);
   const total = getTotalMachines();
   const options = getFilterOptions();
@@ -84,7 +86,7 @@ export default async function Home() {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 34 }}>
                 <Link href="/products" className="btn btn-primary btn-lg">Browse Products <ArrowRight size={18} /></Link>
                 <Link href="/contact" className="btn btn-hot btn-lg">Get Best Price</Link>
-                <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-lg"><MessageCircle size={18} /> WhatsApp</a>
+                <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-lg"><MessageCircle size={18} /> WhatsApp</a>
               </div>
             </Reveal>
             <Reveal delay={300}>
@@ -163,12 +165,19 @@ export default async function Home() {
         <div className="container">
           <Reveal>
             <div className="section-head">
-              <span className="eyebrow" style={{ marginBottom: 10 }}>Best of the stocklist</span>
+              <span className="eyebrow" style={{ marginBottom: 10 }}>Best of the product list</span>
               <h2>Featured machines</h2>
               <p>Freshly inspected arrivals across our most-requested categories.</p>
             </div>
           </Reveal>
           <Reveal delay={80}><FeaturedTabs products={products} /></Reveal>
+        </div>
+      </section>
+
+      {/* ================= 3.5 — WHY CHOOSE OUR PRODUCTS ================= */}
+      <section className="section-sm band-paper">
+        <div className="container">
+          <Reveal><WhyChooseProducts /></Reveal>
         </div>
       </section>
 
@@ -178,7 +187,7 @@ export default async function Home() {
           <div className="promo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22 }}>
             {[
               { icon: PackageCheck, kicker: 'Selling a machine?', title: 'We buy quality used machinery', body: 'Get a fair valuation for your surplus engineering equipment.', cta: 'Sell to us', href: '/contact', tone: 'var(--accent)' },
-              { icon: FileText, kicker: 'For buyers', title: 'Download the full stocklist', body: 'Specs, make, model and origin for every machine — in one PDF.', cta: 'Download Brochure', href: '/products', tone: 'var(--hot)' },
+              { icon: FileText, kicker: 'For buyers', title: 'Download the full product list', body: 'Specs, make, model and origin for every machine — in one PDF.', cta: 'Download Brochure', href: '/products', tone: 'var(--hot)' },
             ].map((p, i) => (
               <Reveal key={i} delay={i * 90}>
                 <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--dark)', color: '#fff', padding: 'clamp(28px, 4vw, 44px)' }}>
@@ -232,7 +241,7 @@ export default async function Home() {
             <Reveal delay={80}><Link href="/products" className="btn btn-secondary">View all inventory <ArrowRight size={16} /></Link></Reveal>
           </div>
           <div className="best-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 22 }}>
-            {products.slice(4, 12).map((p, i) => (
+            {latestArrivals.map((p, i) => (
               <Reveal key={p.id} delay={(i % 4) * 70}>
                 <ProductCardWrap product={p} hot={i === 0} />
               </Reveal>
