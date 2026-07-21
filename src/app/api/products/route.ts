@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import dbConnect from '@/lib/dbConnect';
 import Product from '@/models/Product';
 import { isAdminAuthenticated } from '@/lib/auth';
@@ -80,6 +81,12 @@ export async function POST(request: Request) {
     });
 
     await newProduct.save();
+
+    // The homepage (Featured + Latest Arrivals) and the product list are cached
+    // (revalidate = 3600). Invalidate them so a newly-added / featured product
+    // surfaces on the next visit instead of waiting out the cache window.
+    revalidatePath('/');
+    revalidatePath('/products');
 
     return NextResponse.json({ success: true, product: newProduct }, { status: 201 });
   } catch (error: any) {

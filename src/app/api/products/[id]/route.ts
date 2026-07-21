@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import dbConnect from '@/lib/dbConnect';
 import Product from '@/models/Product';
 import { isAdminAuthenticated } from '@/lib/auth';
@@ -78,6 +79,11 @@ export async function PATCH(
       .filter((pid) => pid && !nextPublicIds.has(pid));
     await deleteImages(removed);
 
+    // Cached homepage (Featured + Latest Arrivals) + product list must reflect
+    // this edit — e.g. toggling isFeatured — on the next visit, not an hour later.
+    revalidatePath('/');
+    revalidatePath('/products');
+
     return NextResponse.json({ success: true, product: updatedProduct });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to update machine';
@@ -107,6 +113,10 @@ export async function DELETE(
     }
 
     await deleteImages(oldImages.map((im) => im.public_id));
+
+    // Drop the deleted machine from the cached homepage + product list.
+    revalidatePath('/');
+    revalidatePath('/products');
 
     return NextResponse.json({ success: true, message: 'Machine deleted successfully' });
   } catch (error) {
