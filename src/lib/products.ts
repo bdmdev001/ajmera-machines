@@ -68,20 +68,26 @@ function normalize(p: IProduct): IProduct {
 }
 
 /**
- * Homepage "Featured" section — ONLY products an admin has explicitly marked
- * as featured (isFeatured). Newest featured first. There is deliberately no
- * "newest products" fallback: an unfeatured catalogue yields an empty section,
- * exactly as specified (nothing is ever auto-featured or hardcoded).
+ * Homepage "Featured" section. Prefers products an admin has explicitly marked
+ * as featured (isFeatured), newest first. To guarantee the section is never
+ * empty in production — e.g. when the live DB has no featured flags set, or the
+ * cluster is briefly unreachable — it falls back to the newest products, and
+ * finally to the bundled seed. This mirrors getLatestArrivals so the homepage
+ * always renders a populated carousel regardless of environment/data state.
  */
 export async function getFeaturedProducts(limit = 12): Promise<IProduct[]> {
   try {
     await dbConnect();
-    const docs = await Product.find({ isFeatured: true }).sort({ createdAt: -1 }).limit(limit).lean();
-    return docs.map((d) => normalize(d as unknown as IProduct));
+    const featured = await Product.find({ isFeatured: true }).sort({ createdAt: -1 }).limit(limit).lean();
+    if (featured.length > 0) return featured.map((d) => normalize(d as unknown as IProduct));
+    // Nothing explicitly featured — surface the newest products instead of an
+    // empty section (parity with Latest Arrivals).
+    const newest = await Product.find({}).sort({ createdAt: -1 }).limit(limit).lean();
+    if (newest.length > 0) return newest.map((d) => normalize(d as unknown as IProduct));
   } catch (error) {
-    console.error('getFeaturedProducts: DB unavailable.', error);
-    return [];
+    console.error('getFeaturedProducts: DB unavailable, using seed fallback.', error);
   }
+  return seed.slice(0, limit).map(fromRaw);
 }
 
 /**
