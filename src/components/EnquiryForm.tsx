@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Send, CheckCircle2, Loader2, ArrowRight, Package } from 'lucide-react';
+import FieldError from '@/components/FieldError';
+import { requiredMsg, emailMsg, phoneMsg, gstMsg, panMsg, isClean } from '@/lib/validation';
 
 interface EnquiryFormProps {
   productId?: string;
@@ -30,9 +32,27 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
   );
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => ({
+    name: requiredMsg(name, 'Full name'),
+    email: emailMsg(email, true),
+    phone: phoneMsg(phone, true, 'Phone / WhatsApp'),
+    companyAddress: requiredMsg(companyAddress, 'Company address'),
+    gstNumber: gstMsg(gstNumber),
+    panNumber: panMsg(panNumber),
+    message: requiredMsg(message, 'Message'),
+  });
+  const clearError = (k: string) => setErrors((p) => (p[k] ? { ...p, [k]: '' } : p));
+  const invalid = (k: string): React.CSSProperties => (errors[k] ? { borderColor: 'var(--hot)' } : {});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const found = validate();
+    setErrors(found);
+    if (!isClean(found)) { setStatus('idle'); return; }
+
     setStatus('loading');
     setErrorMsg('');
 
@@ -107,17 +127,20 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
       <form onSubmit={handleSubmit} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={fieldLabel}>Full name *</label>
-          <input suppressHydrationWarning type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
+          <input suppressHydrationWarning type="text" value={name} onChange={(e) => { setName(e.target.value); clearError('name'); }} onBlur={() => setErrors((p) => ({ ...p, name: requiredMsg(name, 'Full name') }))} placeholder="Your name" style={invalid('name')} aria-invalid={!!errors.name} />
+          <FieldError message={errors.name} />
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="enquiry-row">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <label style={fieldLabel}>Email *</label>
-            <input suppressHydrationWarning type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.com" />
+            <input suppressHydrationWarning type="email" value={email} onChange={(e) => { setEmail(e.target.value); clearError('email'); }} onBlur={() => setErrors((p) => ({ ...p, email: emailMsg(email, true) }))} placeholder="you@company.com" style={invalid('email')} aria-invalid={!!errors.email} />
+            <FieldError message={errors.email} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <label style={fieldLabel}>Phone / WhatsApp *</label>
-            <input suppressHydrationWarning type="tel" required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98765 43210" />
+            <input suppressHydrationWarning type="tel" value={phone} onChange={(e) => { setPhone(e.target.value); clearError('phone'); }} onBlur={() => setErrors((p) => ({ ...p, phone: phoneMsg(phone, true, 'Phone / WhatsApp') }))} placeholder="+91 98765 43210" style={invalid('phone')} aria-invalid={!!errors.phone} />
+            <FieldError message={errors.phone} />
           </div>
         </div>
 
@@ -134,17 +157,20 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={fieldLabel}>Company address *</label>
-          <textarea suppressHydrationWarning required rows={2} value={companyAddress} onChange={(e) => setCompanyAddress(e.target.value)} placeholder="Billing / delivery address" style={{ resize: 'vertical' }} />
+          <textarea suppressHydrationWarning rows={2} value={companyAddress} onChange={(e) => { setCompanyAddress(e.target.value); clearError('companyAddress'); }} onBlur={() => setErrors((p) => ({ ...p, companyAddress: requiredMsg(companyAddress, 'Company address') }))} placeholder="Billing / delivery address" style={{ resize: 'vertical', ...invalid('companyAddress') }} aria-invalid={!!errors.companyAddress} />
+          <FieldError message={errors.companyAddress} />
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="enquiry-row">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <label style={fieldLabel}>GST number</label>
-            <input suppressHydrationWarning type="text" value={gstNumber} onChange={(e) => setGstNumber(e.target.value)} placeholder="Optional" />
+            <input suppressHydrationWarning type="text" value={gstNumber} onChange={(e) => { setGstNumber(e.target.value); clearError('gstNumber'); }} onBlur={() => setErrors((p) => ({ ...p, gstNumber: gstMsg(gstNumber) }))} placeholder="Optional" style={invalid('gstNumber')} aria-invalid={!!errors.gstNumber} />
+            <FieldError message={errors.gstNumber} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <label style={fieldLabel}>PAN number</label>
-            <input suppressHydrationWarning type="text" value={panNumber} onChange={(e) => setPanNumber(e.target.value)} placeholder="Optional" />
+            <input suppressHydrationWarning type="text" value={panNumber} onChange={(e) => { setPanNumber(e.target.value); clearError('panNumber'); }} onBlur={() => setErrors((p) => ({ ...p, panNumber: panMsg(panNumber) }))} placeholder="Optional" style={invalid('panNumber')} aria-invalid={!!errors.panNumber} />
+            <FieldError message={errors.panNumber} />
           </div>
         </div>
 
@@ -157,7 +183,8 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <label style={fieldLabel}>Message *</label>
-          <textarea suppressHydrationWarning required rows={4} value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Tell us what you need…" style={{ resize: 'vertical' }} />
+          <textarea suppressHydrationWarning rows={4} value={message} onChange={(e) => { setMessage(e.target.value); clearError('message'); }} onBlur={() => setErrors((p) => ({ ...p, message: requiredMsg(message, 'Message') }))} placeholder="Tell us what you need…" style={{ resize: 'vertical', ...invalid('message') }} aria-invalid={!!errors.message} />
+          <FieldError message={errors.message} />
         </div>
 
         <button type="submit" className="btn btn-primary btn-lg" disabled={status === 'loading'} style={{ justifyContent: 'center' }}>

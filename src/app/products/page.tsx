@@ -7,7 +7,7 @@ import SortSelect from '@/components/SortSelect';
 import FiltersPanel from '@/components/FiltersPanel';
 import FiltersDrawer from '@/components/FiltersDrawer';
 import WhyChooseProducts from '@/components/WhyChooseProducts';
-import { getAllProducts } from '@/lib/products';
+import { getAllProducts, productMatchesSize, productMatchesCapacity, buildFinderCategories } from '@/lib/products';
 import type { IProduct } from '@/models/Product';
 
 export const dynamic = 'force-dynamic';
@@ -24,7 +24,7 @@ function distinct(items: (string | undefined)[]): string[] {
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
-  const { search, category, make, country, year, sort } = sp;
+  const { search, category, make, country, year, size, capacity, sort } = sp;
 
   const all = await getAllProducts();
 
@@ -35,6 +35,9 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     if (make && p.make !== make) return false;
     if (country && p.country !== country) return false;
     if (year && p.myear !== year) return false;
+    // Size / Capacity match against the product's technical-spec types.
+    if (size && !productMatchesSize(p, size)) return false;
+    if (capacity && !productMatchesCapacity(p, capacity)) return false;
     if (q) {
       const hay = `${p.title} ${p.make} ${p.model} ${p.stockNo} ${p.category}`.toLowerCase();
       if (!hay.includes(q)) return false;
@@ -58,11 +61,20 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     }
   });
 
-  // ---- Filter option lists (from full catalogue) ----
+  // ---- Filter option lists ----
   const categories = distinct(all.map((p) => p.category));
-  const makes = distinct(all.map((p) => p.make));
-  const countries = distinct(all.map((p) => p.country));
-  const years = distinct(all.map((p) => p.myear)).sort((a, b) => b.localeCompare(a));
+  // Brands are scoped to the selected Category (only brands that have products
+  // in it); cleared category ⇒ all brands.
+  const makes = distinct((category ? all.filter((p) => p.category === category) : all).map((p) => p.make));
+
+  // Size / Capacity filters are CATEGORY-SPECIFIC: the label + values come from
+  // the selected category's dominant spec attribute (same one system as the
+  // homepage finder). No category selected ⇒ no generic size/capacity lists.
+  const catFacet = category ? buildFinderCategories(all).find((c) => c.category === category) ?? null : null;
+  const sizeLabel = catFacet?.sizeLabel ?? null;
+  const capacityLabel = catFacet?.capacityLabel ?? null;
+  const sizes = catFacet?.sizes ?? [];
+  const capacities = catFacet?.capacities ?? [];
 
   // ---- Pagination ----
   const pageNum = Math.max(1, parseInt(sp.page ?? '1', 10) || 1);
@@ -70,7 +82,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const current = Math.min(pageNum, totalPages);
   const pageItems = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
 
-  const hasFilters = !!(search || category || make || country || year);
+  const hasFilters = !!(search || category || make || country || year || size || capacity);
 
   const hrefWith = (changes: SP) => {
     const merged: SP = { ...sp, ...changes };
@@ -84,8 +96,8 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   // mobile drawer so no filter JSX is duplicated.
   const filtersProps = {
     sp,
-    values: { category, make, country, year },
-    options: { categories, makes, countries, years },
+    values: { category, make, size, capacity },
+    options: { categories, makes, sizes, capacities, sizeLabel, capacityLabel },
     hasFilters,
   };
 
@@ -137,7 +149,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                 <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-secondary)' }}>
                   {filtered.length} result{filtered.length === 1 ? '' : 's'}
                 </span>
-                {[['search', search], ['category', category], ['make', make], ['country', country], ['year', year]]
+                {[['search', search], ['category', category], ['make', make], ['country', country], ['year', year], ['size', size], ['capacity', capacity]]
                   .filter(([, v]) => v)
                   .map(([k, v]) => (
                     <Link key={k as string} href={hrefWith({ [k as string]: undefined, page: undefined })}

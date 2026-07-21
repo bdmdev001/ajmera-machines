@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   Search, Plus, Edit3, Trash2, Loader2, ChevronLeft, ChevronRight,
-  Users, FileSpreadsheet, FileDown, Mail, Phone, MessageCircle,
+  Users, FileSpreadsheet, FileDown, Mail, Phone, MessageCircle, MapPin,
 } from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
 import CustomerFormModal, { type CustomerData } from '@/components/CustomerFormModal';
@@ -147,6 +147,7 @@ export default function AdminCustomersManager() {
                     <th style={th}>Email</th>
                     <th style={th}>Phone</th>
                     <th style={th}>WhatsApp</th>
+                    <th style={th}>Address</th>
                     <th style={th}>GST</th>
                     <th style={th}>PAN</th>
                     <th style={th}>Created</th>
@@ -163,6 +164,7 @@ export default function AdminCustomersManager() {
                       <td style={{ ...td, color: 'var(--text-secondary)' }}>{c.email}</td>
                       <td style={{ ...td, color: 'var(--text-secondary)' }}>{c.phone}</td>
                       <td style={{ ...td, color: 'var(--text-secondary)' }}>{c.whatsapp || '—'}</td>
+                      <td style={{ ...td, color: 'var(--text-secondary)', maxWidth: 220, whiteSpace: 'normal' }}>{c.companyAddress || '—'}</td>
                       <td style={{ ...td, color: 'var(--text-secondary)' }}>{c.gstNumber || '—'}</td>
                       <td style={{ ...td, color: 'var(--text-secondary)' }}>{c.panNumber || '—'}</td>
                       <td style={{ ...td, color: 'var(--text-secondary)', whiteSpace: 'nowrap' }} suppressHydrationWarning>{formatDate(c.createdAt ?? null)}</td>
@@ -195,6 +197,11 @@ export default function AdminCustomersManager() {
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Phone size={13} /> {c.phone}</span>
                     {c.whatsapp && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><MessageCircle size={13} /> {c.whatsapp}</span>}
                   </div>
+                  {c.companyAddress && (
+                    <div style={{ display: 'flex', gap: 6, fontSize: 13, color: 'var(--text-secondary)' }}>
+                      <MapPin size={13} style={{ flexShrink: 0, marginTop: 2 }} /> <span>{c.companyAddress}</span>
+                    </div>
+                  )}
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 16px', fontSize: 12.5, color: 'var(--text-muted)' }}>
                     {c.gstNumber && <span>GST: {c.gstNumber}</span>}
                     {c.panNumber && <span>PAN: {c.panNumber}</span>}

@@ -43,7 +43,7 @@ export default function Header({ searchIndex }: { searchIndex: SearchIndex }) {
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 40 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <ShieldCheck size={15} style={{ color: '#fff' }} />
-            <span>Inspected &amp; verified used machinery — trusted dealer since 1990.</span>
+            <span>Trusted Dealer Since 1980</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
             <a href="tel:+919322401398" style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
@@ -59,12 +59,13 @@ export default function Header({ searchIndex }: { searchIndex: SearchIndex }) {
       {/* ---- Main header (white) ---- */}
       <div style={{ background: 'var(--bg-surface)', borderBottom: '1px solid var(--border-light)', padding: '5px 0px' }}>
         <div className="container" style={{ display: 'flex', alignItems: 'center', gap: 24, height: 'var(--header-h)' }}>
-          <Link href="/" aria-label="Ajmera Machines" style={{ flexShrink: 0 }}>
+          <Link href="/" aria-label="Ajmera Machines" className="hdr-logo-link" style={{ flexShrink: 0, minWidth: 0, maxWidth: '100%' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={LOGO}
               alt="Ajmera Machines"
-              style={{ height: 80, width: 'auto', objectFit: 'contain', display: 'block' }}
+              className="hdr-logo"
+              style={{ height: 80, width: 'auto', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
               onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
             />
           </Link>
@@ -237,13 +238,22 @@ export default function Header({ searchIndex }: { searchIndex: SearchIndex }) {
       {/* Responsive header behaviour */}
       <style>{`
         .menu-btn { display: none; }
+        /* Logo can never exceed its column / the viewport. */
+        .hdr-logo { max-width: 100%; }
         /* Tablet & below (≤1024): collapse the desktop mega-nav + phone into the
            hamburger and drop the header WhatsApp button. */
         @media (max-width: 1024px) {
           .hdr-catnav { display: none !important; }
           .hdr-phone { display: none !important; }
           .hdr-wa { display: none !important; }
-          .menu-btn { display: inline-flex !important; }
+          .menu-btn {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+            flex-shrink: 0;
+          }
         }
         /* Larger tablet (769–1024) + desktop: the search box is shown directly in
            the header, so the hamburger drawer must NOT duplicate it. */
@@ -251,10 +261,18 @@ export default function Header({ searchIndex }: { searchIndex: SearchIndex }) {
           .hdr-drawer-search { display: none !important; }
         }
         /* Small tablet + phones (≤768): the search moves OUT of the header and
-           into the hamburger drawer; the dark utility top bar is also dropped. */
+           into the hamburger drawer; the dark utility top bar is also dropped.
+           Shrink the logo so it + the hamburger fit within narrow viewports. */
         @media (max-width: 768px) {
           .hdr-topbar { display: none !important; }
           .hdr-search { display: none !important; }
+          .hdr-logo { height: 75px !important; }
+        }
+        @media (max-width: 480px) {
+          .hdr-logo { height: 70px !important; }
+        }
+        @media (max-width: 360px) {
+          .hdr-logo { height: 65px !important; }
         }
       `}</style>
     </header>

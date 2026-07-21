@@ -19,7 +19,15 @@ export interface IProduct {
   technicalSpecifications?: string;
   /** Structured Cloudinary references: { url: secure_url, public_id }. */
   images: ProductImage[];
-  /** Admin-controlled flag: surfaces the product in the homepage "Latest Arrivals". */
+  /** Admin-controlled flag: surfaces the product in the homepage "Featured" section. */
+  isFeatured?: boolean;
+  /** Admin-controlled stock availability, shown across cards & the detail page. */
+  stockStatus?: 'In Stock' | 'Out of Stock';
+  /** Admin-managed free-form badge labels (e.g. "Sold", "Rare Machine"). */
+  badges?: string[];
+  /** @deprecated Latest Arrivals is now derived automatically from `createdAt`
+   *  (newest first). Retained only so historic documents don't error; nothing
+   *  in the app reads it any more. */
   isLatestArrival?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -50,7 +58,11 @@ const ProductSchema = new Schema<IProduct>(
     videoUrl: { type: String },
     technicalSpecifications: { type: String },
     images: { type: [ProductImageSchema], default: [] },
-    isLatestArrival: { type: Boolean, default: false, index: true },
+    isFeatured: { type: Boolean, default: false, index: true },
+    stockStatus: { type: String, enum: ['In Stock', 'Out of Stock'], default: 'In Stock', index: true },
+    badges: { type: [String], default: [] },
+    // Deprecated (kept for back-compat with existing docs; no longer read).
+    isLatestArrival: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

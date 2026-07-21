@@ -3,7 +3,6 @@ import dbConnect from '@/lib/dbConnect';
 import Product from '@/models/Product';
 import Enquiry from '@/models/Enquiry';
 import { isAdminAuthenticated } from '@/lib/auth';
-import AdminNav from '@/components/AdminNav';
 import Link from 'next/link';
 import { Package, ClipboardList, Clock, CheckCircle, ArrowRight, Plus, Inbox } from 'lucide-react';
 
@@ -58,7 +57,6 @@ export default async function AdminDashboardPage() {
 
   return (
     <div style={{ paddingBottom: 80 }}>
-      <AdminNav />
       <div className="container">
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 14, marginBottom: 28 }}>

@@ -26,6 +26,12 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
   const [isDragging, setIsDragging] = useState(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const touchStartX = useRef<number | null>(null);
+  const stageTouchX = useRef<number | null>(null);
+
+  // Thumbnail carousel (all breakpoints): horizontal scroll + arrow controls +
+  // keep the active thumbnail in view when the main image changes.
+  const thumbsRef = useRef<HTMLDivElement>(null);
+  const [thumbNav, setThumbNav] = useState({ overflow: false, atStart: true, atEnd: false });
 
   const resetZoom = useCallback(() => { setScale(1); setPan({ x: 0, y: 0 }); }, []);
 
@@ -50,6 +56,39 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
       return next;
     });
   }, []);
+
+  // ---- Thumbnail carousel controls ----
+  const updateThumbNav = useCallback(() => {
+    const el = thumbsRef.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setThumbNav({ overflow: max > 2, atStart: el.scrollLeft <= 2, atEnd: el.scrollLeft >= max - 2 });
+  }, []);
+
+  const scrollThumbs = (dir: 1 | -1) => {
+    thumbsRef.current?.scrollBy({ left: dir * thumbsRef.current.clientWidth * 0.8, behavior: 'smooth' });
+  };
+
+  // Recompute arrow state on mount, resize, scroll and when the image set changes.
+  useEffect(() => {
+    const el = thumbsRef.current;
+    if (!el) return;
+    updateThumbNav();
+    el.addEventListener('scroll', updateThumbNav, { passive: true });
+    window.addEventListener('resize', updateThumbNav);
+    return () => { el.removeEventListener('scroll', updateThumbNav); window.removeEventListener('resize', updateThumbNav); };
+  }, [updateThumbNav, imgList.length]);
+
+  // Keep the active thumbnail visible — scrolls ONLY the strip, never the page.
+  useEffect(() => {
+    const el = thumbsRef.current;
+    const btn = el?.children[activeIdx] as HTMLElement | undefined;
+    if (!el || !btn) return;
+    const bLeft = btn.offsetLeft;
+    const bRight = bLeft + btn.offsetWidth;
+    if (bLeft < el.scrollLeft) el.scrollTo({ left: Math.max(0, bLeft - 8), behavior: 'smooth' });
+    else if (bRight > el.scrollLeft + el.clientWidth) el.scrollTo({ left: bRight - el.clientWidth + 8, behavior: 'smooth' });
+  }, [activeIdx]);
 
   // Keyboard controls (only while lightbox open)
   useEffect(() => {
@@ -88,8 +127,20 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-      {/* Active image — premium card with a Gaussian-blur backdrop of the same image */}
-      <div className="gallery-stage">
+      {/* Active image — premium card with a Gaussian-blur backdrop of the same
+          image. Acts as an inline carousel on every breakpoint: swipe on touch
+          devices, arrow buttons on pointer devices; the image stays `contain`ed
+          so no part of the machine is cropped. */}
+      <div
+        className="gallery-stage"
+        onTouchStart={(e) => { stageTouchX.current = e.touches[0].clientX; }}
+        onTouchEnd={(e) => {
+          if (stageTouchX.current == null) return;
+          const dx = e.changedTouches[0].clientX - stageTouchX.current;
+          if (Math.abs(dx) > 40 && multiple) { if (dx < 0) nextImg(); else prevImg(); }
+          stageTouchX.current = null;
+        }}
+      >
         {/* Blurred backdrop (same image, covers the stage, darkened for depth) */}
         <div
           aria-hidden
@@ -125,27 +176,41 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
         </button>
       </div>
 
-      {/* Thumbnails */}
+      {/* Thumbnail carousel — horizontal slider on every breakpoint. Arrows
+          appear only when the strip overflows its container; the strip itself
+          stays swipeable (native scroll) on touch devices. */}
       {multiple && (
-        <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 6 }}>
-          {imgList.map((img, idx) => (
-            <button
-              key={idx}
-              onClick={() => setActiveIdx(idx)}
-              aria-label={`View image ${idx + 1}`}
-              aria-current={activeIdx === idx}
-              style={{
-                width: 74, height: 74, flexShrink: 0, padding: 0, cursor: 'pointer', overflow: 'hidden',
-                borderRadius: 'var(--radius-md)', background: '#fff',
-                border: activeIdx === idx ? '2px solid var(--accent)' : '1px solid var(--border-light)',
-                transition: 'border-color 0.2s ease',
-              }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img} alt={`${title} thumbnail ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                onError={(e) => { e.currentTarget.src = FALLBACK; }} />
+        <div className="gallery-thumbs">
+          {thumbNav.overflow && (
+            <button type="button" className="gallery-thumbs__nav" onClick={() => scrollThumbs(-1)} disabled={thumbNav.atStart} aria-label="Previous thumbnails">
+              <ChevronLeft size={18} />
             </button>
-          ))}
+          )}
+          <div className="gallery-thumbs-track" ref={thumbsRef}>
+            {imgList.map((img, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveIdx(idx)}
+                aria-label={`View image ${idx + 1}`}
+                aria-current={activeIdx === idx}
+                style={{
+                  width: 74, height: 74, flexShrink: 0, padding: 0, cursor: 'pointer', overflow: 'hidden',
+                  borderRadius: 'var(--radius-md)', background: '#fff',
+                  border: activeIdx === idx ? '2px solid var(--accent)' : '1px solid var(--border-light)',
+                  transition: 'border-color 0.2s ease',
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={img} alt={`${title} thumbnail ${idx + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  onError={(e) => { e.currentTarget.src = FALLBACK; }} />
+              </button>
+            ))}
+          </div>
+          {thumbNav.overflow && (
+            <button type="button" className="gallery-thumbs__nav" onClick={() => scrollThumbs(1)} disabled={thumbNav.atEnd} aria-label="Next thumbnails">
+              <ChevronRight size={18} />
+            </button>
+          )}
         </div>
       )}
 

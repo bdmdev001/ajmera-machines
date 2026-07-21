@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import Counter from '@/components/Counter';
-import { getFeaturedProducts, getTotalMachines } from '@/lib/products';
+import { getLatestArrivals, getTotalMachines } from '@/lib/products';
 import { imageUrl } from '@/lib/images';
 
 export const revalidate = 3600;
@@ -13,29 +13,29 @@ export const revalidate = 3600;
 const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20would%20like%20to%20enquire%20about%20a%20machine.';
 
 const VALUES = [
-  { icon: Search, title: 'We inspect before we sell', body: 'Every machine is run under power and geometry-checked. If it doesn’t pass, it doesn’t enter our stock.' },
-  { icon: Globe, title: 'Sourced from the best', body: 'Direct acquisition of premium Japanese, German, Swiss and Italian machinery — origins documented.' },
-  { icon: ShieldCheck, title: 'Total transparency', body: 'Make, model, year, condition and specifications recorded honestly for every unit we list.' },
-  { icon: Truck, title: 'Export handled end-to-end', body: 'Dismantling, crating, documentation and freight to 25+ countries — moved door to door.' },
+  { icon: Search, title: 'Find the Right Machine', body: 'Explore suitable machinery based on your application, specifications, and specific requirements.' },
+  { icon: Globe, title: 'Clear & Honest Information', body: 'Get straightforward details about machine specifications, condition, history, and suitability.' },
+  { icon: ShieldCheck, title: 'Quality You Can Rely On', body: 'Explore carefully selected pre-owned machinery from trusted Indian and international sources.' },
+  { icon: Truck, title: 'Support from Enquiry to Delivery', body: 'Get assistance throughout the process, from your initial enquiry to documentation, logistics, and delivery.' },
 ];
 
 const RANGE = [
-  { icon: Wrench, title: 'Conventional workshop', body: 'Lathes, pillar & radial drills, horizontal borers, shaping, slotting and milling machines.' },
-  { icon: Cog, title: 'CNC & automatics', body: 'Vertical & horizontal machining centres, CNC turning, drilling and profile grinders.' },
-  { icon: Layers, title: 'Grinding specialists', body: 'Surface, cylindrical, centreless, internal, double-disc and rotary grinding units.' },
-  { icon: Hammer, title: 'Sheet metal & presses', body: 'Power presses, shears, hydraulic press brakes, notching, bandsaws and cutting saws.' },
+  { icon: Wrench, title: 'Conventional workshop', body: 'Reliable machines for turning, milling, drilling, boring, shaping, and general workshop applications.' },
+  { icon: Cog, title: 'CNC & automatics', body: 'Explore CNC and automated machines for precision manufacturing and production requirements.' },
+  { icon: Layers, title: 'Grinding specialists', body: 'Machines for precision grinding, cylindrical grinding, surface grinding, and other finishing applications.' },
+  { icon: Hammer, title: 'Sheet metal & presses', body: 'Explore machines for forming, bending, pressing, cutting, and sheet-metal requirements.' },
 ];
 
 const TIMELINE = [
-  { n: '01', title: 'Global sourcing', body: 'We acquire directly from closing plants and OEMs across Japan and Europe.' },
-  { n: '02', title: 'Inspection & testing', body: 'Each unit is run under power, geometry-verified and photographed in detail.' },
-  { n: '03', title: 'Documentation', body: 'Make, model, year, specifications and country recorded transparently.' },
-  { n: '04', title: 'Export & delivery', body: 'Professional crating, export paperwork and freight to your facility.' },
-  { n: '05', title: 'Installation support', body: 'Guidance on rigging, commissioning and spares so it earns from day one.' },
+  { n: '01', title: 'Tell Us What You Need', body: 'Share your application, specifications, preferred machine, or production requirement.' },
+  { n: '02', title: 'Explore Suitable Options', body: 'We help you identify available machines or explore suitable alternatives.' },
+  { n: '03', title: 'Understand the Machine', body: 'Get clear information about specifications, condition, images, and relevant details.' },
+  { n: '04', title: 'Make Your Decision', body: 'Compare your options and move forward with the machine that best fits your requirement.' },
+  { n: '05', title: 'Get Support Through the Process', body: 'Receive assistance from initial enquiry through documentation, logistics, and delivery.' },
 ];
 
 export default async function AboutPage() {
-  const products = await getFeaturedProducts(4);
+  const products = await getLatestArrivals(4);
   const total = getTotalMachines();
 
   return (
@@ -49,10 +49,10 @@ export default async function AboutPage() {
             <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>About Us</span>
           </nav>
           <h1 className="display" style={{ fontSize: 'clamp(28px, 4vw, 48px)', marginBottom: 10 }}>
-            Three decades in <span className="text-accent">used machinery</span>
+            Your Trusted Partner for Quality Pre-Owned Machinery
           </h1>
           <p style={{ fontSize: 16, maxWidth: 640 }}>
-            Ajmera Enterprise buys, inspects, and exports quality pre-owned engineering, tool-room, sheet-metal, and CNC machinery—trusted by industries since 1990.
+            Explore quality pre-owned machinery or tell us exactly what you are looking for. We help you discover suitable machines based on your application, specifications, and requirements.
           </p>
         </div>
       </div>
@@ -65,16 +65,19 @@ export default async function AboutPage() {
               <div>
                 <span className="eyebrow" style={{ marginBottom: 16 }}>Our story</span>
                 <h2 style={{ fontSize: 'clamp(26px, 3.4vw, 40px)', marginBottom: 20 }}>
-                  A dealer&apos;s eye for machines with <span className="text-accent">decades</span> left in them
+                  A Trusted Name in <span className="text-accent">Pre-Owned Machinery</span>
                 </h2>
-                <p style={{ fontSize: 16, marginBottom: 16 }}>
-                  Built on client-centric values and a long-standing reputation, <strong>Ajmera Machines</strong> is one of India’s leading dealers of pre-owned industrial machinery. We source, inspect, and stock quality used equipment from engineering workshops, tool-room, sheet-metal plants, forge shops, and complete industrial facilities—offering reliable machinery at fair, value-driven prices.
+                <p style={{ fontSize: 16, marginBottom: 16, textAlign: 'justify' }}>
+                  Ajmera Enterprise is part of the AJMERA Group, with over 30 years of experience in buying, stocking, and selling quality pre-owned industrial machinery. Built on fair business practices and a commitment to keeping our word, the AJMERA name has earned the trust of customers and established a strong reputation among India's recognised second-hand machinery dealers.
                 </p>
-                <p style={{ fontSize: 16, marginBottom: 24 }}>
-                  We purchase both complete industrial plants and individual machines from forging, gear manufacturing, bearing, grinding, turning, and fabrication facilities. With a large, ready-to-inspect physical inventory in Navi Mumbai, we make it easier for buyers to find dependable second-hand machinery that meets their operational requirements.
+                <p style={{ fontSize: 16, marginBottom: 24, textAlign: 'justify' }}>
+                  We source and stock quality Indian and imported engineering workshop, tool-room, sheet-metal, and specialised machinery, as well as complete industrial plants. From forge shops and gear manufacturing to bearing production, grinding media, turning, and sheet-metal operations, our experience spans a wide range of industrial applications.
+                </p>
+                <p style={{ fontSize: 16, marginBottom: 24, textAlign: 'justify' }}>
+                  Whether you are looking to buy, sell, or source a specific machine, we help make the process more transparent, straightforward, and dependable.
                 </p>
                 <div style={{ display: 'grid', gap: 12, marginBottom: 28 }}>
-                  {['Sourced from Japan, Germany, Switzerland & Italy', 'Every machine tested under power & geometry-checked', 'Transparent make, model, year & origin records', 'Full export crating, documentation & logistics'].map((t) => (
+                  {['Find machines based on your specific requirement', 'Get clear information about machine condition and specifications', 'Explore suitable options from a wide range of machinery', 'Get practical guidance when you need it', 'Receive support from enquiry to delivery'].map((t) => (
                     <div key={t} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                       <CheckCircle2 size={19} style={{ color: 'var(--accent)', flexShrink: 0 }} />
                       <span style={{ fontSize: 14.5, color: 'var(--text-secondary)' }}>{t}</span>
@@ -130,9 +133,9 @@ export default async function AboutPage() {
         <div className="container">
           <Reveal>
             <div className="section-head">
-              <span className="eyebrow" style={{ marginBottom: 10 }}>What sets us apart</span>
-              <h2>The difference is what we refuse to sell</h2>
-              <p>Anyone can list a machine. We stake three decades of reputation on the ones that pass inspection.</p>
+              <span className="eyebrow" style={{ marginBottom: 10 }}>What you can expect from us</span>
+              <h2>Making Your Machinery Search Simpler</h2>
+              <p>From finding the right machine to understanding your options, we help you move forward with clear information, practical guidance, and dependable support.</p>
             </div>
           </Reveal>
           <div className="ind-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
@@ -157,8 +160,8 @@ export default async function AboutPage() {
           <Reveal>
             <div className="section-head">
               <span className="eyebrow" style={{ marginBottom: 10 }}>What we stock</span>
-              <h2>Our machinery range</h2>
-              <p>From conventional toolroom machines to CNC centres and heavy sheet-metal presses.</p>
+              <h2>Explore Machines for Your Application</h2>
+              <p>Find suitable machinery across a wide range of industrial applications.</p>
             </div>
           </Reveal>
           <div className="ind-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
@@ -183,7 +186,7 @@ export default async function AboutPage() {
           <Reveal>
             <div style={{ maxWidth: 620, marginBottom: 48 }}>
               <span className="eyebrow" style={{ marginBottom: 12, color: 'var(--accent)' }}>How we work</span>
-              <h2 style={{ color: '#fff', fontSize: 'clamp(26px, 3.4vw, 40px)' }}>From foreign floor to your shop</h2>
+              <h2 style={{ color: '#fff', fontSize: 'clamp(26px, 3.4vw, 40px)' }}>From Your Requirement to the Right Machine</h2>
             </div>
           </Reveal>
           <div className="proc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 20 }}>
@@ -205,12 +208,12 @@ export default async function AboutPage() {
       <section className="section">
         <div className="container">
           <Reveal scale>
-            <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-2xl)', padding: 'clamp(40px, 6vw, 72px)', textAlign: 'center', background: 'var(--accent)', color: '#fff' }}>
+            <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-2xl)', padding: 'clamp(40px, 6vw, 72px)', textAlign: 'center', background: 'var(--dark)', color: '#fff' }}>
               <h2 style={{ color: '#fff', fontSize: 'clamp(26px, 4vw, 44px)', marginBottom: 14, maxWidth: 720, marginInline: 'auto' }}>
-                Looking for a specific machine? We probably have it — or can source it.
+                Looking for the Right Machine?
               </h2>
               <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.88)', maxWidth: 520, margin: '0 auto 30px' }}>
-                Tell us the make, model or category and we&apos;ll respond with availability and the best price.
+                Tell us what you need. We'll help you find the right option for your requirement.
               </p>
               <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
                 <Link href="/products" className="btn btn-dark btn-lg">Browse Products <ArrowRight size={18} /></Link>

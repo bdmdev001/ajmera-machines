@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { Plus, Edit3, Trash2, X, Save, Loader2, Tag } from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
+import FieldError from '@/components/FieldError';
+import { requiredMsg, urlMsg, isClean } from '@/lib/validation';
 
 export interface CategoryRow {
   _id: string;
@@ -22,19 +24,23 @@ export default function AdminCategoryManager({ initialCategories }: { initialCat
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
   const [saving, setSaving] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const { modal, showSuccess, showError, confirm } = useAdminAlert();
+  const invalid = (k: string): React.CSSProperties => (errors[k] ? { borderColor: 'var(--hot)' } : {});
 
   const openAdd = () => {
-    setMode('add'); setEditingId(''); setName(''); setDescription(''); setImage(''); setFormOpen(true);
+    setMode('add'); setEditingId(''); setName(''); setDescription(''); setImage(''); setErrors({}); setFormOpen(true);
   };
   const openEdit = (c: CategoryRow) => {
-    setMode('edit'); setEditingId(c._id); setName(c.name); setDescription(c.description); setImage(c.image); setFormOpen(true);
+    setMode('edit'); setEditingId(c._id); setName(c.name); setDescription(c.description); setImage(c.image); setErrors({}); setFormOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
+    const found = { name: requiredMsg(name, 'Category name'), image: urlMsg(image, false, 'image URL') };
+    setErrors(found);
+    if (!isClean(found)) return;
     setSaving(true);
     try {
       const url = mode === 'add' ? '/api/categories' : `/api/categories/${editingId}`;
@@ -149,7 +155,8 @@ export default function AdminCategoryManager({ initialCategories }: { initialCat
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div className="form-group">
                 <label>Category Name *</label>
-                <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Surface Grinder" style={{ padding: '10px 14px', fontSize: 14 }} />
+                <input type="text" value={name} onChange={(e) => { setName(e.target.value); setErrors((p) => (p.name ? { ...p, name: '' } : p)); }} onBlur={() => setErrors((p) => ({ ...p, name: requiredMsg(name, 'Category name') }))} placeholder="e.g. Surface Grinder" aria-invalid={!!errors.name} style={{ padding: '10px 14px', fontSize: 14, ...invalid('name') }} />
+                <FieldError message={errors.name} />
               </div>
               <div className="form-group">
                 <label>Description</label>
@@ -157,7 +164,8 @@ export default function AdminCategoryManager({ initialCategories }: { initialCat
               </div>
               <div className="form-group">
                 <label>Image URL</label>
-                <input type="text" value={image} onChange={(e) => setImage(e.target.value)} placeholder="https://… (optional)" style={{ padding: '10px 14px', fontSize: 14 }} />
+                <input type="text" value={image} onChange={(e) => { setImage(e.target.value); setErrors((p) => (p.image ? { ...p, image: '' } : p)); }} onBlur={() => setErrors((p) => ({ ...p, image: urlMsg(image, false, 'image URL') }))} placeholder="https://… (optional)" aria-invalid={!!errors.image} style={{ padding: '10px 14px', fontSize: 14, ...invalid('image') }} />
+                <FieldError message={errors.image} />
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, borderTop: '1px solid var(--border-light)', paddingTop: 20 }}>
                 <button type="button" onClick={() => setFormOpen(false)} className="btn btn-secondary" style={{ padding: '10px 20px', fontSize: 14 }}>Cancel</button>

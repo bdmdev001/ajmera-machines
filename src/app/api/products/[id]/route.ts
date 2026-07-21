@@ -5,6 +5,7 @@ import { isAdminAuthenticated } from '@/lib/auth';
 import { deleteImages } from '@/lib/cloudinary';
 import { normalizeImages, type ImageRef } from '@/lib/images';
 import { resolveCategory } from '@/lib/categories';
+import { isValidYear, isValidUrl } from '@/lib/validation';
 
 /** Read a product's stored images WITHOUT hydration (legacy docs may still hold
  *  bare strings, which would CastError against the structured subdoc schema). */
@@ -27,11 +28,17 @@ export async function PATCH(
     const body = await request.json();
     const {
       title, make, model, categoryId, category, country, myear,
-      technicalSpecifications, videoUrl, images, isLatestArrival,
+      technicalSpecifications, videoUrl, images, isFeatured, stockStatus, badges,
     } = body;
 
     if (!title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
+    }
+    if (myear && !isValidYear(String(myear))) {
+      return NextResponse.json({ error: 'Manufacturing year must be a valid 4-digit year.' }, { status: 400 });
+    }
+    if (videoUrl && !isValidUrl(String(videoUrl))) {
+      return NextResponse.json({ error: 'YouTube video link must be a valid URL.' }, { status: 400 });
     }
 
     const cat = await resolveCategory(categoryId, category);
@@ -54,7 +61,9 @@ export async function PATCH(
         technicalSpecifications: technicalSpecifications || '',
         videoUrl: videoUrl || '',
         images: nextImages,
-        isLatestArrival: Boolean(isLatestArrival),
+        isFeatured: Boolean(isFeatured),
+        stockStatus: stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock',
+        badges: Array.isArray(badges) ? badges.map((b: unknown) => String(b).trim()).filter(Boolean) : [],
       },
       { new: true }
     );

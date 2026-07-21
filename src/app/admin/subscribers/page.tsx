@@ -1,5 +1,4 @@
 import { redirect } from 'next/navigation';
-import AdminNav from '@/components/AdminNav';
 import AdminSubscribersManager from '@/components/AdminSubscribersManager';
 import { isAdminAuthenticated } from '@/lib/auth';
 
@@ -10,7 +9,6 @@ export default async function AdminSubscribersPage() {
 
   return (
     <div style={{ paddingBottom: 80 }}>
-      <AdminNav />
       <div className="container">
         <div style={{ marginBottom: 24 }}>
           <h1 className="display" style={{ fontSize: 28, marginBottom: 4 }}>Newsletter Subscribers</h1>

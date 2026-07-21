@@ -7,12 +7,12 @@ import {
 import Reveal from '@/components/Reveal';
 import Counter from '@/components/Counter';
 import MachineFinder from '@/components/MachineFinder';
-import FeaturedTabs from '@/components/FeaturedTabs';
+import FeaturedCarousel from '@/components/FeaturedCarousel';
 import ProductCard from '@/components/ProductCard';
 import WhyChooseProducts from '@/components/WhyChooseProducts';
 import type { IProduct } from '@/models/Product';
 import {
-  getFeaturedProducts, getLatestArrivals, getCategoryStats, getTotalMachines, getFilterOptions,
+  getFeaturedProducts, getLatestArrivals, getCategoryStats, getTotalMachines, getFinderIndex,
 } from '@/lib/products';
 import { cldUrl, cldSrcSet } from '@/lib/images';
 
@@ -47,12 +47,15 @@ export default async function Home() {
   const latestArrivals = await getLatestArrivals(8);
   const categories = getCategoryStats().slice(0, 6);
   const total = getTotalMachines();
-  const options = getFilterOptions();
+  const finderData = await getFinderIndex();
 
   return (
     <div>
       {/* ================= 1 — HERO ================= */}
-      <section className="hero-photo" style={{ position: 'relative', overflow: 'hidden' }}>
+      {/* overflow is `clip` on X only (safety against sub-pixel bleed) but
+          visible on Y so the finder's Size/Capacity suggestion dropdown can
+          overlay the section below instead of being clipped at the hero edge. */}
+      <section className="hero-photo" style={{ position: 'relative', overflowX: 'clip', overflowY: 'visible' }}>
         {/* LCP element: real <img> (not a CSS background) so it is discovered by
             the preload scanner immediately and marked high priority. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -70,16 +73,16 @@ export default async function Home() {
         <div className="container" style={{ position: 'relative', zIndex: 2, padding: 'clamp(52px, 7vw, 96px) 20px clamp(60px, 7vw, 130px)' }}>
           <div className="hero-copy" style={{ maxWidth: 640 }}>
             <Reveal>
-              <span className="badge badge-dark" style={{ marginBottom: 22, padding: '7px 14px', letterSpacing: '0.1em' }}>Used · Inspected · Exported</span>
+              <span className="badge badge-dark" style={{ marginBottom: 22, padding: '7px 14px', letterSpacing: '0.1em' }}>Ready To Use For Production</span>
             </Reveal>
             <Reveal delay={80}>
               <h1 className="display" style={{ fontSize: 'clamp(40px, 6vw, 72px)', lineHeight: 1.02, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: 22 }}>
-                Industrial machines,<br /><span style={{ color: 'var(--accent)' }}>ready to run.</span>
+                Industrial Machines,<br /><span style={{ color: 'var(--accent)' }}>Ready To Run.</span>
               </h1>
             </Reveal>
             <Reveal delay={150}>
               <p style={{ fontSize: 'clamp(16px, 1.6vw, 19px)', color: 'var(--text-secondary)', maxWidth: 540, marginBottom: 32, lineHeight: 1.6 }}>
-                Premium industrial machinery sourced from renowned Japanese & European brands. Built to maximize precision, efficiency, and long-term value.
+                Premium industrial machinery sourced from renowned worldwide brands. Built to maximize precision, efficiency, and long-term value.
               </p>
             </Reveal>
             <Reveal delay={220}>
@@ -94,7 +97,7 @@ export default async function Home() {
                 {[
                   { Icon: ShieldCheck, a: 'Inspected', b: 'under power' },
                   { Icon: Globe, a: '25+', b: 'countries' },
-                  { Icon: Truck, a: 'Worldwide', b: 'export' },
+                  { Icon: Truck, a: 'Worldwide', b: 'import/export' },
                 ].map(({ Icon, a, b }, i) => (
                   <Fragment key={a}>
                     {i > 0 && <span aria-hidden className="hide-mobile" style={{ width: 1, height: 30, background: 'var(--border-strong)' }} />}
@@ -112,7 +115,7 @@ export default async function Home() {
 
           {/* Machine finder — overlaps hero bottom */}
           <Reveal className="hero-finder" delay={120} style={{ marginTop: 'clamp(40px, 5vw, 64px)', marginBottom: -80, position: 'relative', zIndex: 5 }}>
-            <MachineFinder categories={options.categories} makes={options.makes} countries={options.countries} years={options.years} />
+            <MachineFinder categories={finderData} />
           </Reveal>
         </div>
       </section>
@@ -170,7 +173,7 @@ export default async function Home() {
               <p>Freshly inspected arrivals across our most-requested categories.</p>
             </div>
           </Reveal>
-          <Reveal delay={80}><FeaturedTabs products={products} /></Reveal>
+          <Reveal delay={80}><FeaturedCarousel products={products} /></Reveal>
         </div>
       </section>
 
@@ -243,7 +246,7 @@ export default async function Home() {
           <div className="best-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 22 }}>
             {latestArrivals.map((p, i) => (
               <Reveal key={p.id} delay={(i % 4) * 70}>
-                <ProductCardWrap product={p} hot={i === 0} />
+                <ProductCardWrap product={p} />
               </Reveal>
             ))}
           </div>
@@ -305,7 +308,8 @@ export default async function Home() {
   );
 }
 
-/* Small server wrapper so we can vary the corner badge without a client boundary. */
-function ProductCardWrap({ product, hot }: { product: IProduct; hot?: boolean }) {
-  return <ProductCard product={product} badge={hot ? { label: 'Hot', tone: 'hot' } : undefined} />;
+/* Small server wrapper for the "Latest arrivals" grid. Every card here is, by
+   definition, one of the newest products — so each carries the "New" badge. */
+function ProductCardWrap({ product }: { product: IProduct }) {
+  return <ProductCard product={product} badge={{ label: 'New', tone: 'new' }} />;
 }

@@ -4,6 +4,7 @@ import dbConnect from '@/lib/dbConnect';
 import Enquiry from '@/models/Enquiry';
 import { sendEnquiryNotification } from '@/lib/mailer';
 import { isAdminAuthenticated } from '@/lib/auth';
+import { isValidEmail, isValidPhone, isValidGST, isValidPAN } from '@/lib/validation';
 
 export async function POST(request: Request) {
   try {
@@ -18,6 +19,19 @@ export async function POST(request: Request) {
         { error: 'Missing required fields. Name, email, phone, company address, and message are required.' },
         { status: 400 }
       );
+    }
+    // Format checks mirror the client so bad data can never bypass the UI.
+    if (!isValidEmail(String(email))) {
+      return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 });
+    }
+    if (!isValidPhone(String(phone))) {
+      return NextResponse.json({ error: 'Please enter a valid phone number.' }, { status: 400 });
+    }
+    if (gstNumber && !isValidGST(String(gstNumber))) {
+      return NextResponse.json({ error: 'Please enter a valid 15-character GST number.' }, { status: 400 });
+    }
+    if (panNumber && !isValidPAN(String(panNumber))) {
+      return NextResponse.json({ error: 'Please enter a valid 10-character PAN.' }, { status: 400 });
     }
 
     const newEnquiry = new Enquiry({

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Vendor from '@/models/Vendor';
 import { isAdminAuthenticated } from '@/lib/auth';
+import { isValidEmail, isValidPhone, isValidGST, isValidPAN } from '@/lib/validation';
 
 /* Admin-only vendors/suppliers collection: paginated + searchable list, create.
    GET  /api/admin/vendors?page=1&limit=25&q=term&status=Active
@@ -17,17 +18,27 @@ function escapeRegex(s: string): string {
 export function validateVendor(body: any): { data?: Record<string, string>; error?: string } {
   const companyName = String(body?.companyName ?? '').trim();
   if (!companyName) return { error: 'Company name is required.' };
+  const email = String(body?.email ?? '').trim().toLowerCase();
+  if (email && !isValidEmail(email)) return { error: 'Please provide a valid email address.' };
+  const phone = String(body?.phone ?? '').trim();
+  if (phone && !isValidPhone(phone)) return { error: 'Please provide a valid phone number.' };
+  const whatsapp = String(body?.whatsapp ?? '').trim();
+  if (whatsapp && !isValidPhone(whatsapp)) return { error: 'Please provide a valid WhatsApp number.' };
+  const gstNumber = String(body?.gstNumber ?? '').trim();
+  if (gstNumber && !isValidGST(gstNumber)) return { error: 'Please provide a valid 15-character GST number.' };
+  const panNumber = String(body?.panNumber ?? '').trim();
+  if (panNumber && !isValidPAN(panNumber)) return { error: 'Please provide a valid 10-character PAN.' };
   const status = body?.status === 'Inactive' ? 'Inactive' : 'Active';
   return {
     data: {
       companyName,
-      gstNumber: String(body?.gstNumber ?? '').trim(),
-      panNumber: String(body?.panNumber ?? '').trim(),
+      gstNumber,
+      panNumber,
       address: String(body?.address ?? '').trim(),
       contactPerson: String(body?.contactPerson ?? '').trim(),
-      email: String(body?.email ?? '').trim().toLowerCase(),
-      phone: String(body?.phone ?? '').trim(),
-      whatsapp: String(body?.whatsapp ?? '').trim(),
+      email,
+      phone,
+      whatsapp,
       notes: String(body?.notes ?? '').trim(),
       status,
     },

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   Search, Plus, Edit3, Trash2, Loader2, ChevronLeft, ChevronRight,
-  Building2, Mail, Phone, MessageCircle,
+  Building2, Mail, Phone, MessageCircle, MapPin, FileSpreadsheet, FileDown,
 } from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
 import VendorFormModal, { type VendorData } from '@/components/VendorFormModal';
@@ -113,7 +113,14 @@ export default function AdminVendorsManager() {
             <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>vendor{total === 1 ? '' : 's'} / suppliers</div>
           </div>
         </div>
-        <button onClick={openAdd} className="btn btn-primary btn-sm"><Plus size={15} /> Add vendor</button>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          {/* Downloads from an API route (not a page) — Link would hijack navigation. */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a href="/api/admin/vendors/export?format=csv" download className="btn btn-secondary btn-sm"><FileDown size={15} /> CSV</a>
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a href="/api/admin/vendors/export?format=xlsx" download className="btn btn-secondary btn-sm"><FileSpreadsheet size={15} /> Excel</a>
+          <button onClick={openAdd} className="btn btn-primary btn-sm"><Plus size={15} /> Add vendor</button>
+        </div>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
@@ -149,6 +156,7 @@ export default function AdminVendorsManager() {
                     <th style={th}>Email</th>
                     <th style={th}>Phone</th>
                     <th style={th}>WhatsApp</th>
+                    <th style={th}>Address</th>
                     <th style={th}>GST</th>
                     <th style={th}>Status</th>
                     <th style={{ ...th, textAlign: 'right' }}>Actions</th>
@@ -164,6 +172,7 @@ export default function AdminVendorsManager() {
                       <td style={{ ...td, color: 'var(--text-secondary)' }}>{v.email || '—'}</td>
                       <td style={{ ...td, color: 'var(--text-secondary)' }}>{v.phone || '—'}</td>
                       <td style={{ ...td, color: 'var(--text-secondary)' }}>{v.whatsapp || '—'}</td>
+                      <td style={{ ...td, color: 'var(--text-secondary)', maxWidth: 220, whiteSpace: 'normal' }}>{v.address || '—'}</td>
                       <td style={{ ...td, color: 'var(--text-secondary)' }}>{v.gstNumber || '—'}</td>
                       <td style={td}><StatusBadge status={v.status} /></td>
                       <td style={{ ...td, textAlign: 'right', whiteSpace: 'nowrap' }}>
@@ -195,6 +204,11 @@ export default function AdminVendorsManager() {
                     {v.phone && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Phone size={13} /> {v.phone}</span>}
                     {v.whatsapp && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><MessageCircle size={13} /> {v.whatsapp}</span>}
                   </div>
+                  {v.address && (
+                    <div style={{ display: 'flex', gap: 6, fontSize: 13, color: 'var(--text-secondary)' }}>
+                      <MapPin size={13} style={{ flexShrink: 0, marginTop: 2 }} /> <span>{v.address}</span>
+                    </div>
+                  )}
                   {(v.gstNumber || v.panNumber) && (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 16px', fontSize: 12.5, color: 'var(--text-muted)' }}>
                       {v.gstNumber && <span>GST: {v.gstNumber}</span>}

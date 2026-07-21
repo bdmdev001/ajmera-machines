@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Customer from '@/models/Customer';
 import { isAdminAuthenticated } from '@/lib/auth';
+import { isValidPhone, isValidGST, isValidPAN } from '@/lib/validation';
 
 /* Admin-only customers collection: paginated + searchable list, and create.
    GET  /api/admin/customers?page=1&limit=25&q=term
@@ -25,16 +26,23 @@ export function validateCustomer(body: any): { data?: Record<string, string>; er
     return { error: 'Company name, full name, email and phone are required.' };
   }
   if (!EMAIL_RE.test(email)) return { error: 'Please provide a valid email address.' };
+  if (!isValidPhone(phone)) return { error: 'Please provide a valid phone number.' };
+  const whatsapp = String(body?.whatsapp ?? '').trim();
+  if (whatsapp && !isValidPhone(whatsapp)) return { error: 'Please provide a valid WhatsApp number.' };
+  const gstNumber = String(body?.gstNumber ?? '').trim();
+  if (gstNumber && !isValidGST(gstNumber)) return { error: 'Please provide a valid 15-character GST number.' };
+  const panNumber = String(body?.panNumber ?? '').trim();
+  if (panNumber && !isValidPAN(panNumber)) return { error: 'Please provide a valid 10-character PAN.' };
   return {
     data: {
       companyName,
-      gstNumber: String(body?.gstNumber ?? '').trim(),
-      panNumber: String(body?.panNumber ?? '').trim(),
+      gstNumber,
+      panNumber,
       companyAddress: String(body?.companyAddress ?? '').trim(),
       fullName,
       email: email.toLowerCase(),
       phone,
-      whatsapp: String(body?.whatsapp ?? '').trim(),
+      whatsapp,
     },
   };
 }

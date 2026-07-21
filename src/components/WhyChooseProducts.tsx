@@ -1,72 +1,69 @@
 import {
-  ShieldCheck, CheckCircle2, BadgeIndianRupee, Truck, Factory, Layers, Headphones,
+  Search, ShieldCheck, Settings, MessagesSquare, Globe, Handshake,
 } from 'lucide-react';
 
 /* ============================================================================
-   "Why Choose Our Products?" — a reusable, fully-responsive value-props grid.
-   Rendered on both the Product List page and the homepage (single source of
-   truth, no duplicated markup). Server component: pure presentational.
+   "Why Choose Ajmera Machines?" — the single, reusable value-props section.
+   One source of truth: rendered on the homepage and the Product List page.
+   Server component, purely presentational. Responsive 3×2 grid (desktop) →
+   2 columns (tablet) → 1 column (mobile) via .why-choose-grid in globals.css.
    ========================================================================= */
 
-const POINTS: { Icon: typeof ShieldCheck; text: string }[] = [
-  { Icon: ShieldCheck, text: 'Professionally inspected machines available for immediate purchase' },
-  { Icon: CheckCircle2, text: 'Every machine is quality checked and verified' },
-  { Icon: BadgeIndianRupee, text: 'Competitive pricing with excellent value' },
-  { Icon: Truck, text: 'Ready for fast delivery and installation' },
-  { Icon: Factory, text: 'Machines sourced from trusted manufacturers' },
-  { Icon: Layers, text: 'Suitable for a wide range of industrial applications' },
-  { Icon: Headphones, text: 'Expert assistance in selecting the right machine' },
+const CARDS: { Icon: typeof Search; title: string; text: string }[] = [
+  {
+    Icon: Search,
+    title: 'Find the Right Machine for Your Requirement',
+    text: 'Explore available machinery or share your specific requirement to discover suitable options.',
+  },
+  {
+    Icon: ShieldCheck,
+    title: 'Buy with Confidence',
+    text: 'Get clear and honest information about machine condition, specifications and suitability.',
+  },
+  {
+    Icon: Settings,
+    title: 'Quality Pre-Owned Machinery',
+    text: 'Carefully selected second-hand machines for a wide range of industrial applications.',
+  },
+  {
+    Icon: MessagesSquare,
+    title: 'Get Guidance That Works for You',
+    text: 'Not sure which machine is right for your needs? Get practical guidance based on your specific requirement.',
+  },
+  {
+    Icon: Globe,
+    title: 'Explore More Possibilities',
+    text: 'Whether you are looking for a machine from our available range or something specific, we help you explore the right opportunities.',
+  },
+  {
+    Icon: Handshake,
+    title: 'Simple, Clear & Transparent Dealings',
+    text: 'Straightforward communication and honest information to make your buying decision easier.',
+  },
 ];
 
 export default function WhyChooseProducts({
-  heading = 'Why Choose Our Products?',
-  eyebrow = 'The Ajmera advantage',
+  heading = 'Why Choose Ajmera Machines?',
+  eyebrow = 'The Ajmera Advantage',
 }: { heading?: string; eyebrow?: string }) {
   return (
     <section aria-labelledby="why-choose-heading">
-      <div style={{ marginBottom: 28 }}>
-        <span className="eyebrow" style={{ marginBottom: 10 }}>{eyebrow}</span>
-        <h2 id="why-choose-heading" style={{ fontSize: 'clamp(24px, 3.2vw, 34px)' }}>{heading}</h2>
+      <div style={{ marginBottom: 'clamp(24px, 3vw, 40px)' }}>
+        <span className="eyebrow" style={{ marginBottom: 12 }}>{eyebrow}</span>
+        <h2 id="why-choose-heading" className="display" style={{ fontSize: 'clamp(26px, 4vw, 44px)' }}>{heading}</h2>
       </div>
 
-      <div
-        className="why-choose-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: 16,
-        }}
-      >
-        {POINTS.map(({ Icon, text }) => (
-          <div
-            key={text}
-            className="surface"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-              padding: '18px 20px',
-              borderRadius: 'var(--radius-md)',
-            }}
-          >
-            <span
-              style={{
-                display: 'grid',
-                placeItems: 'center',
-                width: 44,
-                height: 44,
-                flexShrink: 0,
-                borderRadius: 12,
-                background: 'var(--accent-soft)',
-                color: 'var(--accent)',
-              }}
-            >
-              <Icon size={22} />
+      <div className="why-choose-grid">
+        {CARDS.map(({ Icon, title, text }) => (
+          <article key={title} className="why-card">
+            <span className="why-card__icon" aria-hidden>
+              <Icon size={26} strokeWidth={1.75} />
             </span>
-            <p style={{ fontSize: 14.5, fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.45, margin: 0 }}>
-              {text}
-            </p>
-          </div>
+            <div style={{ minWidth: 0 }}>
+              <h3 className="why-card__title">{title}</h3>
+              <p className="why-card__text">{text}</p>
+            </div>
+          </article>
         ))}
       </div>
     </section>

@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Search, Plus, Edit3, Trash2, X, Upload, Save, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { imageUrl, normalizeImages, type ProductImage } from '@/lib/images';
 import { useAdminAlert } from '@/components/AdminModal';
+import FieldError from '@/components/FieldError';
+import { requiredMsg, yearMsg, urlMsg, isClean } from '@/lib/validation';
 
 const PAGE_SIZE_OPTIONS: (number | 'all')[] = [25, 50, 100, 'all'];
 
@@ -23,8 +25,12 @@ interface ProductData {
   videoUrl?: string;
   technicalSpecifications?: string;
   images: ProductImage[]; // structured { url, public_id }
-  isLatestArrival?: boolean;
+  isFeatured?: boolean;
+  stockStatus?: 'In Stock' | 'Out of Stock';
+  badges?: string[];
 }
+
+const BADGE_SUGGESTIONS = ['Sold', 'Rare Machine', 'Coming Soon', 'Special Offer', 'New', 'Reserved', 'Price Drop'];
 
 interface Props {
   initialProducts: ProductData[];
@@ -52,10 +58,15 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
   const [videoUrl, setVideoUrl] = useState('');
   const [technicalSpecifications, setTechnicalSpecifications] = useState('');
   const [photos, setPhotos] = useState<ProductImage[]>([]);
-  const [isLatestArrival, setIsLatestArrival] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [stockStatus, setStockStatus] = useState<'In Stock' | 'Out of Stock'>('In Stock');
+  const [badges, setBadges] = useState<string[]>([]);
+  const [badgeDraft, setBadgeDraft] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const invalidStyle = (k: string): React.CSSProperties => (errors[k] ? { borderColor: 'var(--hot)' } : {});
 
   const { modal, showSuccess, showError, confirm } = useAdminAlert();
 
@@ -72,13 +83,18 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     setVideoUrl('');
     setTechnicalSpecifications('');
     setPhotos([]);
-    setIsLatestArrival(false);
+    setIsFeatured(false);
+    setStockStatus('In Stock');
+    setBadges([]);
+    setBadgeDraft('');
+    setErrors({});
     setIsFormOpen(true);
   };
 
   // Open Form for Editing
   const handleOpenEdit = (p: ProductData) => {
     setFormMode('edit');
+    setErrors({});
     setEditingId(p.id);
     setTitle(p.title);
     setMake(p.make);
@@ -89,9 +105,21 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     setVideoUrl(p.videoUrl || '');
     setTechnicalSpecifications(p.technicalSpecifications || '');
     setPhotos(normalizeImages(p.images));
-    setIsLatestArrival(Boolean(p.isLatestArrival));
+    setIsFeatured(Boolean(p.isFeatured));
+    setStockStatus(p.stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock');
+    setBadges(Array.isArray(p.badges) ? p.badges : []);
+    setBadgeDraft('');
     setIsFormOpen(true);
   };
+
+  // Badge chip helpers (free-form; admin can type any label or pick a suggestion).
+  const addBadge = (raw: string) => {
+    const b = raw.trim();
+    if (!b) return;
+    setBadges((prev) => (prev.some((x) => x.toLowerCase() === b.toLowerCase()) ? prev : [...prev, b]));
+    setBadgeDraft('');
+  };
+  const removeBadge = (b: string) => setBadges((prev) => prev.filter((x) => x !== b));
 
   // Handle Image Upload
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +159,14 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
   // Handle Form Submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title) return;
+
+    const found = {
+      title: requiredMsg(title, 'Machine title'),
+      myear: yearMsg(myear),
+      videoUrl: urlMsg(videoUrl, false, 'YouTube video link'),
+    };
+    setErrors(found);
+    if (!isClean(found)) return;
 
     setIsSubmitting(true);
     // Send categoryId — the server resolves the category NAME from it, keeping
@@ -146,7 +181,9 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
       videoUrl,
       technicalSpecifications,
       images: photos, // structured [{ url, public_id }]
-      isLatestArrival,
+      isFeatured,
+      stockStatus,
+      badges,
     };
 
     try {
@@ -296,8 +333,8 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                     <td style={{ padding: '14px 20px' }}>
                       <div style={{ fontWeight: '600', color: 'var(--text-primary)', fontSize: '14px', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                         {p.title}
-                        {p.isLatestArrival && (
-                          <span className="badge" style={{ background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 10.5, fontWeight: 700 }}>Latest</span>
+                        {p.isFeatured && (
+                          <span className="badge" style={{ background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 10.5, fontWeight: 700 }}>Featured</span>
                         )}
                       </div>
                       <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Make: {p.make}</div>
@@ -483,12 +520,14 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                 <label>Machine Title *</label>
                 <input
                   type="text"
-                  required
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => { setTitle(e.target.value); setErrors((p) => (p.title ? { ...p, title: '' } : p)); }}
+                  onBlur={() => setErrors((p) => ({ ...p, title: requiredMsg(title, 'Machine title') }))}
                   placeholder="e.g. OKAMOTO Make Surface Grinder"
-                  style={{ padding: '10px 14px', fontSize: '14px' }}
+                  aria-invalid={!!errors.title}
+                  style={{ padding: '10px 14px', fontSize: '14px', ...invalidStyle('title') }}
                 />
+                <FieldError message={errors.title} />
               </div>
 
               {/* Grid 2 Columns */}
@@ -561,46 +600,106 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                   <input
                     type="text"
                     value={myear}
-                    onChange={(e) => setMyear(e.target.value)}
+                    onChange={(e) => { setMyear(e.target.value); setErrors((p) => (p.myear ? { ...p, myear: '' } : p)); }}
+                    onBlur={() => setErrors((p) => ({ ...p, myear: yearMsg(myear) }))}
                     placeholder="e.g. 1988"
-                    style={{ padding: '10px 14px', fontSize: '14px' }}
+                    aria-invalid={!!errors.myear}
+                    style={{ padding: '10px 14px', fontSize: '14px', ...invalidStyle('myear') }}
                   />
+                  <FieldError message={errors.myear} />
                 </div>
                 <div className="form-group">
                   <label>YouTube Video Link</label>
                   <input
                     type="text"
                     value={videoUrl}
-                    onChange={(e) => setVideoUrl(e.target.value)}
+                    onChange={(e) => { setVideoUrl(e.target.value); setErrors((p) => (p.videoUrl ? { ...p, videoUrl: '' } : p)); }}
+                    onBlur={() => setErrors((p) => ({ ...p, videoUrl: urlMsg(videoUrl, false, 'YouTube video link') }))}
                     placeholder="e.g. https://www.youtube.com/watch?v=..."
-                    style={{ padding: '10px 14px', fontSize: '14px' }}
+                    aria-invalid={!!errors.videoUrl}
+                    style={{ padding: '10px 14px', fontSize: '14px', ...invalidStyle('videoUrl') }}
                   />
+                  <FieldError message={errors.videoUrl} />
                 </div>
               </div>
 
               {/* Technical Specifications */}
               <div className="form-group">
                 <label>Technical Specifications (Pre-formatted)</label>
+                <span style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: -4, marginBottom: 4 }}>
+                  One <code>Key : Value</code> per line. Include the machine&apos;s size and capacity
+                  specs (e.g. <code>Table Size : 600 x 300 mm</code>, <code>Capacity : 10 Ton</code>) —
+                  these power the homepage Size &amp; Capacity finder for this category. Use a
+                  <code> / </code> to list multiple sizes (e.g. <code>600 x 300 mm / 800 x 400 mm</code>).
+                </span>
                 <textarea
-                  rows={4}
+                  rows={5}
                   value={technicalSpecifications}
                   onChange={(e) => setTechnicalSpecifications(e.target.value)}
-                  placeholder="Length : 1200mm&#10;Capacity : 35 ton"
+                  placeholder={'Table Size : 600 x 300 mm\nSwing : 400 mm\nCapacity : 10 Ton'}
                   style={{ padding: '10px 14px', fontSize: '14px', resize: 'vertical' }}
                 />
               </div>
 
-              {/* Latest Arrival toggle */}
+              {/* Stock status */}
+              <div className="form-group">
+                <label>Stock Status</label>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  {(['In Stock', 'Out of Stock'] as const).map((s) => (
+                    <label key={s} style={{ flex: '1 1 140px', display: 'flex', alignItems: 'center', gap: 9, padding: '11px 14px', border: `1px solid ${stockStatus === s ? 'var(--accent)' : 'var(--border-light)'}`, borderRadius: 'var(--radius-sm)', background: stockStatus === s ? 'var(--accent-soft)' : 'var(--bg-surface)', cursor: 'pointer' }}>
+                      <input type="radio" name="stockStatus" checked={stockStatus === s} onChange={() => setStockStatus(s)} style={{ width: 16, height: 16, accentColor: 'var(--accent)', cursor: 'pointer' }} />
+                      <span style={{ fontSize: 14, fontWeight: 600, color: stockStatus === s ? 'var(--accent)' : 'var(--text-primary)' }}>{s}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Custom badges */}
+              <div className="form-group">
+                <label>Product Badges</label>
+                <span style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: -4, marginBottom: 4 }}>
+                  Type a badge and press Enter (e.g. Sold, Rare Machine), or pick a suggestion. Shown on the product card &amp; detail page.
+                </span>
+                {badges.length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
+                    {badges.map((b) => (
+                      <span key={b} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 10px', borderRadius: 'var(--radius-pill)', background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 12.5, fontWeight: 700 }}>
+                        {b}
+                        <button type="button" onClick={() => removeBadge(b)} aria-label={`Remove ${b}`} style={{ display: 'grid', placeItems: 'center', background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', padding: 0 }}>
+                          <X size={13} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <input
+                  type="text"
+                  value={badgeDraft}
+                  onChange={(e) => setBadgeDraft(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addBadge(badgeDraft); } }}
+                  placeholder="Add a badge…"
+                  style={{ padding: '10px 14px', fontSize: '14px' }}
+                />
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+                  {BADGE_SUGGESTIONS.filter((s) => !badges.some((b) => b.toLowerCase() === s.toLowerCase())).map((s) => (
+                    <button key={s} type="button" onClick={() => addBadge(s)} style={{ padding: '4px 10px', borderRadius: 'var(--radius-pill)', border: '1px dashed var(--border-strong)', background: 'var(--bg-surface)', color: 'var(--text-secondary)', fontSize: 12, cursor: 'pointer' }}>
+                      + {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Featured toggle */}
               <label style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', background: 'var(--bg-surface-2)', cursor: 'pointer' }}>
                 <input
                   type="checkbox"
-                  checked={isLatestArrival}
-                  onChange={(e) => setIsLatestArrival(e.target.checked)}
+                  checked={isFeatured}
+                  onChange={(e) => setIsFeatured(e.target.checked)}
                   style={{ width: 16, height: 16, cursor: 'pointer', accentColor: 'var(--accent)' }}
                 />
                 <span style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>Mark as Latest Arrival</span>
-                  <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Featured in the homepage &ldquo;Latest Arrivals&rdquo; section.</span>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>Mark as Featured</span>
+                  <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Shows in the homepage &ldquo;Featured machines&rdquo; section. Latest Arrivals updates automatically by date.</span>
                 </span>
               </label>
 

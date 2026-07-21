@@ -7,8 +7,16 @@ const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20need
 
 interface FiltersPanelProps {
   sp: SP;
-  values: { category?: string; make?: string; country?: string; year?: string };
-  options: { categories: string[]; makes: string[]; countries: string[]; years: string[] };
+  values: { category?: string; make?: string; size?: string; capacity?: string };
+  options: {
+    categories: string[];
+    makes: string[];
+    sizes: string[];
+    capacities: string[];
+    /** Category-specific labels, e.g. "Table Size" / "Swing". Null ⇒ hide filter. */
+    sizeLabel?: string | null;
+    capacityLabel?: string | null;
+  };
   hasFilters: boolean;
 }
 
@@ -20,8 +28,8 @@ interface FiltersPanelProps {
  * plain <Link> that changes the URL, exactly as before.
  */
 export default function FiltersPanel({ sp, values, options, hasFilters }: FiltersPanelProps) {
-  const { category, make, country, year } = values;
-  const { categories, makes, countries, years } = options;
+  const { category, make, size, capacity } = values;
+  const { categories, makes, sizes, capacities, sizeLabel, capacityLabel } = options;
 
   const hrefWith = (changes: SP) => {
     const merged: SP = { ...sp, ...changes };
@@ -31,14 +39,14 @@ export default function FiltersPanel({ sp, values, options, hasFilters }: Filter
     return `/products${qs ? `?${qs}` : ''}`;
   };
 
-  const filterGroup = (label: string, value: string | undefined, opts: string[], param: string) => (
+  const filterGroup = (label: string, value: string | undefined, opts: string[], param: string, allLabel = `All ${label}`) => (
     <div>
       <label style={{ fontFamily: 'var(--font-display)', fontSize: 12.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-primary)', display: 'block', marginBottom: 12 }}>
         {label}
       </label>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 9, maxHeight: 190, overflowY: 'auto', paddingRight: 6 }}>
         <Link href={hrefWith({ [param]: undefined, page: undefined })} style={{ fontSize: 13.5, color: !value ? 'var(--accent)' : 'var(--text-secondary)', fontWeight: !value ? 700 : 500 }}>
-          All {label}
+          {allLabel}
         </Link>
         {opts.map((o) => (
           <Link key={o} href={hrefWith({ [param]: o, page: undefined })} style={{ fontSize: 13.5, color: value === o ? 'var(--accent)' : 'var(--text-secondary)', fontWeight: value === o ? 700 : 500 }}>
@@ -66,11 +74,13 @@ export default function FiltersPanel({ sp, values, options, hasFilters }: Filter
         {filterGroup('Categories', category, categories, 'category')}
         <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)' }} />
         {filterGroup('Makes', make, makes, 'make')}
-        <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)' }} />
-        {filterGroup('Countries', country, countries, 'country')}
-        {years.length > 0 && (<>
+        {sizeLabel && sizes.length > 0 && (<>
           <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)' }} />
-          {filterGroup('Years', year, years, 'year')}
+          {filterGroup(sizeLabel, size, sizes, 'size', 'All Sizes')}
+        </>)}
+        {capacityLabel && capacities.length > 0 && (<>
+          <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)' }} />
+          {filterGroup(capacityLabel, capacity, capacities, 'capacity', 'All Capacities')}
         </>)}
       </div>
 

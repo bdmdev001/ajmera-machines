@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { X, Save, Loader2 } from 'lucide-react';
+import FieldError from '@/components/FieldError';
+import { requiredMsg, emailMsg, phoneMsg, gstMsg, panMsg, isClean } from '@/lib/validation';
 
 export interface CustomerData {
   _id?: string;
@@ -32,16 +34,29 @@ const empty: CustomerData = { companyName: '', gstNumber: '', panNumber: '', com
 export default function CustomerFormModal({ mode, initial, linkEnquiryId, onClose, onSaved, onError }: Props) {
   const [form, setForm] = useState<CustomerData>(() => ({ ...empty, ...initial }));
   const [saving, setSaving] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const set = (k: keyof CustomerData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  const validate = (f: CustomerData) => ({
+    companyName: requiredMsg(f.companyName, 'Company name'),
+    fullName: requiredMsg(f.fullName, 'Full name'),
+    email: emailMsg(f.email, true),
+    phone: phoneMsg(f.phone ?? '', true),
+    whatsapp: phoneMsg(f.whatsapp ?? '', false, 'WhatsApp number'),
+    gstNumber: gstMsg(f.gstNumber ?? ''),
+    panNumber: panMsg(f.panNumber ?? ''),
+  });
+  const invalid = (k: string): React.CSSProperties => (errors[k] ? { borderColor: 'var(--hot)' } : {});
+
+  const set = (k: keyof CustomerData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((f) => ({ ...f, [k]: e.target.value }));
+    setErrors((p) => (p[k] ? { ...p, [k]: '' } : p));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.companyName.trim() || !form.fullName.trim() || !form.email.trim() || !form.phone.trim()) {
-      onError('Missing required fields', 'Company name, full name, email and phone are required.');
-      return;
-    }
+    const found = validate(form);
+    setErrors(found);
+    if (!isClean(found)) return;
     setSaving(true);
     try {
       const url = mode === 'add' ? '/api/admin/customers' : `/api/admin/customers/${form._id}`;
@@ -92,16 +107,19 @@ export default function CustomerFormModal({ mode, initial, linkEnquiryId, onClos
           <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--accent)' }}>Company details</div>
           <div>
             <label style={label}>Company name *</label>
-            <input suppressHydrationWarning type="text" required value={form.companyName} onChange={set('companyName')} placeholder="Company / factory name" style={input} />
+            <input suppressHydrationWarning type="text" value={form.companyName} onChange={set('companyName')} onBlur={() => setErrors((p) => ({ ...p, companyName: requiredMsg(form.companyName, 'Company name') }))} placeholder="Company / factory name" style={{ ...input, ...invalid('companyName') }} aria-invalid={!!errors.companyName} />
+            <FieldError message={errors.companyName} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="cust-form-row">
             <div>
               <label style={label}>GST number</label>
-              <input suppressHydrationWarning type="text" value={form.gstNumber} onChange={set('gstNumber')} placeholder="Optional" style={input} />
+              <input suppressHydrationWarning type="text" value={form.gstNumber} onChange={set('gstNumber')} onBlur={() => setErrors((p) => ({ ...p, gstNumber: gstMsg(form.gstNumber ?? '') }))} placeholder="Optional" style={{ ...input, ...invalid('gstNumber') }} aria-invalid={!!errors.gstNumber} />
+              <FieldError message={errors.gstNumber} />
             </div>
             <div>
               <label style={label}>PAN number</label>
-              <input suppressHydrationWarning type="text" value={form.panNumber} onChange={set('panNumber')} placeholder="Optional" style={input} />
+              <input suppressHydrationWarning type="text" value={form.panNumber} onChange={set('panNumber')} onBlur={() => setErrors((p) => ({ ...p, panNumber: panMsg(form.panNumber ?? '') }))} placeholder="Optional" style={{ ...input, ...invalid('panNumber') }} aria-invalid={!!errors.panNumber} />
+              <FieldError message={errors.panNumber} />
             </div>
           </div>
           <div>
@@ -112,21 +130,25 @@ export default function CustomerFormModal({ mode, initial, linkEnquiryId, onClos
           <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', color: 'var(--accent)', marginTop: 4 }}>Contact person</div>
           <div>
             <label style={label}>Full name *</label>
-            <input suppressHydrationWarning type="text" required value={form.fullName} onChange={set('fullName')} placeholder="Contact person name" style={input} />
+            <input suppressHydrationWarning type="text" value={form.fullName} onChange={set('fullName')} onBlur={() => setErrors((p) => ({ ...p, fullName: requiredMsg(form.fullName, 'Full name') }))} placeholder="Contact person name" style={{ ...input, ...invalid('fullName') }} aria-invalid={!!errors.fullName} />
+            <FieldError message={errors.fullName} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }} className="cust-form-row">
             <div>
               <label style={label}>Email ID *</label>
-              <input suppressHydrationWarning type="email" required value={form.email} onChange={set('email')} placeholder="name@company.com" style={input} />
+              <input suppressHydrationWarning type="email" value={form.email} onChange={set('email')} onBlur={() => setErrors((p) => ({ ...p, email: emailMsg(form.email, true) }))} placeholder="name@company.com" style={{ ...input, ...invalid('email') }} aria-invalid={!!errors.email} />
+              <FieldError message={errors.email} />
             </div>
             <div>
               <label style={label}>Phone number *</label>
-              <input suppressHydrationWarning type="tel" required value={form.phone} onChange={set('phone')} placeholder="+91 98765 43210" style={input} />
+              <input suppressHydrationWarning type="tel" value={form.phone} onChange={set('phone')} onBlur={() => setErrors((p) => ({ ...p, phone: phoneMsg(form.phone ?? '', true) }))} placeholder="+91 98765 43210" style={{ ...input, ...invalid('phone') }} aria-invalid={!!errors.phone} />
+              <FieldError message={errors.phone} />
             </div>
           </div>
           <div>
             <label style={label}>WhatsApp number</label>
-            <input suppressHydrationWarning type="tel" value={form.whatsapp} onChange={set('whatsapp')} placeholder="Optional" style={input} />
+            <input suppressHydrationWarning type="tel" value={form.whatsapp} onChange={set('whatsapp')} onBlur={() => setErrors((p) => ({ ...p, whatsapp: phoneMsg(form.whatsapp ?? '', false, 'WhatsApp number') }))} placeholder="Optional" style={{ ...input, ...invalid('whatsapp') }} aria-invalid={!!errors.whatsapp} />
+            <FieldError message={errors.whatsapp} />
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, borderTop: '1px solid var(--border-light)', paddingTop: 20, marginTop: 6 }}>

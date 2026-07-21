@@ -239,7 +239,7 @@ a {
 }
 
 .band-dark {
-  background: var(--dark);
+  background: #080b12;
   color: var(--text-on-dark);
 }
 
@@ -322,7 +322,7 @@ a {
 }
 
 .btn-dark {
-  background: var(--dark);
+  background: #080b12;
   color: #fff;
 }
 
@@ -844,15 +844,23 @@ th {
    PRODUCT DETAIL — layout, info cards, spec cards, action card
    ========================================================================= */
 
-/* Desktop: gallery left / info right. Tablet & mobile: stacked. */
+/* Desktop (≥701px): gallery left / info right. ≤700px: single column.
+   minmax(0, …) lets both tracks shrink below their content size, and the
+   `> *` rule gives every column a shrinkable min-width — together these stop
+   any child (gallery, spec value, buttons) from pushing the page wide. */
 .detail-layout {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   gap: clamp(24px, 4vw, 44px);
   align-items: start;
 }
 
-@media (max-width: 992px) {
+.detail-layout>* {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 700px) {
   .detail-layout {
     grid-template-columns: 1fr !important;
   }
@@ -1071,6 +1079,57 @@ th {
   background: var(--bg-surface-2);
 }
 
+/* ---- Thumbnail carousel (desktop / tablet / mobile) ---- */
+.gallery-thumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.gallery-thumbs-track {
+  position: relative;
+  /* offsetParent for thumbnails, so active-thumb auto-scroll math is correct */
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.gallery-thumbs-track::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-thumbs__nav {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.gallery-thumbs__nav:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.gallery-thumbs__nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .gallery-stage__blur {
   position: absolute;
   inset: -30px;
@@ -1094,6 +1153,214 @@ th {
   object-fit: contain;
   /* padding: clamp(18px, 4vw, 36px); */
   cursor: zoom-in;
+}
+
+/* ============================================================================
+   WHY CHOOSE — "The Ajmera Advantage" feature-card grid (3 × 2 → 2 → 1)
+   ========================================================================= */
+.why-choose-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 1.6vw, 24px);
+}
+
+.why-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: clamp(20px, 2vw, 28px);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal), border-color var(--transition-normal);
+}
+
+.why-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
+  transform: translateY(-3px);
+}
+
+.why-card__icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.why-card__title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.why-card__text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+/* Tablet → 2 columns */
+@media (max-width: 1024px) {
+  .why-choose-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mobile → 1 column */
+@media (max-width: 640px) {
+  .why-choose-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================================
+   FEATURED CAROUSEL — homepage "Featured machines" horizontal slider
+   Native CSS scroll-snap (smooth slide + touch/swipe) with Prev/Next buttons.
+   Cards per view: 4 (desktop) → 3 → 2 → 1 (phones), driven purely by CSS.
+   ========================================================================= */
+.fcar {
+  position: relative;
+}
+
+.fcar__track {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  /* Vertical room so the card hover-lift + shadow aren't clipped by overflow. */
+  padding: 8px 2px 16px;
+  /* Hide the native scrollbar — navigation is via arrows / swipe. */
+  scrollbar-width: none;
+}
+
+.fcar__track::-webkit-scrollbar {
+  display: none;
+}
+
+.fcar__slide {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  /* 4 cards per view (gap 22px × 3 gaps = 66px). */
+  width: calc((100% - 66px) / 4);
+}
+
+@media (max-width: 1200px) {
+
+  /* 3 per view */
+  .fcar__slide {
+    width: calc((100% - 44px) / 3);
+  }
+}
+
+@media (max-width: 900px) {
+
+  /* 2 per view */
+  .fcar__slide {
+    width: calc((100% - 22px) / 2);
+  }
+}
+
+@media (max-width: 600px) {
+
+  /* 1 per view */
+  .fcar__slide {
+    width: 100%;
+  }
+}
+
+.fcar__controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.fcar__btn {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.fcar__btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.fcar__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================================================
+   MACHINE FINDER — dependent Size / Capacity typeahead
+   ========================================================================= */
+.finder-ta {
+  position: relative;
+  min-width: 0;
+}
+
+.finder-input:disabled {
+  background: var(--bg-surface-2);
+  color: var(--text-muted);
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+.finder-suggest {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+}
+
+.finder-suggest__item {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.finder-suggest__item.is-active,
+.finder-suggest__item:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 /* ============================================================================
@@ -1478,7 +1745,7 @@ th {
    Tablet
 ================================ */
 
-@media (max-width:1024px) {
+@media (max-width:700px) {
 
   .detail-layout {
     grid-template-columns: 1fr;
@@ -1503,7 +1770,7 @@ th {
   min-width: 0;
 }
 
-@media (max-width:1024px) {
+@media (max-width:700px) {
 
   .detail-layout {
     grid-template-columns: 1fr;
@@ -1699,5 +1966,326 @@ th {
         rgba(248, 249, 251, 0.86) 30%,
         rgba(248, 249, 251, 0.5) 58%,
         rgba(248, 249, 251, 0.22) 100%);
+  }
+}
+
+/* ============================================================================
+   ADMIN DASHBOARD SHELL — responsive sidebar layout
+   Desktop: fixed left sidebar + offset main content.
+   Tablet / mobile (<=1024px): sidebar becomes an off-canvas slide-in drawer,
+   toggled from a sticky top bar; overlay dims the page behind it.
+   ========================================================================= */
+.admin-shell {
+  --admin-sidebar-w: 320px;
+  position: relative;
+  min-height: 100vh;
+  background: var(--canvas);
+}
+
+/* ---- Sidebar ----------------------------------------------------------- */
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  width: var(--admin-sidebar-w);
+  height: 100vh;
+  /* background: var(--dark); */
+  background: #080b12;
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+
+.admin-sidebar__brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.admin-brand {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  max-width: 100%;
+}
+
+.admin-brand-logo {
+  /* height: 42px; */
+  height: 70px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.admin-brand-tag {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(238, 241, 244, 0.52);
+  padding-left: 2px;
+}
+
+.admin-sidebar__nav {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 14px;
+}
+
+.admin-navlink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(238, 241, 244, 0.72);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.admin-navlink svg {
+  flex-shrink: 0;
+}
+
+.admin-navlink:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.admin-navlink.is-active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: var(--shadow-glow);
+}
+
+.admin-sidebar__footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13.5px;
+  color: rgba(238, 241, 244, 0.72);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.admin-sidebar__link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.admin-signout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  text-align: left;
+  color: #ff8a7d;
+  background: rgba(236, 68, 51, 0.12);
+  border: 1px solid rgba(236, 68, 51, 0.28);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.admin-signout:hover {
+  background: var(--hot);
+  color: #fff;
+  border-color: var(--hot);
+}
+
+/* ---- Main content ------------------------------------------------------ */
+.admin-main {
+  margin-left: var(--admin-sidebar-w);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-main__body {
+  flex: 1 0 auto;
+  padding-top: 28px;
+}
+
+/* ---- Mobile / tablet top bar (hidden on desktop) ----------------------- */
+.admin-topbar {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  padding: 12px 16px;
+  background: #080b12;
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-hamburger {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.admin-hamburger:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.admin-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.admin-topbar__logo {
+  height: 60px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.admin-topbar__tag {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(238, 241, 244, 0.5);
+  padding-left: 11px;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  white-space: nowrap;
+}
+
+/* Close button inside the sidebar (only visible in drawer mode) */
+.admin-sidebar__close {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.admin-sidebar__close:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ---- Overlay behind the drawer ----------------------------------------- */
+.admin-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1150;
+  background: rgba(14, 47, 73, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+}
+
+/* ============================================================================
+   ADMIN — tablet & mobile: collapse sidebar into a drawer
+   ========================================================================= */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    width: 284px;
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+  }
+
+  .admin-shell.is-open .admin-sidebar {
+    transform: translateX(0);
+  }
+
+  .admin-sidebar__close {
+    display: grid;
+  }
+
+  .admin-main {
+    margin-left: 0;
+  }
+
+  .admin-topbar {
+    display: flex;
+  }
+
+  .admin-overlay {
+    display: block;
+  }
+
+  .admin-shell.is-open .admin-overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .admin-main__body {
+    padding-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-sidebar {
+    width: min(86vw, 300px);
+  }
+
+  .admin-topbar__logo {
+    height: 50px;
+  }
+}
+
+/* Very small phones: keep the top-bar logo primary, drop the "Admin" tag. */
+@media (max-width: 359px) {
+  .admin-topbar__tag {
+    display: none;
+  }
+
+  .admin-topbar__logo {
+    height: 50px;
   }
 }

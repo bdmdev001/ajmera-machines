@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation';
 import dbConnect from '@/lib/dbConnect';
 import Product from '@/models/Product';
 import Category from '@/models/Category';
-import AdminNav from '@/components/AdminNav';
 import AdminInventoryManager, { type CategoryOption } from '@/components/AdminInventoryManager';
 import { isAdminAuthenticated } from '@/lib/auth';
 import { normalizeImages } from '@/lib/images';
@@ -43,14 +42,14 @@ export default async function AdminInventoryPage() {
       technicalSpecifications: p.technicalSpecifications || '',
       categoryId: p.categoryId ? String(p.categoryId) : '',
       images: normalizeImages(p.images),
-      isLatestArrival: Boolean(p.isLatestArrival),
+      isFeatured: Boolean(p.isFeatured),
+      stockStatus: (p.stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock') as 'In Stock' | 'Out of Stock',
+      badges: Array.isArray(p.badges) ? p.badges.filter((b: unknown) => typeof b === 'string' && b.trim()) : [],
     };
   });
 
   return (
     <div style={{ paddingBottom: '80px' }}>
-      <AdminNav />
-
       <div className="container">
         <div style={{ marginBottom: 24 }}>
           <h1 className="display" style={{ fontSize: 28, marginBottom: 4 }}>Inventory</h1>

@@ -1,80 +1,56 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
 import { IProduct } from '@/models/Product';
-import { ArrowRight, Eye, Heart, MessageCircle, MapPin, CheckCircle2 } from 'lucide-react';
+import { MapPin, CheckCircle2, XCircle } from 'lucide-react';
 import { cldUrl, cldSrcSet } from '@/lib/images';
 import { getProductUrl } from '@/lib/productUrl';
 
 interface ProductCardProps {
   product: IProduct;
-  /** Optional corner badge, e.g. "NEW" or "HOT" */
+  /** Optional corner badge, e.g. "Featured" or "New" (section context). */
   badge?: { label: string; tone?: 'hot' | 'new' };
 }
 
-const WA = '919322401398';
-
 export default function ProductCard({ product, badge }: ProductCardProps) {
-  const [saved, setSaved] = useState(false);
-
   const hasImage = product.images && product.images.length > 0;
   const PLACEHOLDER = 'https://placehold.co/600x450/eef1f4/93a0af?text=Machine';
   const mainImage = hasImage ? cldUrl(product.images[0], { width: 600 }) : PLACEHOLDER;
   const mainSrcSet = hasImage ? cldSrcSet(product.images[0], [300, 450, 600, 800]) : undefined;
 
   const detailHref = getProductUrl(product);
-  const quoteHref = `/contact?enquiry=${encodeURIComponent(product.title)}&stock=${encodeURIComponent(product.stockNo)}`;
-  const waHref = `https://api.whatsapp.com/send?phone=${WA}&text=${encodeURIComponent(
-    `Hi, I'd like the best price for ${product.title} (Stock ${product.stockNo}).`
-  )}`;
+  const hasCountry = !!product.country && product.country !== 'N/A';
+  const outOfStock = product.stockStatus === 'Out of Stock';
+  const customBadges = Array.isArray(product.badges) ? product.badges.filter(Boolean) : [];
 
   return (
-    <div className="pcard">
+    // The whole card is the primary (and only) interaction — it opens the
+    // product detail page. No per-card action buttons or duplicate CTAs.
+    <Link href={detailHref} className="pcard" aria-label={product.title}>
       {/* Image */}
       <div className="pcard-img">
-        <Link href={detailHref} aria-label={product.title}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={mainImage}
-            srcSet={mainSrcSet}
-            sizes="(max-width: 560px) 90vw, (max-width: 1024px) 45vw, 300px"
-            alt={product.title}
-            loading="lazy"
-            decoding="async"
-            onError={(e) => {
-              e.currentTarget.srcset = '';
-              e.currentTarget.src = PLACEHOLDER;
-            }}
-          />
-        </Link>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={mainImage}
+          srcSet={mainSrcSet}
+          sizes="(max-width: 560px) 90vw, (max-width: 1024px) 45vw, 300px"
+          alt={product.title}
+          loading="lazy"
+          decoding="async"
+          onError={(e) => {
+            e.currentTarget.srcset = '';
+            e.currentTarget.src = PLACEHOLDER;
+          }}
+        />
 
-        {/* Corner badges */}
-        <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {/* Corner badges: section badge (Featured/New) + admin custom badges */}
+        <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-start' }}>
           {badge && (
             <span className={`badge ${badge.tone === 'hot' ? 'badge-hot' : 'badge-new'}`}>{badge.label}</span>
           )}
-          {product.country && product.country !== 'N/A' && (
-            <span className="badge badge-dark">{product.country}</span>
-          )}
-        </div>
-
-        {/* Hover quick-actions */}
-        <div className="pcard-actions">
-          <button
-            type="button"
-            aria-label={saved ? 'Saved' : 'Save'}
-            onClick={() => setSaved((s) => !s)}
-            style={saved ? { background: 'var(--hot)', color: '#fff', borderColor: 'var(--hot)' } : undefined}
-          >
-            <Heart size={16} fill={saved ? '#fff' : 'none'} />
-          </button>
-          <Link href={detailHref} aria-label="View details">
-            <Eye size={16} />
-          </Link>
-          <a href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp enquiry">
-            <MessageCircle size={16} />
-          </a>
+          {customBadges.map((b) => (
+            <span key={b} className="badge badge-dark">{b}</span>
+          ))}
         </div>
       </div>
 
@@ -84,24 +60,22 @@ export default function ProductCard({ product, badge }: ProductCardProps) {
           {product.category}
         </span>
 
-        <Link href={detailHref}>
-          <h3
-            style={{
-              fontSize: 15.5,
-              fontWeight: 600,
-              color: 'var(--text-primary)',
-              lineHeight: 1.4,
-              marginBottom: 12,
-              minHeight: 44,
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-            }}
-          >
-            {product.title}
-          </h3>
-        </Link>
+        <h3
+          style={{
+            fontSize: 15.5,
+            fontWeight: 600,
+            color: 'var(--text-primary)',
+            lineHeight: 1.4,
+            marginBottom: 12,
+            minHeight: 44,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}
+        >
+          {product.title}
+        </h3>
 
         {/* Meta row */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 14px', fontSize: 13, color: 'var(--text-muted)', marginBottom: 14 }}>
@@ -110,24 +84,25 @@ export default function ProductCard({ product, badge }: ProductCardProps) {
           {product.myear && <span>Yr {product.myear}</span>}
         </div>
 
-        {/* Availability + origin */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 16 }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--accent)' }}>
-            <CheckCircle2 size={15} style={{ color: '#16A34A' }} />
-            <span><span style={{ color: '#16A34A' }}>Verified</span> · In stock</span>
-          </span>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12.5, color: 'var(--text-muted)' }}>
-            <MapPin size={13} /> {product.country || 'India'}
-          </span>
-        </div>
-
-        {/* CTA */}
-        <div style={{ marginTop: 'auto', display: 'flex', gap: 8 }}>
-          <Link href={quoteHref} className="btn btn-primary btn-sm" style={{ flex: 1 }}>
-            Request Quote <ArrowRight size={15} />
-          </Link>
+        {/* Stock status + origin ("Made in …") — both from admin-managed data */}
+        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+          {outOfStock ? (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--hot)' }}>
+              <XCircle size={15} /> Out of stock
+            </span>
+          ) : (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--accent)' }}>
+              <CheckCircle2 size={15} style={{ color: '#16A34A' }} />
+              <span><span style={{ color: '#16A34A' }}>Verified</span> · In stock</span>
+            </span>
+          )}
+          {hasCountry && (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12.5, color: 'var(--text-muted)' }}>
+              <MapPin size={13} /> Made in {product.country}
+            </span>
+          )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

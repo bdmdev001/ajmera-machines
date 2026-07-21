@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { isValidEmail } from '@/lib/validation';
 import {
   ShieldCheck, Globe, Award, Headphones, ChevronRight,
   MapPin, Phone, Mail, ArrowRight, Send, ArrowUp, Shield,
@@ -22,8 +23,8 @@ const BORDER = 'rgba(255,255,255,0.08)';
 const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20would%20like%20to%20enquire%20about%20a%20machine.';
 
 const USPS = [
-  { Icon: ShieldCheck, title: 'Inspected & Verified', note: 'Every machine is quality checked before listing' },
-  { Icon: Globe, title: 'Worldwide Export', note: 'Exporting machinery to 25+ countries globally' },
+  // { Icon: ShieldCheck, title: 'Inspected & Verified', note: 'Every machine is quality checked before listing' },
+  { Icon: Globe, title: 'Worldwide Import & Export', note: 'Importing and exporting machinery to 25+ countries globally' },
   { Icon: Award, title: '30+ Years Trusted', note: 'Serving industries with excellence since 1990' },
   { Icon: Headphones, title: 'Fast Enquiry Reply', note: 'Quick response within hours, every time' },
 ];
@@ -109,6 +110,10 @@ export default function Footer() {
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isValidEmail(email)) {
+      setNewsMsg('Please enter a valid email address.');
+      return;
+    }
     setSending(true);
     setNewsMsg('');
     try {
@@ -133,7 +138,7 @@ export default function Footer() {
     <footer style={{ marginTop: 'auto', color: MUTED }}>
       {/* ============ Trust / USP band ============ */}
       <div style={{ background: 'radial-gradient(70% 130% at 22% 0%, rgba(46,116,180,0.32), transparent 55%), linear-gradient(180deg, #0e2c49 0%, #0a1220 100%)', borderBottom: `1px solid ${BORDER}` }}>
-        <div className="container footer-usp" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '30px 20px' }}>
+        <div className="container footer-usp" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: '30px 20px' }}>
           {USPS.map(({ Icon, title, note }) => (
             <motion.div key={title} className="footer-usp-item" whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300, damping: 22 }} style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
               <span style={{ display: 'grid', placeItems: 'center', width: 54, height: 54, borderRadius: '50%', border: '1px solid rgba(120,164,214,0.35)', background: 'rgba(120,164,214,0.08)', color: '#7ea6d8', flexShrink: 0 }}>
@@ -157,9 +162,7 @@ export default function Footer() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="https://res.cloudinary.com/z5xktswf/image/upload/f_auto,q_auto,w_760/v1784268556/ajmera/homepage/ajmera-logo-footer.png" alt="Ajmera Enterprise" width={362} height={90} loading="lazy" decoding="async" style={{ height: 90, width: 'auto', objectFit: 'contain', display: 'block', marginBottom: 22 }} />
               <p style={{ fontSize: 14, lineHeight: 1.7, maxWidth: 320, marginBottom: 24, color: 'rgba(238,241,244,0.66)', textAlign: 'justify' }}>
-                Trusted importer &amp; dealer of quality used machinery including CNC, VMC,
-                Press Brakes, Lathes, and more. We deliver performance, value, and reliability
-                with every machine.
+                Ajmera Enterprise, part of the AJMERA Group, is a trusted name in quality pre-owned industrial machinery. With over 45+ years of experience, we buy, stock, sell, and source Indian and imported machinery for engineering, tool-room, sheet-metal, and specialised industrial applications.
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
                 {SOCIALS.map(({ label, href, Glyph }) => (

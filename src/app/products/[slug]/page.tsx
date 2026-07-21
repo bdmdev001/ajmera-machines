@@ -138,15 +138,20 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const waHref = `${WA_BASE}${encodeURIComponent(`Hi, I'd like the best price for ${product.title} (Stock ${product.stockNo}).`)}`;
 
+  const hasCountry = !!product.country && product.country !== 'N/A';
+  const outOfStock = product.stockStatus === 'Out of Stock';
+  const stockLabel = outOfStock ? 'Out of stock' : 'In stock';
+  const customBadges = Array.isArray(product.badges) ? product.badges.filter(Boolean) : [];
+
   const infoCards: { icon: typeof Tag; label: string; value: string; accent?: boolean }[] = [
     { icon: Tag, label: 'Stock No.', value: product.stockNo, accent: true },
     { icon: Layers, label: 'Category', value: product.category },
     { icon: Settings, label: 'Make', value: product.make },
     { icon: HardDrive, label: 'Model', value: product.model },
     ...(product.myear ? [{ icon: Calendar, label: 'Year', value: product.myear }] : []),
-    { icon: Globe, label: 'Country', value: product.country || 'N/A' },
+    ...(hasCountry ? [{ icon: Globe, label: 'Made in', value: product.country }] : []),
     { icon: ShieldCheck, label: 'Condition', value: 'Inspected' },
-    { icon: CheckCircle2, label: 'Availability', value: 'In stock' },
+    { icon: CheckCircle2, label: 'Availability', value: stockLabel },
   ];
 
   const description = buildDescription(product);
@@ -194,17 +199,23 @@ export default async function ProductDetailPage({ params }: Props) {
           <ImageGallery images={product.images} title={product.title} />
 
           <div className="detail-side">
+            {/* Badge row: category → admin custom badges → stock status.
+                Country is NOT a badge here — it lives in the info grid / summary. */}
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               <span className="badge badge-new">{product.category}</span>
-              {product.country && product.country !== 'N/A' && <span className="badge badge-dark">{product.country}</span>}
-              <span className="badge badge-soft">Verified · In stock</span>
+              {customBadges.map((b) => <span key={b} className="badge badge-dark">{b}</span>)}
+              {outOfStock
+                ? <span className="badge badge-hot">Out of stock</span>
+                : <span className="badge badge-soft">Verified · In stock</span>}
             </div>
 
             <div>
               <h1 className="display" style={{ fontSize: 'clamp(25px, 3.4vw, 38px)', lineHeight: 1.14, marginBottom: 12 }}>{product.title}</h1>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', color: 'var(--text-secondary)', fontSize: 14 }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><MapPin size={16} style={{ color: 'var(--accent)' }} /> {product.country || 'N/A'}</span>
-                <span style={{ color: 'var(--border-strong)' }}>•</span>
+                {hasCountry && (<>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><MapPin size={16} style={{ color: 'var(--accent)' }} /> Made in {product.country}</span>
+                  <span style={{ color: 'var(--border-strong)' }}>•</span>
+                </>)}
                 <span>Stock <strong style={{ color: 'var(--accent)' }}>{product.stockNo}</strong></span>
               </div>
             </div>
@@ -242,7 +253,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     year: product.myear,
                     country: product.country,
                     condition: 'Inspected',
-                    availability: 'In stock',
+                    availability: stockLabel,
                   }}
                   description={description}
                   specs={shareSpecs}

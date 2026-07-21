@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation';
 import dbConnect from '@/lib/dbConnect';
 import Category from '@/models/Category';
 import Product from '@/models/Product';
-import AdminNav from '@/components/AdminNav';
 import AdminCategoryManager, { type CategoryRow } from '@/components/AdminCategoryManager';
 import { isAdminAuthenticated } from '@/lib/auth';
 
@@ -38,7 +37,6 @@ export default async function AdminCategoriesPage() {
 
   return (
     <div style={{ paddingBottom: 80 }}>
-      <AdminNav />
       <div className="container">
         <div style={{ marginBottom: 24 }}>
           <h1 className="display" style={{ fontSize: 28, marginBottom: 4 }}>Categories</h1>

@@ -3,6 +3,7 @@ import dbConnect from '@/lib/dbConnect';
 import Category, { slugify } from '@/models/Category';
 import Product from '@/models/Product';
 import { isAdminAuthenticated } from '@/lib/auth';
+import { isValidUrl } from '@/lib/validation';
 
 /** PATCH — update a category. Renaming cascades the new name onto every product
  *  linked by categoryId, so the denormalized `category` string stays in sync. */
@@ -31,7 +32,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     category.name = name;
     category.slug = slug;
     if (body.description !== undefined) category.description = String(body.description).trim();
-    if (body.image !== undefined) category.image = String(body.image).trim();
+    if (body.image !== undefined) {
+      const image = String(body.image).trim();
+      if (image && !isValidUrl(image)) {
+        return NextResponse.json({ error: 'Image URL must be a valid URL' }, { status: 400 });
+      }
+      category.image = image;
+    }
     await category.save();
 
     // Keep the denormalized product.category name in sync on rename.

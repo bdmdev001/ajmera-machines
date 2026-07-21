@@ -3,6 +3,7 @@ import dbConnect from '@/lib/dbConnect';
 import Category, { slugify } from '@/models/Category';
 import Product from '@/models/Product';
 import { isAdminAuthenticated } from '@/lib/auth';
+import { isValidUrl } from '@/lib/validation';
 
 /** GET — list all categories (with the number of machines assigned to each). */
 export async function GET() {
@@ -59,6 +60,11 @@ export async function POST(request: Request) {
     const slug = slugify(name);
     if (!slug) return NextResponse.json({ error: 'Category name must contain letters or numbers' }, { status: 400 });
 
+    const image = String(body.image || '').trim();
+    if (image && !isValidUrl(image)) {
+      return NextResponse.json({ error: 'Image URL must be a valid URL' }, { status: 400 });
+    }
+
     const exists = await Category.findOne({ $or: [{ name }, { slug }] }).lean();
     if (exists) return NextResponse.json({ error: `A category named “${name}” already exists` }, { status: 409 });
 
@@ -66,7 +72,7 @@ export async function POST(request: Request) {
       name,
       slug,
       description: String(body.description || '').trim(),
-      image: String(body.image || '').trim(),
+      image,
     });
 
     return NextResponse.json({ success: true, category }, { status: 201 });

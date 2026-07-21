@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ShieldCheck, KeyRound, User, Loader2, ArrowLeft } from 'lucide-react';
+import { KeyRound, User, Loader2, ArrowLeft } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
@@ -14,6 +14,11 @@ export default function AdminLoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!username.trim() || !password.trim()) {
+      setStatus('error');
+      setErrorMsg('Please enter both your username and password.');
+      return;
+    }
     setStatus('loading');
     setErrorMsg('');
     try {
@@ -47,11 +52,16 @@ export default function AdminLoginPage() {
 
         <div className="surface" style={{ borderRadius: 'var(--radius-xl)', overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
           {/* Dark header */}
-          <div style={{ background: 'linear-gradient(135deg, #0a192f 0%, #102a43 35%, #1e3a5f 70%, #2d6ea3 100%)', padding: '32px 30px', textAlign: 'center' }}>
-            <div style={{ width: 54, height: 54, borderRadius: 14, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center', margin: '0 auto 14px' }}>
-              <ShieldCheck size={26} />
-            </div>
-            <h2 style={{ color: '#fff', fontSize: 22, fontWeight: 700 }}>Admin Dashboard</h2>
+          <div style={{ background: '#080b12', padding: '34px 30px', textAlign: 'center' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://res.cloudinary.com/z5xktswf/image/upload/f_auto,q_auto,w_760/v1784268556/ajmera/homepage/ajmera-logo-footer.png"
+              alt="Ajmera Enterprise"
+              width={362}
+              height={90}
+              style={{ height: 80, width: 'auto', maxWidth: '100%', objectFit: 'contain', display: 'block', margin: '0 auto 16px' }}
+            />
+            <h2 style={{ color: '#fff', fontSize: 20, fontWeight: 700, letterSpacing: '0.01em' }}>Admin Panel</h2>
             <p style={{ fontSize: 13, color: 'rgba(238,241,244,0.6)', marginTop: 4 }}>Authorized personnel only</p>
           </div>
 
