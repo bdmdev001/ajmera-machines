@@ -12,6 +12,7 @@ import RecentlyViewed from '@/components/RecentlyViewed';
 import ProductCard from '@/components/ProductCard';
 import ShareProduct from '@/components/ShareProduct';
 import { getAllProducts, getProductByStockNo } from '@/lib/products';
+import { buildProductDescription } from '@/lib/productDescription';
 import { imageUrl } from '@/lib/images';
 import {
   getProductSlug, getProductUrl, getProductAbsoluteUrl, extractIdToken,
@@ -26,9 +27,11 @@ export const dynamic = 'force-dynamic';
 
 const WA_BASE = 'https://api.whatsapp.com/send?phone=919322401398&text=';
 
-/** Marketing description reused by the page body, metadata and JSON-LD. */
-function buildDescription(p: IProduct): string {
-  return `The ${p.make !== 'N/A' ? `${p.make} ` : ''}${p.title} is a quality used ${p.category.toLowerCase()} machine${p.country && p.country !== 'N/A' ? ` of ${p.country} origin` : ''}, available from our Navi Mumbai stockyard. Each machine in our inventory is inspected and tested under power before it is listed, with its make, model, year and specifications documented transparently. Request a quote for best pricing, condition photos and export logistics.`;
+/** Description reused by the page body, metadata and JSON-LD: the stored,
+ *  professional description when present, else a live-generated one (identical
+ *  generator) so display stays consistent across the whole catalogue. */
+function productDescription(p: IProduct): string {
+  return p.description?.trim() || buildProductDescription(p);
 }
 
 /** Dynamic, per-product SEO metadata (canonical + Open Graph + Twitter). */
@@ -40,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const url = getProductAbsoluteUrl(product);
   const brand = product.make && product.make !== 'N/A' ? ` ${product.make}` : '';
   const title = `${product.title}${brand ? ` —${brand}` : ''} (Stock ${product.stockNo}) | Ajmera Enterprise`;
-  const description = buildDescription(product).slice(0, 300);
+  const description = productDescription(product).slice(0, 300);
   const image = product.images?.[0] ? imageUrl(product.images[0]) : undefined;
 
   return {
@@ -154,7 +157,7 @@ export default async function ProductDetailPage({ params }: Props) {
     { icon: CheckCircle2, label: 'Availability', value: stockLabel },
   ];
 
-  const description = buildDescription(product);
+  const description = productDescription(product);
 
   // Product JSON-LD (no invented price/offers — only real, known fields).
   const jsonLd: Record<string, unknown> = {
@@ -337,7 +340,7 @@ export default async function ProductDetailPage({ params }: Props) {
           {embed && (
             <section>
               <SectionHead icon={Play} title="Machine video" />
-              <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: '#000', maxWidth: 900 }}>
+              <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: '#000' }}>
                 <iframe src={embed} title={`${product.title} video`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0 }} />
               </div>
             </section>

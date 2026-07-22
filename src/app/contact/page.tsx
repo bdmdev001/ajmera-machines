@@ -16,8 +16,8 @@ const METHODS = [
   { icon: Mail, label: 'Email', value: 'ajmeraenterprise@gmail.com', href: 'mailto:ajmeraenterprise@gmail.com', tone: 'var(--secondary)' },
 ];
 
-export default async function ContactPage({ searchParams }: { searchParams: Promise<{ enquiry?: string; stock?: string }> }) {
-  const { enquiry, stock } = await searchParams;
+export default async function ContactPage({ searchParams }: { searchParams: Promise<{ enquiry?: string; stock?: string; requirement?: string }> }) {
+  const { enquiry, stock, requirement } = await searchParams;
 
   return (
     <div>
@@ -87,9 +87,14 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                   </div>
                 </li>
               </ul>
-              <a href="https://maps.google.com/?q=Rabale+MIDC+Navi+Mumbai" target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-block" style={{ marginTop: 22 }}>
-                Open in Google Maps <ExternalLink size={14} />
-              </a>
+              <div style={{ display: 'flex', gap: 10, marginTop: 22, flexWrap: 'wrap' }}>
+                <a href="https://maps.google.com/?q=Rabale+MIDC+Navi+Mumbai" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ flex: '1 1 180px', justifyContent: 'center' }}>
+                  Open in Google Maps <ExternalLink size={14} />
+                </a>
+                <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Ajmera Enterprise HQ\n${ADDRESS}\nhttps://maps.app.goo.gl/mG64FJ7QsU6ycTCT6`)}`} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp" style={{ flex: '1 1 180px', justifyContent: 'center' }}>
+                  <MessageCircle size={16} /> Share location
+                </a>
+              </div>
             </div>
 
             {/* Map embed */}
@@ -117,7 +122,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
           </div>
 
           {/* Right: form (prefilled from query) */}
-          <EnquiryForm productTitle={enquiry} stockNo={stock} />
+          <EnquiryForm productTitle={enquiry} stockNo={stock} initialMessage={requirement} />
         </div>
       </div>
     </div>

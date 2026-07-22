@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       title, make, model, categoryId, category, country, myear,
-      technicalSpecifications, videoUrl, images, isFeatured, stockStatus, badges,
+      technicalSpecifications, description, videoUrl, images, isFeatured, stockStatus, badges,
     } = body;
 
     if (!title) {
@@ -73,6 +73,7 @@ export async function POST(request: Request) {
       country: country || 'N/A',
       myear: myear || '',
       technicalSpecifications: technicalSpecifications || '',
+      description: typeof description === 'string' ? description.trim() : '',
       videoUrl: videoUrl || '',
       images: cleanImages,
       isFeatured: Boolean(isFeatured),

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { X, Save, Loader2 } from 'lucide-react';
 import FieldError from '@/components/FieldError';
+import PhoneField from '@/components/PhoneField';
 import { requiredMsg, emailMsg, phoneMsg, gstMsg, panMsg, isClean } from '@/lib/validation';
 
 export interface CustomerData {
@@ -49,6 +50,10 @@ export default function CustomerFormModal({ mode, initial, linkEnquiryId, onClos
 
   const set = (k: keyof CustomerData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((f) => ({ ...f, [k]: e.target.value }));
+    setErrors((p) => (p[k] ? { ...p, [k]: '' } : p));
+  };
+  const setVal = (k: keyof CustomerData) => (v: string) => {
+    setForm((f) => ({ ...f, [k]: v }));
     setErrors((p) => (p[k] ? { ...p, [k]: '' } : p));
   };
 
@@ -141,13 +146,13 @@ export default function CustomerFormModal({ mode, initial, linkEnquiryId, onClos
             </div>
             <div>
               <label style={label}>Phone number *</label>
-              <input suppressHydrationWarning type="tel" value={form.phone} onChange={set('phone')} onBlur={() => setErrors((p) => ({ ...p, phone: phoneMsg(form.phone ?? '', true) }))} placeholder="+91 98765 43210" style={{ ...input, ...invalid('phone') }} aria-invalid={!!errors.phone} />
+              <PhoneField value={form.phone ?? ''} onChange={setVal('phone')} onBlur={() => setErrors((p) => ({ ...p, phone: phoneMsg(form.phone ?? '', true) }))} invalid={!!errors.phone} required ariaLabel="Phone number" />
               <FieldError message={errors.phone} />
             </div>
           </div>
           <div>
             <label style={label}>WhatsApp number</label>
-            <input suppressHydrationWarning type="tel" value={form.whatsapp} onChange={set('whatsapp')} onBlur={() => setErrors((p) => ({ ...p, whatsapp: phoneMsg(form.whatsapp ?? '', false, 'WhatsApp number') }))} placeholder="Optional" style={{ ...input, ...invalid('whatsapp') }} aria-invalid={!!errors.whatsapp} />
+            <PhoneField value={form.whatsapp ?? ''} onChange={setVal('whatsapp')} onBlur={() => setErrors((p) => ({ ...p, whatsapp: phoneMsg(form.whatsapp ?? '', false, 'WhatsApp number') }))} invalid={!!errors.whatsapp} ariaLabel="WhatsApp number" />
             <FieldError message={errors.whatsapp} />
           </div>
 

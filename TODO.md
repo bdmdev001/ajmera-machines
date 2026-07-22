@@ -1,9 +1,9 @@
-# ajmera-machines-clone - Header redesign TODO
+# About Us Page Content Update TODO
 
-- [x] Inspect current header/search implementation (`Header.tsx`, `Header.module.css`, `SearchBar.tsx`) and capture gaps.
-- [x] Update `src/components/SearchBar.tsx` with premium autocomplete (sections, highlight, keyboard nav, outside click/Esc, empty state).
-
-- [ ] Update `src/components/Header.tsx` layout into premium responsive header (logo left, nav center, search/actions right; hamburger + responsive mobile behavior).
-- [ ] Update `src/components/Header.module.css` to match palette + premium spacing/shadows + sticky/border + responsive rules.
-- [ ] Run `npm run lint` and `npm run build` to verify correctness.
+- [x] Plan approved by user
+- [x] Edit 1: Update Header Band - h1 and subtitle
+- [x] Edit 2: Update Story Section - paragraphs, add Strategic Sourcing & Core Capabilities
+- [x] Edit 3: Update Stats Section - change 30 to 40 years
+- [x] Edit 4: Update Values Section - heading and description
+- [ ] Verify build succeeds with `npm run build` (currently running)
 

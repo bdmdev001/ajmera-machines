@@ -17,6 +17,10 @@ export interface IProduct {
   myear: string;
   videoUrl?: string;
   technicalSpecifications?: string;
+  /** Professional, marketplace-ready description. When empty, the product page
+   *  falls back to a live-generated one (same generator), so display stays
+   *  consistent. Populated in bulk by scripts/update-products-from-csv.mjs. */
+  description?: string;
   /** Structured Cloudinary references: { url: secure_url, public_id }. */
   images: ProductImage[];
   /** Admin-controlled flag: surfaces the product in the homepage "Featured" section. */
@@ -57,6 +61,7 @@ const ProductSchema = new Schema<IProduct>(
     myear: { type: String },
     videoUrl: { type: String },
     technicalSpecifications: { type: String },
+    description: { type: String },
     images: { type: [ProductImageSchema], default: [] },
     isFeatured: { type: Boolean, default: false, index: true },
     stockStatus: { type: String, enum: ['In Stock', 'Out of Stock'], default: 'In Stock', index: true },

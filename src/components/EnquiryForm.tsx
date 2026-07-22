@@ -4,17 +4,19 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Send, CheckCircle2, Loader2, ArrowRight, Package } from 'lucide-react';
 import FieldError from '@/components/FieldError';
+import PhoneField from '@/components/PhoneField';
 import { requiredMsg, emailMsg, phoneMsg, gstMsg, panMsg, isClean } from '@/lib/validation';
 
 interface EnquiryFormProps {
   productId?: string;
   productTitle?: string;
   stockNo?: string;
+  /** Pre-filled message body, e.g. a requirement carried from the product-list
+   *  "no results" state (category + selected specifications). */
+  initialMessage?: string;
 }
 
-const CONTACT_TIMES = ['Any time', 'Morning (10am–1pm)', 'Afternoon (1pm–4pm)', 'Evening (4pm–6:30pm)'];
-
-export default function EnquiryForm({ productId, productTitle, stockNo }: EnquiryFormProps) {
+export default function EnquiryForm({ productId, productTitle, stockNo, initialMessage }: EnquiryFormProps) {
   const hasProduct = !!(productTitle || stockNo);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -24,11 +26,12 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
   const [gstNumber, setGstNumber] = useState('');
   const [panNumber, setPanNumber] = useState('');
   const [quantity, setQuantity] = useState('1');
-  const [preferred, setPreferred] = useState(CONTACT_TIMES[0]);
   const [message, setMessage] = useState(
-    hasProduct
-      ? `I'm interested in ${productTitle ?? 'this machine'}${stockNo ? ` (Stock ${stockNo})` : ''}. Please send me the best price, condition photos and full specifications.`
-      : ''
+    initialMessage
+      ? initialMessage
+      : hasProduct
+        ? `I'm interested in ${productTitle ?? 'this machine'}${stockNo ? ` (Stock ${stockNo})` : ''}. Please send me the best price, condition photos and full specifications.`
+        : ''
   );
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
@@ -56,7 +59,7 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
     setStatus('loading');
     setErrorMsg('');
 
-    const composedMessage = `${message}\n\n— Quantity required: ${quantity}\n— Preferred contact time: ${preferred}`;
+    const composedMessage = `${message}\n\n— Quantity required: ${quantity}`;
 
     try {
       const response = await fetch('/api/enquiries', {
@@ -139,7 +142,7 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <label style={fieldLabel}>Phone / WhatsApp *</label>
-            <input suppressHydrationWarning type="tel" value={phone} onChange={(e) => { setPhone(e.target.value); clearError('phone'); }} onBlur={() => setErrors((p) => ({ ...p, phone: phoneMsg(phone, true, 'Phone / WhatsApp') }))} placeholder="+91 98765 43210" style={invalid('phone')} aria-invalid={!!errors.phone} />
+            <PhoneField value={phone} onChange={(v) => { setPhone(v); clearError('phone'); }} onBlur={() => setErrors((p) => ({ ...p, phone: phoneMsg(phone, true, 'Phone / WhatsApp') }))} invalid={!!errors.phone} required ariaLabel="Phone / WhatsApp" />
             <FieldError message={errors.phone} />
           </div>
         </div>
@@ -172,13 +175,6 @@ export default function EnquiryForm({ productId, productTitle, stockNo }: Enquir
             <input suppressHydrationWarning type="text" value={panNumber} onChange={(e) => { setPanNumber(e.target.value); clearError('panNumber'); }} onBlur={() => setErrors((p) => ({ ...p, panNumber: panMsg(panNumber) }))} placeholder="Optional" style={invalid('panNumber')} aria-invalid={!!errors.panNumber} />
             <FieldError message={errors.panNumber} />
           </div>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <label style={fieldLabel}>Preferred contact time</label>
-          <select suppressHydrationWarning value={preferred} onChange={(e) => setPreferred(e.target.value)}>
-            {CONTACT_TIMES.map((t) => <option key={t} value={t}>{t}</option>)}
-          </select>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>

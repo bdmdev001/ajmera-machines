@@ -6,6 +6,8 @@
    valid. Optional fields validate their FORMAT only when a value is present.
    ========================================================================= */
 
+import { isValidPhoneNumber } from 'libphonenumber-js';
+
 // Email — pragmatic RFC-ish check (also used by the subscribe route).
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Indian GSTIN — 15 chars: 2 state digits, 5 PAN letters, 4 digits, 1 letter,
@@ -18,9 +20,14 @@ export function isValidEmail(v: string): boolean {
   return EMAIL_RE.test(v.trim());
 }
 
-/** Phone / WhatsApp — accepts +, spaces, hyphens, parens; needs 7–15 digits. */
+/** Phone / WhatsApp. Forms now submit E.164 (e.g. "+919876543210"), which we
+ *  validate per-country via libphonenumber-js. A digit-count fallback keeps any
+ *  pre-existing, non-E.164 stored values from being rejected. */
 export function isValidPhone(v: string): boolean {
-  const digits = v.replace(/\D/g, '');
+  const s = v.trim();
+  if (!s) return false;
+  if (s.startsWith('+')) return isValidPhoneNumber(s);
+  const digits = s.replace(/\D/g, '');
   return digits.length >= 7 && digits.length <= 15;
 }
 
@@ -65,7 +72,7 @@ export function emailMsg(value: string, required = false): string {
 export function phoneMsg(value: string, required = false, label = 'Phone number'): string {
   const v = value.trim();
   if (!v) return required ? `${label} is required.` : '';
-  return isValidPhone(v) ? '' : `Enter a valid ${label.toLowerCase()} (7–15 digits).`;
+  return isValidPhone(v) ? '' : `Enter a valid ${label.toLowerCase()}.`;
 }
 
 export function gstMsg(value: string): string {

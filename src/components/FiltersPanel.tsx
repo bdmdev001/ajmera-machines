@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { RotateCcw, SlidersHorizontal, MessageCircle } from 'lucide-react';
+import SpecFilterInput from '@/components/SpecFilterInput';
 
 type SP = { [k: string]: string | undefined };
 
@@ -7,15 +8,10 @@ const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20need
 
 interface FiltersPanelProps {
   sp: SP;
-  values: { category?: string; make?: string; size?: string; capacity?: string };
+  values: { category?: string; make?: string; spec?: string };
   options: {
     categories: string[];
     makes: string[];
-    sizes: string[];
-    capacities: string[];
-    /** Category-specific labels, e.g. "Table Size" / "Swing". Null ⇒ hide filter. */
-    sizeLabel?: string | null;
-    capacityLabel?: string | null;
   };
   hasFilters: boolean;
 }
@@ -28,8 +24,8 @@ interface FiltersPanelProps {
  * plain <Link> that changes the URL, exactly as before.
  */
 export default function FiltersPanel({ sp, values, options, hasFilters }: FiltersPanelProps) {
-  const { category, make, size, capacity } = values;
-  const { categories, makes, sizes, capacities, sizeLabel, capacityLabel } = options;
+  const { category, make, spec } = values;
+  const { categories, makes } = options;
 
   const hrefWith = (changes: SP) => {
     const merged: SP = { ...sp, ...changes };
@@ -74,14 +70,13 @@ export default function FiltersPanel({ sp, values, options, hasFilters }: Filter
         {filterGroup('Categories', category, categories, 'category')}
         <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)' }} />
         {filterGroup('Makes', make, makes, 'make')}
-        {sizeLabel && sizes.length > 0 && (<>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)' }} />
-          {filterGroup(sizeLabel, size, sizes, 'size', 'All Sizes')}
-        </>)}
-        {capacityLabel && capacities.length > 0 && (<>
-          <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)' }} />
-          {filterGroup(capacityLabel, capacity, capacities, 'capacity', 'All Capacities')}
-        </>)}
+
+        <hr style={{ border: 'none', borderTop: '1px solid var(--border-light)' }} />
+
+        {/* Free-text Size / Capacity / specification filter with spec-based
+            autocomplete. Scopes suggestions to the selected category (or all
+            categories when none), and preserves the other active filters. */}
+        <SpecFilterInput category={category} initialValue={spec} sp={sp} />
       </div>
 
       <div style={{ marginTop: 24, padding: 16, borderRadius: 'var(--radius-md)', background: 'var(--accent-soft)' }}>

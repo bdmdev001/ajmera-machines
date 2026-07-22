@@ -12,7 +12,7 @@ import ProductCard from '@/components/ProductCard';
 import WhyChooseProducts from '@/components/WhyChooseProducts';
 import type { IProduct } from '@/models/Product';
 import {
-  getFeaturedProducts, getLatestArrivals, getCategoryStats, getTotalMachines, getFinderIndex,
+  getFeaturedProducts, getLatestArrivals, getCategoryStats, getTotalMachines, getProductCategories,
 } from '@/lib/products';
 import { cldUrl, cldSrcSet } from '@/lib/images';
 
@@ -47,7 +47,7 @@ export default async function Home() {
   const latestArrivals = await getLatestArrivals(8);
   const categories = getCategoryStats().slice(0, 6);
   const total = getTotalMachines();
-  const finderData = await getFinderIndex();
+  const finderCategories = await getProductCategories();
 
   return (
     <div>
@@ -115,7 +115,7 @@ export default async function Home() {
 
           {/* Machine finder — overlaps hero bottom */}
           <Reveal className="hero-finder" delay={120} style={{ marginTop: 'clamp(40px, 5vw, 64px)', marginBottom: -80, position: 'relative', zIndex: 5 }}>
-            <MachineFinder categories={finderData} />
+            <MachineFinder categories={finderCategories} />
           </Reveal>
         </div>
       </section>

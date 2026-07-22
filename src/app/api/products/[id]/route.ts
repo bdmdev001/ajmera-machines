@@ -29,7 +29,7 @@ export async function PATCH(
     const body = await request.json();
     const {
       title, make, model, categoryId, category, country, myear,
-      technicalSpecifications, videoUrl, images, isFeatured, stockStatus, badges,
+      technicalSpecifications, description, videoUrl, images, isFeatured, stockStatus, badges,
     } = body;
 
     if (!title) {
@@ -65,6 +65,9 @@ export async function PATCH(
         isFeatured: Boolean(isFeatured),
         stockStatus: stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock',
         badges: Array.isArray(badges) ? badges.map((b: unknown) => String(b).trim()).filter(Boolean) : [],
+        // Only touch the description when the edit actually sends one, so it is
+        // preserved intact when other fields are updated by any partial caller.
+        ...(typeof description === 'string' ? { description: description.trim() } : {}),
       },
       { new: true }
     );

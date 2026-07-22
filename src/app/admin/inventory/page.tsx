@@ -40,6 +40,7 @@ export default async function AdminInventoryPage() {
       myear: p.myear || '',
       videoUrl: p.videoUrl || '',
       technicalSpecifications: p.technicalSpecifications || '',
+      description: p.description || '',
       categoryId: p.categoryId ? String(p.categoryId) : '',
       images: normalizeImages(p.images),
       isFeatured: Boolean(p.isFeatured),

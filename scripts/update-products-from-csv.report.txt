@@ -1,0 +1,18 @@
+
+=== Product update from CSV (DRY-RUN) ===
+CSV: ajmera.csv
+Columns OK. StockID @0, Videos @11. Data rows: 92
+
+--- SUMMARY ---
+CSV data rows            : 92
+Products to update        : 0
+  • video link changed   : 0
+  • description changed  : 0
+Matched, no change       : 92
+StockIDs NOT found       : 0
+Invalid rows             : 0
+Duplicate StockIDs       : 0
+
+Commercial note: rendered on every product page (site-wide), so it is present for all products.
+
+DRY-RUN complete — nothing was written. Re-run with --apply to save.

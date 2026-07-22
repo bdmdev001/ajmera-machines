@@ -40,6 +40,7 @@ function fromRaw(r: RawProduct): IProduct {
     myear: r.myear ?? '',
     videoUrl: r.video_url ?? '',
     technicalSpecifications: r.technical_specifications ?? '',
+    description: '',
     images: normalizeImages(r.images),
     isFeatured: false,
     stockStatus: 'In Stock',
@@ -59,6 +60,7 @@ function normalize(p: IProduct): IProduct {
     myear: p.myear ?? '',
     videoUrl: p.videoUrl ?? '',
     technicalSpecifications: p.technicalSpecifications ?? '',
+    description: p.description ?? '',
     images: normalizeImages(p.images),
     isFeatured: Boolean(p.isFeatured),
     stockStatus: p.stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock',
@@ -405,4 +407,188 @@ export function buildFinderCategories(products: IProduct[]): FinderCategory[] {
 /** Build the category-driven Machine-Finder index (DB, seed fallback). */
 export async function getFinderIndex(): Promise<FinderCategory[]> {
   return buildFinderCategories(await getAllProducts());
+}
+
+/* ============================================================================
+   FREE-TEXT SIZE / CAPACITY / SPECIFICATION SEARCH
+   ----------------------------------------------------------------------------
+   The finder merges Size & Capacity into ONE free-text field. The typed
+   requirement is matched against each product's actual technical specifications
+   with forgiving tokenization — insensitive to case, spacing, punctuation and
+   unit-gluing, and dimension-aware ("800 x 500" == "800x500"). Numeric tokens
+   must match whole (so "500" never matches "1500"); the chosen Category still
+   scopes the search. No fixed spec list and no per-spec dropdowns are used.
+   ========================================================================= */
+
+/** Forgiving tokenizer: "800x500mm" / "800 X 500 MM" / "Table Size: 800 x 500"
+ *  all reduce to comparable tokens — dimensions split around x, digits split
+ *  from units ("32mm" -> "32 mm"), punctuation dropped. */
+function specSearchTokens(s: string): string[] {
+  return s
+    .toLowerCase()
+    .replace(/×/g, 'x')
+    .replace(/(\d),(?=\d{3}\b)/g, '$1')      // 1,500 -> 1500 (thousands, not "2,5" decimals)
+    .replace(/(\d)\s*x\s*(\d)/g, '$1 x $2') // 800x500 -> 800 x 500
+    .replace(/(\d)([a-z])/g, '$1 $2')        // 32mm -> 32 mm
+    .replace(/([a-z])(\d)/g, '$1 $2')        // iso40 -> iso 40
+    .replace(/[^a-z0-9]+/g, ' ')             // punctuation -> space
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+/** True when a product's specifications (and title) satisfy the free-text
+ *  requirement: every token the user typed must be present. Empty query ⇒ true. */
+export function productMatchesQuery(
+  p: Pick<IProduct, 'technicalSpecifications' | 'title'>,
+  query: string,
+): boolean {
+  const wanted = specSearchTokens(query);
+  if (!wanted.length) return true;
+  const hay = new Set(specSearchTokens(`${p.technicalSpecifications || ''} ${p.title || ''}`));
+  return wanted.every((t) => hay.has(t));
+}
+
+/** Distinct product category names (DB-aware via getAllProducts), sorted. */
+export async function getProductCategories(): Promise<string[]> {
+  const set = new Set<string>();
+  for (const p of await getAllProducts()) {
+    const c = (p.category || '').trim();
+    if (c && c !== 'N/A') set.add(c);
+  }
+  return [...set].sort((a, b) => a.localeCompare(b));
+}
+
+/* ============================================================================
+   SPECIFICATION AUTOCOMPLETE SUGGESTIONS
+   ----------------------------------------------------------------------------
+   The finder suggests real "Label : Value" pairs mined from actual product
+   specifications (never hardcoded), each with its category and a live product
+   count. Category is OPTIONAL: with one selected, suggestions are scoped to it;
+   without, they span the whole catalogue (category shown per suggestion).
+   Matching is flexible — case-insensitive, partial, numeric, and unit/spacing-
+   tolerant so "32" / "32mm" / "32 mm" all surface "Drilling Capacity: 32 mm".
+   ========================================================================= */
+
+/** Normalize a raw spec key for grouping ("Table size" / "Cross TRavel" collapse). */
+function normLabelKey(raw: string): string {
+  return raw.toLowerCase().replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+/** A key is a usable spec label only if it reads like a real attribute — no
+ *  digits (those are malformed spec dumps) and not over-long prose. */
+function isUsableSpecKey(k: string): boolean {
+  return !!k && !/\d/.test(k) && k.length <= 26 && k.split(' ').length <= 4;
+}
+
+/** Keep concise, selectable values; drop empty / N-A and long free-text prose. */
+function isUsableSpecValue(v: string): boolean {
+  const c = v.trim();
+  if (!c || c.length > 32) return false;
+  if (/^n\.?\/?a\.?$/i.test(c)) return false;
+  return /\d/.test(c) || c.split(/\s+/).length <= 2;
+}
+
+/** Split multi-value cells ("600x300 / 800x400") without breaking "24/26mm". */
+function splitSpecValues(raw: string): string[] {
+  return raw.split(/\s+\/\s+|\s+&\s+|\s+and\s+/i).map((x) => x.trim()).filter(Boolean);
+}
+
+export interface SpecSuggestion {
+  /** Clean, consistent spec label ("Drilling Capacity"). */
+  label: string;
+  /** A real value found in the products ("32 mm"). */
+  value: string;
+  /** The category this label + value belongs to (shown when searching all). */
+  category: string;
+  /** How many products in that category carry this label + value. */
+  count: number;
+}
+
+/** Every distinct { category, label, value, count } spec entry — the raw
+ *  material for autocomplete. Pass a category to scope to it, or omit it to mine
+ *  the whole catalogue. Values are deduped per product so the count reflects
+ *  matching machines, not spec lines. */
+export function buildSpecEntries(products: IProduct[], category?: string): SpecSuggestion[] {
+  const cat = category?.trim();
+  const acc = new Map<string, { label: string; value: string; category: string; products: Set<string> }>();
+  for (const p of products) {
+    const pc = (p.category || '').trim();
+    if (!pc || pc === 'N/A') continue;
+    if (cat && pc !== cat) continue;
+    for (const line of (p.technicalSpecifications || '').split(/\r?\n/)) {
+      const i = line.indexOf(':');
+      if (i === -1) continue;
+      const rawKey = line.slice(0, i).trim();
+      const rawVal = line.slice(i + 1).trim();
+      if (!rawKey || !rawVal) continue;
+      const nk = normLabelKey(rawKey);
+      if (!isUsableSpecKey(nk)) continue;
+      const label = titleCaseKey(nk);
+      for (const part of splitSpecValues(rawVal)) {
+        const value = cleanValue(part);
+        if (!isUsableSpecValue(value)) continue;
+        const mapKey = `${pc}|${nk}|${valueKey(value)}`;
+        let a = acc.get(mapKey);
+        if (!a) { a = { label, value, category: pc, products: new Set() }; acc.set(mapKey, a); }
+        a.products.add(p.id);
+      }
+    }
+  }
+  return [...acc.values()]
+    .map((a) => ({ label: a.label, value: a.value, category: a.category, count: a.products.size }))
+    .sort((a, b) => b.count - a.count || byMeasure(a.value, b.value) || a.label.localeCompare(b.label) || a.category.localeCompare(b.category));
+}
+
+/** True when a product carries the given spec label + value on the SAME spec
+ *  line (label grouped by normalized key, value normalized so "32mm" == "32 mm").
+ *  Used when the user picks an autocomplete suggestion, so the result set (and
+ *  its size) exactly matches the suggested "N machines available" count. */
+export function productMatchesSpecPair(
+  p: Pick<IProduct, 'technicalSpecifications'>,
+  label: string,
+  value: string,
+): boolean {
+  const wantKey = normLabelKey(label);
+  const wantVal = valueKey(value);
+  if (!wantKey || !wantVal) return false;
+  for (const line of (p.technicalSpecifications || '').split(/\r?\n/)) {
+    const i = line.indexOf(':');
+    if (i === -1) continue;
+    if (normLabelKey(line.slice(0, i)) !== wantKey) continue;
+    for (const part of splitSpecValues(line.slice(i + 1).trim())) {
+      if (valueKey(cleanValue(part)) === wantVal) return true;
+    }
+  }
+  return false;
+}
+
+/** Compress to alphanumerics for forgiving substring matching ("32 mm" -> "32mm"). */
+function suggestKey(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
+/** Autocomplete suggestions filtered by the typed query. Category is optional —
+ *  omit it to search every category. Every whitespace-separated term must appear
+ *  (case/space/unit-insensitive) in the entry's "Label Value" text, so "table
+ *  500" and "500" both work. DB-aware. */
+export async function getSpecSuggestions(category: string, query: string, limit = 8): Promise<SpecSuggestion[]> {
+  const terms = query.toLowerCase().split(/\s+/).map(suggestKey).filter(Boolean);
+  if (!terms.length) return [];
+  const entries = buildSpecEntries(await getAllProducts(), category);
+  // Whole-token relevance so "32" surfaces "32 mm" above a substring hit inside
+  // "3,200"; partial/substring matches still appear, just ranked lower.
+  const qTokens = specSearchTokens(query);
+  return entries
+    .filter((e) => {
+      const hay = suggestKey(`${e.label} ${e.value}`);
+      return terms.every((t) => hay.includes(t));
+    })
+    .map((e) => {
+      const toks = new Set(specSearchTokens(`${e.label} ${e.value}`));
+      const score = qTokens.reduce((n, t) => n + (toks.has(t) ? 1 : 0), 0);
+      return { e, score };
+    })
+    .sort((a, b) => b.score - a.score || b.e.count - a.e.count || byMeasure(a.e.value, b.e.value) || a.e.label.localeCompare(b.e.label))
+    .slice(0, limit)
+    .map((m) => m.e);
 }

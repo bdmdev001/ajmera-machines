@@ -479,6 +479,74 @@ textarea:focus {
   border-color: var(--accent);
 }
 
+/* ============================================================================
+   International phone / WhatsApp input (react-phone-number-input)
+   The library renders a country selector + a plain <input>. We move the site's
+   field chrome (border, background, radius) onto the flex container and strip it
+   from the inner input so it visually matches every other field, in both themes.
+   ========================================================================= */
+.phone-field.PhoneInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 4px 14px;
+  transition: var(--transition-fast);
+}
+
+.phone-field.PhoneInput:focus-within {
+  border-color: var(--accent);
+}
+
+.phone-field.phone-field--invalid.PhoneInput {
+  border-color: var(--hot);
+}
+
+/* Inner number input — neutralise the global input chrome. */
+.phone-field .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  padding: 9px 0;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.phone-field .PhoneInputInput:focus {
+  border: none;
+}
+
+/* Country selector: flag + hidden native <select> overlay. */
+.phone-field .PhoneInputCountry {
+  margin: 0;
+}
+
+.phone-field .PhoneInputCountryIcon {
+  width: 26px;
+  height: 19px;
+  box-shadow: 0 0 0 1px var(--border-light);
+  border-radius: 2px;
+}
+
+.phone-field .PhoneInputCountrySelectArrow {
+  color: var(--text-muted);
+  opacity: 0.9;
+}
+
+/* The overlay <select> is invisible but must ignore the global select styling. */
+.phone-field .PhoneInputCountrySelect {
+  width: auto;
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -751,10 +819,6 @@ textarea:focus {
     grid-template-columns: 1fr !important;
   }
 
-  .finder-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-
   .prod-grid {
     grid-template-columns: repeat(2, 1fr) !important;
   }
@@ -775,8 +839,7 @@ textarea:focus {
   .test-grid,
   .ind-grid,
   .best-grid,
-  .prod-grid,
-  .finder-grid {
+  .prod-grid {
     grid-template-columns: 1fr !important;
   }
 
@@ -1314,18 +1377,45 @@ th {
 }
 
 /* ============================================================================
-   MACHINE FINDER — dependent Size / Capacity typeahead
-   ========================================================================= */
+   MACHINE FINDER — Category + single free-text Size / Capacity field + Search.
+   Desktop: three inline controls with the free-text input taking the most room.
+   Tablet/mobile: stack to a single column so every control is comfortably wide. */
+.finder-grid {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(220px, 2.2fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.finder-grid > .finder-search {
+  justify-content: center;
+}
+
+@media (max-width: 760px) {
+  .finder-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Free-text field + specification autocomplete dropdown. */
+@keyframes finder-spin {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
 .finder-ta {
   position: relative;
   min-width: 0;
 }
 
-.finder-input:disabled {
-  background: var(--bg-surface-2);
+.finder-spinner {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
   color: var(--text-muted);
-  border-style: dashed;
-  cursor: not-allowed;
+  animation: finder-spin 1s linear infinite;
+  pointer-events: none;
 }
 
 .finder-suggest {
@@ -1337,7 +1427,7 @@ th {
   list-style: none;
   margin: 0;
   padding: 6px;
-  max-height: 240px;
+  max-height: 280px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   background: var(--bg-surface);
@@ -1347,20 +1437,60 @@ th {
 }
 
 .finder-suggest__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   padding: 10px 12px;
   border-radius: var(--radius-sm);
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--text-secondary);
   cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .finder-suggest__item.is-active,
 .finder-suggest__item:hover {
   background: var(--accent-soft);
   color: var(--accent);
+}
+
+.finder-suggest__label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.finder-suggest__spec {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.finder-suggest__cat {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.finder-suggest__label strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.finder-suggest__item.is-active .finder-suggest__label strong,
+.finder-suggest__item:hover .finder-suggest__label strong {
+  color: var(--accent);
+}
+
+.finder-suggest__count {
+  flex-shrink: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 /* ============================================================================

@@ -24,6 +24,7 @@ interface ProductData {
   myear: string;
   videoUrl?: string;
   technicalSpecifications?: string;
+  description?: string;
   images: ProductImage[]; // structured { url, public_id }
   isFeatured?: boolean;
   stockStatus?: 'In Stock' | 'Out of Stock';
@@ -57,6 +58,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
   const [myear, setMyear] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [technicalSpecifications, setTechnicalSpecifications] = useState('');
+  const [description, setDescription] = useState('');
   const [photos, setPhotos] = useState<ProductImage[]>([]);
   const [isFeatured, setIsFeatured] = useState(false);
   const [stockStatus, setStockStatus] = useState<'In Stock' | 'Out of Stock'>('In Stock');
@@ -82,6 +84,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     setMyear('');
     setVideoUrl('');
     setTechnicalSpecifications('');
+    setDescription('');
     setPhotos([]);
     setIsFeatured(false);
     setStockStatus('In Stock');
@@ -104,6 +107,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     setMyear(p.myear || '');
     setVideoUrl(p.videoUrl || '');
     setTechnicalSpecifications(p.technicalSpecifications || '');
+    setDescription(p.description || '');
     setPhotos(normalizeImages(p.images));
     setIsFeatured(Boolean(p.isFeatured));
     setStockStatus(p.stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock');
@@ -180,6 +184,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
       myear,
       videoUrl,
       technicalSpecifications,
+      description,
       images: photos, // structured [{ url, public_id }]
       isFeatured,
       stockStatus,
@@ -621,6 +626,23 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                   />
                   <FieldError message={errors.videoUrl} />
                 </div>
+              </div>
+
+              {/* Product Description (customer-facing) */}
+              <div className="form-group">
+                <label>Product Description</label>
+                <span style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: -4, marginBottom: 4 }}>
+                  A short, positive, buyer-focused paragraph about this specific machine — its purpose,
+                  application and suitability. Shown on the product details page. Don&apos;t repeat the
+                  specifications below or include any disclaimer. Leave blank to auto-generate one.
+                </span>
+                <textarea
+                  rows={5}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder={'e.g. This radial drilling machine is well suited to fabrication and general engineering workshops, offering dependable performance for drilling, reaming and tapping across a range of components. A cost-effective, ready-to-use option for buyers seeking reliable pre-owned machinery.'}
+                  style={{ padding: '10px 14px', fontSize: '14px', resize: 'vertical' }}
+                />
               </div>
 
               {/* Technical Specifications */}

@@ -10,7 +10,8 @@
     "audit:images": "node --env-file=.env scripts/audit-images.mjs",
     "migrate:images": "node --env-file=.env scripts/migrate-images-to-cloudinary.mjs",
     "verify:cloudinary": "node --env-file=.env scripts/verify-cloudinary.mjs",
-    "backfill:categories": "node --env-file=.env scripts/backfill-categories.mjs"
+    "backfill:categories": "node --env-file=.env scripts/backfill-categories.mjs",
+    "update:products-csv": "node --env-file=.env scripts/update-products-from-csv.mjs"
   },
   "dependencies": {
     "@types/nodemailer": "^8.0.1",
@@ -18,13 +19,15 @@
     "cloudinary": "^2.10.0",
     "framer-motion": "^12.42.2",
     "jspdf": "^4.2.1",
+    "libphonenumber-js": "^1.13.9",
     "lucide-react": "^1.23.0",
     "mongoose": "^9.7.4",
     "next": "16.2.10",
     "nodemailer": "^9.0.3",
     "qrcode": "^1.5.4",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-phone-number-input": "^3.4.17"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
