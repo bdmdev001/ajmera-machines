@@ -7,6 +7,7 @@ import {
 import Reveal from '@/components/Reveal';
 import Counter from '@/components/Counter';
 import MachineFinder from '@/components/MachineFinder';
+import HeroSlider from '@/components/HeroSlider';
 import FeaturedCarousel from '@/components/FeaturedCarousel';
 import ProductCard from '@/components/ProductCard';
 import WhyChooseProducts from '@/components/WhyChooseProducts';
@@ -14,16 +15,36 @@ import type { IProduct } from '@/models/Product';
 import {
   getFeaturedProducts, getLatestArrivals, getCategoryStats, getTotalMachines, getProductCategories,
 } from '@/lib/products';
-import { cldUrl, cldSrcSet } from '@/lib/images';
+import { cldUrl, type ImageRef } from '@/lib/images';
 
 export const revalidate = 3600;
 
 const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20would%20like%20to%20enquire%20about%20a%20machine.';
 
-/* Hero LCP photo (Cloudinary). Rendered as a real <img> — see below — so the
+/* Hero LCP photo (Cloudinary). It is the FIRST slide of the hero background
+   carousel and is rendered as a real, eager <img> (see HeroSlider) so the
    browser's preload scanner discovers it in the initial HTML instead of waiting
-   for the CSSOM (which is what made the old CSS background a 14.6s LCP). */
-const HERO_IMG = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784268553/ajmera/homepage/hero-light';
+   for the CSSOM (which is what made the old CSS background a 14.6s LCP).
+   Additional slides are appended at request time from the admin-curated featured
+   products below — drop dedicated hero shots into HERO_SLIDES to replace them. */
+const HERO_IMG_1 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/2_sfqimu.jpg';
+const HERO_IMG_2 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784962500/Ajmera_2_done_hjfgqf.jpg';
+const HERO_IMG_3 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/4_srdkch.jpg';
+const HERO_IMG_4 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/1_xpwhn5.jpg';
+const HERO_IMG_5 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/5_fj5kdh.jpg';
+const HERO_IMG_6 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/6_fowcqt.jpg';
+const HERO_IMG_7 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/7_vrrr5j.jpg';
+
+/* Tablet / mobile hero slides — a SEPARATE set from desktop (rendered by its own
+   HeroSlider instance and toggled by CSS below ~1024px). Replace these URLs with
+   portrait/tablet-optimized crops; seeded with the desktop images for now. */
+const HERO_IMG_M1 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/Ajmera_1_ohn8cc.jpg';
+const HERO_IMG_M2 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/Ajmera_2_oe7vqe.jpg';
+const HERO_IMG_M3 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971461/Ajmera_3_l0qfh8.jpg';
+const HERO_IMG_M4 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/Ajmera_4_jpg_bk9lvp.jpg';
+const HERO_IMG_M5 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971459/5_wabszc.jpg';
+const HERO_IMG_M6 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/6_q0ucpw.jpg';
+const HERO_IMG_M7 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971459/7_uzm7wm.jpg';
 
 const CATEGORY_META: Record<string, string> = {
   'Grinder Surface': 'Surface grinders',
@@ -49,74 +70,107 @@ export default async function Home() {
   const total = getTotalMachines();
   const finderCategories = await getProductCategories();
 
+  // Hero background carousel. Desktop and tablet/mobile use SEPARATE image sets —
+  // the two HeroSlider instances below are toggled by CSS per breakpoint, so each
+  // set can be composed for its own aspect ratio.
+  const HERO_SLIDES: ImageRef[] = [
+    HERO_IMG_1,
+    HERO_IMG_2,
+    HERO_IMG_3,
+    HERO_IMG_4,
+    HERO_IMG_5,
+    HERO_IMG_6,
+    HERO_IMG_7,
+  ];
+
+  // TABLET / MOBILE slides — swap these for portrait/tablet-optimized crops when
+  // available. Seeded with the desktop set so the slider works until then.
+  const HERO_SLIDES_MOBILE: ImageRef[] = [
+    HERO_IMG_M1,
+    HERO_IMG_M2,
+    HERO_IMG_M3,
+    HERO_IMG_M4,
+    HERO_IMG_M5,
+    HERO_IMG_M6,
+    HERO_IMG_M7,
+  ];
+
   return (
     <div>
       {/* ================= 1 — HERO ================= */}
       {/* overflow is `clip` on X only (safety against sub-pixel bleed) but
           visible on Y so the finder's Size/Capacity suggestion dropdown can
-          overlay the section below instead of being clipped at the hero edge. */}
-      <section className="hero-photo" style={{ position: 'relative', overflowX: 'clip', overflowY: 'visible' }}>
-        {/* LCP element: real <img> (not a CSS background) so it is discovered by
-            the preload scanner immediately and marked high priority. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className="hero-photo-img"
-          src={cldUrl(HERO_IMG, { width: 1280 })}
-          srcSet={cldSrcSet(HERO_IMG, [640, 960, 1280, 1600])}
-          sizes="100vw"
-          alt=""
-          aria-hidden="true"
-          fetchPriority="high"
-          decoding="async"
-        />
-        <div className="hero-photo-overlay" aria-hidden />
-        <div className="container" style={{ position: 'relative', zIndex: 2, padding: 'clamp(52px, 7vw, 96px) 20px clamp(60px, 7vw, 130px)' }}>
-          <div className="hero-copy" style={{ maxWidth: 640 }}>
-            <Reveal>
-              <span className="badge badge-dark" style={{ marginBottom: 22, padding: '7px 14px', letterSpacing: '0.1em' }}>Ready To Use For Production</span>
-            </Reveal>
-            <Reveal delay={80}>
-              <h1 className="display" style={{ fontSize: 'clamp(40px, 6vw, 72px)', lineHeight: 1.02, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: 22 }}>
-                Industrial Machines,<br /><span style={{ color: 'var(--accent)' }}>Ready To Run.</span>
-              </h1>
-            </Reveal>
-            <Reveal delay={150}>
-              <p style={{ fontSize: 'clamp(16px, 1.6vw, 19px)', color: 'var(--text-secondary)', maxWidth: 540, marginBottom: 32, lineHeight: 1.6 }}>
-                Premium industrial machinery sourced from renowned worldwide brands. Built to maximize precision, efficiency, and long-term value.
-              </p>
-            </Reveal>
-            <Reveal delay={220}>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 34 }}>
-                <Link href="/products" className="btn btn-primary btn-lg">Browse Products <ArrowRight size={18} /></Link>
-                <Link href="/contact" className="btn btn-hot btn-lg">Get Best Price</Link>
-                <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-lg"><MessageCircle size={18} /> WhatsApp</a>
-              </div>
-            </Reveal>
-            <Reveal delay={300}>
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '14px 22px' }}>
-                {[
-                  { Icon: ShieldCheck, a: 'Inspected', b: 'under power' },
-                  { Icon: Globe, a: '25+', b: 'countries' },
-                  { Icon: Truck, a: 'Worldwide', b: 'import/export' },
-                ].map(({ Icon, a, b }, i) => (
-                  <Fragment key={a}>
-                    {i > 0 && <span aria-hidden className="hide-mobile" style={{ width: 1, height: 30, background: 'var(--border-strong)' }} />}
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
-                      <Icon size={22} style={{ color: 'var(--accent)', flexShrink: 0 }} />
-                      <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, fontSize: 13.5, fontWeight: 600, color: 'var(--text-primary)' }}>
-                        <span>{a}</span><span>{b}</span>
+          overlay the section below instead of being clipped at the hero edge.
+
+          Three sibling blocks — media / copy / finder. On desktop the media is
+          absolutely positioned as the full-bleed background and the copy layers
+          over it; on tablet & mobile CSS `order` restacks them into three clean,
+          separated sections (copy → slider → finder). */}
+      <section className="hero" style={{ position: 'relative', overflowX: 'clip', overflowY: 'visible' }}>
+        {/* Background carousel — desktop and mobile use different image sets,
+            toggled by CSS. Only the desktop instance carries the eager LCP <img>. */}
+        <div className="hero__media">
+          <HeroSlider slides={HERO_SLIDES} priority className="hero-slider--desktop" />
+          <HeroSlider slides={HERO_SLIDES_MOBILE} className="hero-slider--mobile" />
+          <div className="hero__overlay" aria-hidden="true" />
+        </div>
+
+        {/* Static hero copy — layered over the media on desktop, its own white
+            section on tablet/mobile. */}
+        <div className="hero__copy-wrap">
+          <div className="container">
+            <div className="hero-copy" style={{ maxWidth: 640 }}>
+              <Reveal>
+                <span className="badge badge-dark" style={{ marginBottom: 22, padding: '7px 14px', letterSpacing: '0.1em' }}>Ready To Use For Production</span>
+              </Reveal>
+              <Reveal delay={80}>
+                <h1 className="display" style={{ fontSize: 'clamp(40px, 6vw, 72px)', lineHeight: 1.02, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: 22 }}>
+                  Industrial Machines,<br /><span style={{ color: 'var(--accent)' }}>Ready To Run.</span>
+                </h1>
+              </Reveal>
+              <Reveal delay={150}>
+                <p style={{ fontSize: 'clamp(16px, 1.6vw, 19px)', color: 'var(--text-secondary)', maxWidth: 540, marginBottom: 32, lineHeight: 1.6 }}>
+                  Premium industrial machinery sourced from renowned worldwide brands. Built to maximize precision, efficiency, and long-term value.
+                </p>
+              </Reveal>
+              <Reveal delay={220}>
+                <div className="hero-cta" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 34 }}>
+                  <Link href="/products" className="btn btn-primary btn-lg">Browse Products <ArrowRight size={18} /></Link>
+                  <Link href="/contact" className="btn btn-hot btn-lg">Get Best Price</Link>
+                  <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-lg"><MessageCircle size={18} /> WhatsApp</a>
+                </div>
+              </Reveal>
+              <Reveal delay={300}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '14px 22px' }}>
+                  {[
+                    { Icon: ShieldCheck, a: 'Inspected', b: 'under power' },
+                    { Icon: Globe, a: '25+', b: 'countries' },
+                    { Icon: Truck, a: 'Worldwide', b: 'import/export' },
+                  ].map(({ Icon, a, b }, i) => (
+                    <Fragment key={a}>
+                      {i > 0 && <span aria-hidden className="hide-mobile" style={{ width: 1, height: 30, background: 'var(--border-strong)' }} />}
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+                        <Icon size={22} style={{ color: 'var(--accent)', flexShrink: 0 }} />
+                        <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15, fontSize: 13.5, fontWeight: 600, color: 'var(--text-primary)' }}>
+                          <span>{a}</span><span>{b}</span>
+                        </span>
                       </span>
-                    </span>
-                  </Fragment>
-                ))}
-              </div>
+                    </Fragment>
+                  ))}
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </div>
+
+        {/* Machine finder — overlaps hero bottom on desktop; a separate card on
+            tablet/mobile. */}
+        <div className="hero__finder-wrap">
+          <div className="container">
+            <Reveal className="hero-finder" delay={120} style={{ marginBottom: -80, position: 'relative', zIndex: 5 }}>
+              <MachineFinder categories={finderCategories} />
             </Reveal>
           </div>
-
-          {/* Machine finder — overlaps hero bottom */}
-          <Reveal className="hero-finder" delay={120} style={{ marginTop: 'clamp(40px, 5vw, 64px)', marginBottom: -80, position: 'relative', zIndex: 5 }}>
-            <MachineFinder categories={finderCategories} />
-          </Reveal>
         </div>
       </section>
 

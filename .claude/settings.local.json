@@ -93,7 +93,14 @@
       "Bash(sed -n '1,60p' src/app/api/admin/login/route.ts)",
       "Bash(node --env-file=.env -e ' *)",
       "Bash(curl -s -m 40 -o /dev/null -w \"status=%{http_code}\\\\n\" \"http://localhost:3000/products\")",
-      "Bash(node -e \"const l=require\\('lucide-react'\\); console.log\\(['Handshake','Building2','Globe','Network','Users','Boxes','Factory','Cog','Layers','Sparkles','Target','Compass','Landmark','Gem','Star'].map\\(n=>n+':'+\\(n in l\\)\\).join\\('  '\\)\\)\")"
+      "Bash(node -e \"const l=require\\('lucide-react'\\); console.log\\(['Handshake','Building2','Globe','Network','Users','Boxes','Factory','Cog','Layers','Sparkles','Target','Compass','Landmark','Gem','Star'].map\\(n=>n+':'+\\(n in l\\)\\).join\\('  '\\)\\)\")",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/)",
+      "Bash(curl -s http://localhost:3000/ -o \"/c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/de311a19-e563-4f52-8cf8-42264e6c2dc6/scratchpad/home.html\")",
+      "Read(//c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/de311a19-e563-4f52-8cf8-42264e6c2dc6/scratchpad/**)",
+      "Bash(cd \"d:/Jatin Works/my_projects/ajmera-machines-clone\" && grep -o 'hero-slider__img[^>]*' \"/c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/de311a19-e563-4f52-8cf8-42264e6c2dc6/scratchpad/home.html\" | grep -o 'fetchpriority=\"[a-z]*\"\\\\|loading=\"[a-z]*\"\\\\|data-active' | head -12)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(cd \"d:/Jatin Works/my_projects/ajmera-machines-clone\" && grep -io 'fetch[a-z]*=[^ ]*' \"/c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/de311a19-e563-4f52-8cf8-42264e6c2dc6/scratchpad/home.html\" | head; echo \"---\"; grep -c 'res.cloudinary' \"/c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/de311a19-e563-4f52-8cf8-42264e6c2dc6/scratchpad/home.html\")",
+      "Bash(curl -s -o /dev/null -w '%{http_code}\\\\n' http://localhost:3000/)"
     ],
     "additionalDirectories": [
       "C:\\Users\\ADMIN"
