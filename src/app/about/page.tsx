@@ -6,8 +6,10 @@ import {
 } from 'lucide-react';
 import Reveal from '@/components/Reveal';
 import Counter from '@/components/Counter';
-import { getLatestArrivals, getTotalMachines } from '@/lib/products';
-import { imageUrl } from '@/lib/images';
+import StoryCollage, { type CollageSlide } from '@/components/StoryCollage';
+import { getFeaturedProducts, getLatestArrivals, getTotalMachines } from '@/lib/products';
+import type { IProduct } from '@/models/Product';
+import { getProductUrl } from '@/lib/productUrl';
 
 export const revalidate = 3600;
 
@@ -43,9 +45,48 @@ const TIMELINE = [
   { n: '05', title: 'Get Support Through the Process', body: 'Receive assistance from initial enquiry through documentation, logistics, and delivery.' },
 ];
 
+/** Round-robin products by category so consecutive picks come from different
+ *  sectors — the collage showcases the breadth of the inventory, not four
+ *  variants of the same machine. Insertion order (featured-first, newest-first)
+ *  is preserved within each category. */
+function orderByCategoryVariety(products: IProduct[]): IProduct[] {
+  const groups = new Map<string, IProduct[]>();
+  for (const p of products) {
+    const key = (p.category || 'N/A').trim();
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(p);
+  }
+  const decks = [...groups.values()];
+  const out: IProduct[] = [];
+  let drew = true;
+  while (drew) {
+    drew = false;
+    for (const deck of decks) {
+      const p = deck.shift();
+      if (p) { out.push(p); drew = true; }
+    }
+  }
+  return out;
+}
+
 export default async function AboutPage() {
-  const products = await getLatestArrivals(4);
   const total = getTotalMachines();
+
+  // Build the collage image pool from real, published products: prefer
+  // admin-featured machines, then fall back to the latest arrivals. Dedupe by
+  // product, drop anything without a gallery image, then mix categories so the
+  // three sliders continuously reveal different kinds of machinery.
+  const [featured, latest] = await Promise.all([getFeaturedProducts(12), getLatestArrivals(18)]);
+  const seen = new Set<string>();
+  const withImages: IProduct[] = [];
+  for (const p of [...featured, ...latest]) {
+    if (seen.has(p.id) || !p.images?.[0]) continue;
+    seen.add(p.id);
+    withImages.push(p);
+  }
+  const collageSlides: CollageSlide[] = orderByCategoryVariety(withImages)
+    .slice(0, 12)
+    .map((p) => ({ image: p.images[0], href: getProductUrl(p), title: p.title }));
 
   return (
     <div>
@@ -99,22 +140,7 @@ export default async function AboutPage() {
 
             <Reveal delay={140} scale>
               <div style={{ position: 'relative' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 14, alignItems: 'stretch' }}>
-                  {products[0]?.images?.[0] && (
-                    <div style={{ gridRow: '1 / span 2', minHeight: 220, borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-md)', background: '#eef1f4' }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={imageUrl(products[0].images[0])} alt={products[0].title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </div>
-                  )}
-                  {products.slice(1, 3).map((p) => (
-                    <div key={p.id} style={{ aspectRatio: '1 / 1', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-sm)', background: '#eef1f4' }}>
-                      {p.images?.[0] && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={imageUrl(p.images[0])} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      )}
-                    </div>
-                  ))}
-                </div>
+                <StoryCollage slides={collageSlides} />
                 <div style={{ position: 'absolute', left: 16, bottom: 16, background: 'var(--dark)', color: '#fff', padding: '12px 18px', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-lg)' }}>
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 800, lineHeight: 1 }}>40+</div>
                   <div style={{ fontSize: 11, letterSpacing: '0.06em', textTransform: 'uppercase', opacity: 0.82, marginTop: 2 }}>Years of trust</div>
