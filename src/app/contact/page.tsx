@@ -30,11 +30,11 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
             <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Contact</span>
           </nav>
           <h1 className="display" style={{ fontSize: 'clamp(28px, 4vw, 46px)', marginBottom: 10 }}>
-            Let&apos;s find your <span className="text-accent">machine</span>
+            We&apos;re Ready to Serve Your <span className="text-accent">Machinery Needs</span>
           </h1>
           <p style={{ fontSize: 16, maxWidth: 620 }}>
-            Enquiring about a specific machine, or want to sell your factory equipment?
-            Reach out — we reply fast, with the best price and honest condition details.
+            Whether you&apos;re searching for a specific machine or looking to sell your used equipment, we&apos;re here to help.
+            Reach out — we reply quickly with the best prices and honest condition details.
           </p>
         </div>
       </div>
@@ -110,7 +110,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
 
             {/* Trust row */}
             <div className="surface" style={{ padding: 18, borderRadius: 'var(--radius-lg)', display: 'flex', justifyContent: 'space-around', gap: 10, flexWrap: 'wrap' }}>
-              {[[ShieldCheck, 'Inspected stock'], [Truck, 'Worldwide export'], [BadgeCheck, '30+ yrs trusted']].map(([Icon, label], i) => {
+              {[[ShieldCheck, 'Inspected stock'], [Truck, 'Worldwide export'], [BadgeCheck, '40+ yrs trusted']].map(([Icon, label], i) => {
                 const I = Icon as typeof ShieldCheck;
                 return (
                   <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)' }}>

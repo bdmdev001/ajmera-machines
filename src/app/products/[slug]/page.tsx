@@ -309,7 +309,7 @@ export default async function ProductDetailPage({ params }: Props) {
           </section>
 
           {/* Features + Applications */}
-          <section>
+          {/* <section>
             <div className="detail-two" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(28px, 4vw, 48px)' }}>
               <div>
                 <SectionHead icon={Sparkles} title="Features & advantages" />
@@ -334,7 +334,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 </div>
               </div>
             </div>
-          </section>
+          </section> */}
 
           {/* Video (no 360) */}
           {embed && (

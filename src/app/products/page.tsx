@@ -134,7 +134,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
             {category && (<><ChevronRight size={14} /><span style={{ color: 'var(--accent)', fontWeight: 600 }}>{category}</span></>)}
           </nav>
           <h1 className="display" style={{ fontSize: 'clamp(26px, 3.4vw, 40px)', marginBottom: 12, maxWidth: 900 }}>
-            {category ? category : 'Quality Pre-Owned Industrial Machinery for Your Requirements'}
+            {category ? category : 'Find The Right Machine'}
           </h1>
           {!category && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 14 }}>

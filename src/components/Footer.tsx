@@ -25,7 +25,7 @@ const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20woul
 const USPS = [
   // { Icon: ShieldCheck, title: 'Inspected & Verified', note: 'Every machine is quality checked before listing' },
   { Icon: Globe, title: 'Worldwide Import & Export', note: 'Importing and exporting machinery to 25+ countries globally' },
-  { Icon: Award, title: '30+ Years Trusted', note: 'Serving industries with excellence since 1990' },
+  { Icon: Award, title: '40+ Years Trusted', note: 'Serving industries with excellence since 1990' },
   { Icon: Headphones, title: 'Fast Enquiry Reply', note: 'Quick response within hours, every time' },
 ];
 
@@ -162,7 +162,7 @@ export default function Footer() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="https://res.cloudinary.com/z5xktswf/image/upload/f_auto,q_auto,w_760/v1784268556/ajmera/homepage/ajmera-logo-footer.png" alt="Ajmera Enterprise" width={362} height={90} loading="lazy" decoding="async" style={{ height: 90, width: 'auto', objectFit: 'contain', display: 'block', marginBottom: 22 }} />
               <p style={{ fontSize: 14, lineHeight: 1.7, maxWidth: 320, marginBottom: 24, color: 'rgba(238,241,244,0.66)', textAlign: 'justify' }}>
-                Ajmera Enterprise, part of the AJMERA Group, is a trusted name in quality pre-owned industrial machinery. With over 45+ years of experience, we buy, stock, sell, and source Indian and imported machinery for engineering, tool-room, sheet-metal, and specialised industrial applications.
+                Ajmera Enterprise, part of the AJMERA Group, is a trusted name in quality pre-owned industrial machinery. With over 40+ years of experience, we buy, stock, sell, and source Indian and imported machinery for engineering, tool-room, sheet-metal, and specialised industrial applications.
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
                 {SOCIALS.map(({ label, href, Glyph }) => (

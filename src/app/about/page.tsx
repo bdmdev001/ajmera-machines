@@ -61,7 +61,7 @@ export default async function AboutPage() {
           </nav>
           <span className="eyebrow" style={{ marginBottom: 16 }}>Corporate profile</span>
           <h1 className="display" style={{ fontSize: 'clamp(30px, 4.6vw, 54px)', letterSpacing: '-0.02em', lineHeight: 1.05, marginBottom: 16, maxWidth: 760 }}>
-            About <span className="text-accent">Ajmera Enterprise</span>
+            About <span style={{ color: 'var(--warn)' }}>Ajmera Enterprise</span>
           </h1>
           <p style={{ fontSize: 'clamp(15px, 1.6vw, 18px)', color: 'var(--text-secondary)', maxWidth: 680, lineHeight: 1.7 }}>
             A proud group company of AJMERA and one of India&apos;s established importers, exporters and dealers of pre-owned engineering, conventional, CNC and metalworking machinery — and complete industrial plants.

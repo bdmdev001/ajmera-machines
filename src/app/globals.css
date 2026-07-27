@@ -541,7 +541,7 @@ textarea:focus {
 
 /* The overlay <select> is invisible but must ignore the global select styling. */
 .phone-field .PhoneInputCountrySelect {
-  width: auto;
+  /* width: auto; */
   border: none;
   padding: 0;
   background: transparent;
@@ -1387,7 +1387,7 @@ th {
   align-items: center;
 }
 
-.finder-grid > .finder-search {
+.finder-grid>.finder-search {
   justify-content: center;
 }
 
@@ -1399,8 +1399,13 @@ th {
 
 /* Free-text field + specification autocomplete dropdown. */
 @keyframes finder-spin {
-  from { transform: translateY(-50%) rotate(0deg); }
-  to { transform: translateY(-50%) rotate(360deg); }
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
 }
 
 .finder-ta {
