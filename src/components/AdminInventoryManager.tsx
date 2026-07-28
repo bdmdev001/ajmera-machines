@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, Plus, Edit3, Trash2, X, Upload, Save, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Plus, Edit3, Trash2, X, Save, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { imageUrl, normalizeImages, type ProductImage } from '@/lib/images';
 import { useAdminAlert } from '@/components/AdminModal';
 import FieldError from '@/components/FieldError';
+import ProductImageUploader from '@/components/ProductImageUploader';
 import { requiredMsg, yearMsg, urlMsg, isClean } from '@/lib/validation';
 
 const PAGE_SIZE_OPTIONS: (number | 'all')[] = [25, 50, 100, 'all'];
@@ -124,41 +125,6 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     setBadgeDraft('');
   };
   const removeBadge = (b: string) => setBadges((prev) => prev.filter((x) => x !== b));
-
-  // Handle Image Upload
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files;
-    if (!fileList || fileList.length === 0) return;
-
-    setIsUploading(true);
-    const file = fileList[0];
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const res = await fetch('/api/products/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      if (res.ok && data.image?.url) {
-        setPhotos((prev) => [...prev, data.image as ProductImage]);
-      } else {
-        showError('Image upload failed', data.error || 'Please try again.');
-      }
-    } catch {
-      showError('Image upload failed', 'A network error occurred. Please try again.');
-    } finally {
-      setIsUploading(false);
-      // Allow re-selecting the same file after a failed/removed upload.
-      e.target.value = '';
-    }
-  };
-
-  // Remove Image from Local Form Array (url + publicId stay aligned)
-  const handleRemoveImage = (index: number) => {
-    setPhotos((prev) => prev.filter((_, i) => i !== index));
-  };
 
   // Handle Form Submit
   const handleSubmit = async (e: React.FormEvent) => {
@@ -725,92 +691,16 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                 </span>
               </label>
 
-              {/* Image Upload Gallery */}
+              {/* Image Upload Gallery — multi-select, drag-drop, reorder, replace, featured */}
               <div>
                 <label style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)', display: 'block', marginBottom: '8px' }}>
                   Machinery Images
                 </label>
-
-                {/* Images list previews */}
-                {photos.length > 0 && (
-                  <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '16px' }}>
-                    {photos.map((photo, idx) => (
-                      <div
-                        key={photo.url || idx}
-                        style={{
-                          position: 'relative',
-                          width: '70px',
-                          height: '70px',
-                          border: '1px solid var(--border-light)',
-                          borderRadius: '6px',
-                          overflow: 'hidden',
-                          backgroundColor: '#eef1f4',
-                        }}
-                      >
-                        <img src={imageUrl(photo.url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveImage(idx)}
-                          style={{
-                            position: 'absolute',
-                            top: '3px',
-                            right: '3px',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%',
-                            backgroundColor: '#fff',
-                            color: 'var(--hot)',
-                            border: '1px solid var(--border-light)',
-                            boxShadow: 'var(--shadow-sm)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            padding: 0,
-                          }}
-                        >
-                          <X size={10} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Upload Button */}
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <label
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      padding: '12px 20px',
-                      backgroundColor: 'var(--bg-surface-2)',
-                      border: '1px dashed var(--border-strong)',
-                      borderRadius: 'var(--radius-sm)',
-                      cursor: 'pointer',
-                      fontSize: '13px',
-                      fontWeight: '600',
-                      color: 'var(--text-secondary)',
-                    }}
-                  >
-                    {isUploading ? (
-                      <>
-                        <Loader2 size={14} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} /> Uploading...
-                      </>
-                    ) : (
-                      <>
-                        <Upload size={14} /> Upload Image
-                      </>
-                    )}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      disabled={isUploading}
-                      style={{ display: 'none' }}
-                    />
-                  </label>
-                </div>
+                <ProductImageUploader
+                  initialImages={photos}
+                  onChange={setPhotos}
+                  onUploadingChange={setIsUploading}
+                />
               </div>
 
               {/* Submit Buttons */}
@@ -824,13 +714,18 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                   marginTop: '10px',
                 }}
               >
+                {isUploading && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: 'var(--text-muted)', marginRight: 'auto' }}>
+                    <Loader2 size={13} style={{ animation: 'spin 1s linear infinite' }} /> Waiting for image uploads to finish…
+                  </span>
+                )}
                 <button type="button" onClick={() => setIsFormOpen(false)} className="btn btn-secondary" style={{ padding: '10px 20px', fontSize: '14px' }}>
                   Cancel
                 </button>
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isUploading}
                   style={{ padding: '10px 24px', fontSize: '14px' }}
                 >
                   {isSubmitting ? (

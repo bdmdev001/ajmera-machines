@@ -4,7 +4,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import {
   ChevronRight, MapPin, MessageCircle, ShieldCheck, Truck,
   Gauge, Tag, Settings, HardDrive, Layers, Globe, Calendar, ArrowRight,
-  CheckCircle2, Factory, ListChecks, FileText, Play, Sparkles,
+  CheckCircle2, ListChecks, FileText, Play,
 } from 'lucide-react';
 import ImageGallery from '@/components/ImageGallery';
 import EnquiryForm from '@/components/EnquiryForm';
@@ -83,24 +83,6 @@ function parseSpecs(raw?: string): SpecRow[] {
       : { note: line };
   });
 }
-
-const FEATURES = [
-  'Inspected and tested under power before listing',
-  'Geometry & alignment verified to hold tolerance',
-  'Transparent origin, make, model and year records',
-  'Detailed photographs of the actual machine',
-  'Available for pre-purchase inspection on request',
-  'Professional dismantling, crating & loading',
-];
-
-const APPLICATIONS = [
-  'Automotive & ancillary manufacturing',
-  'Die, mould & tool rooms',
-  'Heavy fabrication & structural work',
-  'Aerospace & defence machining',
-  'General engineering job shops',
-  'Energy, power & railway components',
-];
 
 const SectionHead = ({ icon: Icon, title, sub }: { icon: typeof ListChecks; title: string; sub?: string }) => (
   <div style={{ marginBottom: 20 }}>
@@ -261,8 +243,6 @@ export default async function ProductDetailPage({ params }: Props) {
                   description={description}
                   specs={shareSpecs}
                   notes={shareNotes}
-                  features={FEATURES}
-                  applications={APPLICATIONS}
                   images={product.images.map((f) => imageUrl(f))}
                 />
               </div>
@@ -307,34 +287,6 @@ export default async function ProductDetailPage({ params }: Props) {
               <p style={{ fontSize: 15, color: 'var(--text-muted)' }}>No technical specifications recorded — <a href="#enquiry" style={{ color: 'var(--accent)', fontWeight: 600 }}>request the full spec sheet</a>.</p>
             )}
           </section>
-
-          {/* Features + Applications */}
-          {/* <section>
-            <div className="detail-two" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(28px, 4vw, 48px)' }}>
-              <div>
-                <SectionHead icon={Sparkles} title="Features & advantages" />
-                <div className="surface" style={{ padding: 'clamp(20px, 3vw, 28px)', borderRadius: 'var(--radius-lg)' }}>
-                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 14 }}>
-                    {FEATURES.map((f) => (
-                      <li key={f} style={{ display: 'flex', gap: 11, alignItems: 'flex-start', fontSize: 14.5, color: 'var(--text-secondary)' }}>
-                        <CheckCircle2 size={18} style={{ color: 'var(--accent)', flexShrink: 0, marginTop: 2 }} /> {f}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div>
-                <SectionHead icon={Factory} title="Typical applications" />
-                <div className="surface" style={{ padding: 'clamp(20px, 3vw, 28px)', borderRadius: 'var(--radius-lg)' }}>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-                    {APPLICATIONS.map((a) => (
-                      <span key={a} className="pill-neutral" style={{ display: 'inline-flex', padding: '9px 14px', borderRadius: 'var(--radius-pill)', fontSize: 13, fontWeight: 500 }}>{a}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section> */}
 
           {/* Video (no 360) */}
           {embed && (

@@ -1,14 +1,19 @@
 import type { jsPDF } from 'jspdf';
-import { PdfKit, PAGE, CONTENT_W, C, type RGB } from './pdfKit';
+import { PdfKit, PAGE, CONTENT_W, FLOW_BOTTOM, C, type RGB } from './pdfKit';
 import type { LoadedImage } from './assets';
 
 /* ============================================================================
-   Premium industrial product brochure — vector layout (jsPDF).
+   Premium product datasheet — vector layout (jsPDF).
 
-   Composed of small, single-responsibility "components" (PDFHeader, PDFHero,
-   ProductInfoGrid, SpecificationTable, FeatureList, Applications, ImageGallery,
-   QRCodeCard, PDFContact, PDFFooter). buildBrochureDoc wires them together and
-   is pure/sync so it can be unit-smoke-tested outside the browser.
+   A clean, product-specific machine datasheet (no generic marketing content):
+     • Page 1 — brand header, hero image + thumbnails, title, product summary
+       (Stock/Category/Make/Model/Year/Country/Condition/Availability) and the
+       product description.
+     • Page 2 — the complete technical specifications as a two-column table that
+       flows/auto-paginates, with the QR code (to the product page) at the end.
+   The header, running header, footer and branding are unchanged. Composed of
+   small single-responsibility "components"; buildBrochureDoc wires them together
+   and is pure/sync so it can be smoke-tested outside the browser.
    ========================================================================= */
 
 export interface Company {
@@ -38,8 +43,6 @@ export interface BrochureData {
   description: string;
   specs: { label: string; value: string }[];
   notes: string[];
-  features: string[];
-  applications: string[];
   productUrl: string;
   generatedDate: string;
 }
@@ -163,19 +166,23 @@ export function PDFHeader(kit: PdfKit, company: Company, assets: BrochureAssets)
 }
 
 /* ================================================================== *
- * PDFHero — large image + thumbnails, title, badges.
+ * PDFHero — prominent featured image, title, badges.
  * ================================================================== */
 export function PDFHero(kit: PdfKit, data: BrochureData, assets: BrochureAssets) {
   const { doc } = kit;
   const x = PAGE.MX;
   const top = kit.y;
-  const leftW = 86;
+  // A single image gets a larger, wider hero; with more images the hero is a
+  // touch narrower to leave a balanced identity column. The remaining images
+  // are shown in the integrated grid below (no separate gallery section).
+  const single = assets.images.length <= 1;
+  const leftW = single ? 104 : 86;
   const gap = 8;
   const rightX = x + leftW + gap;
   const rightW = CONTENT_W - leftW - gap;
 
-  // --- Hero image card ---
-  const imgH = 64;
+  // --- Hero image card (the prominent featured image) ---
+  const imgH = single ? 74 : 64;
   kit.card(x, top, leftW, imgH, { radius: 4, shadow: true, fill: C.white, stroke: C.border });
   const hero = assets.images[0];
   if (hero) {
@@ -183,22 +190,7 @@ export function PDFHero(kit: PdfKit, data: BrochureData, assets: BrochureAssets)
   } else {
     kit.text('Image unavailable', x + leftW / 2, top + imgH / 2, { size: 9, color: C.muted, align: 'center' });
   }
-
-  // --- Thumbnails ---
-  let leftBottom = top + imgH;
-  const thumbs = assets.images.slice(1, 5);
-  if (thumbs.length > 0) {
-    const tGap = 3;
-    const tW = (leftW - tGap * 3) / 4;
-    const tH = 16;
-    const ty = top + imgH + 4;
-    thumbs.forEach((t, i) => {
-      const tx = x + i * (tW + tGap);
-      kit.card(tx, ty, tW, tH, { radius: 2.4, fill: C.white, stroke: C.border, lineWidth: 0.3 });
-      kit.imageContain(t.dataUrl, t.format, { x: tx, y: ty, w: tW, h: tH }, t, 1.6);
-    });
-    leftBottom = ty + tH;
-  }
+  const leftBottom = top + imgH;
 
   // --- Right column ---
   let ry = top + 4;
@@ -316,10 +308,13 @@ export function ProductInfoGrid(kit: PdfKit, product: BrochureProduct) {
 }
 
 /* ================================================================== *
- * Description card (page 1) — height adapts to remaining space.
+ * Description card — flow-aware; self-sizes to its content and clamps
+ * only if it would run past the page's footer band.
  * ================================================================== */
-export function PDFDescription(kit: PdfKit, description: string, maxBottom: number) {
+export function PDFDescription(kit: PdfKit, description: string, onNewPage: () => void) {
   const x = PAGE.MX;
+  if (!description || !description.trim()) return;
+  kit.ensure(26, onNewPage); // keep the heading with at least a few lines
   kit.text('DESCRIPTION', x, kit.y, { size: 9, weight: 'bold', color: C.primary, letterSpacing: 0.4 });
   kit.y += 5.5;
 
@@ -328,8 +323,8 @@ export function PDFDescription(kit: PdfKit, description: string, maxBottom: numb
   const size = 9.6;
   const lh = 5.1;
   const { lines } = kit.measure(description, size, 'normal', CONTENT_W - padX * 2, lh);
-  // Clamp so the card + a QR card still fit above the footer.
-  const maxLines = Math.max(3, Math.floor((maxBottom - kit.y - padY * 2) / lh));
+  // Clamp so the card still finishes above the footer band on this page.
+  const maxLines = Math.max(3, Math.floor((FLOW_BOTTOM - kit.y - padY * 2) / lh));
   const shown = lines.slice(0, maxLines);
   if (shown.length < lines.length) {
     shown[shown.length - 1] = `${shown[shown.length - 1].replace(/\s+\S*$/, '')} …`;
@@ -339,6 +334,38 @@ export function PDFDescription(kit: PdfKit, description: string, maxBottom: numb
   kit.accentRail(x, kit.y, cardH, 1.4, C.accent);
   shown.forEach((ln, i) => kit.text(ln, x + padX, kit.y + padY + 3.4 + i * lh, { size, color: [55, 65, 81] }));
   kit.y += cardH + 8;
+}
+
+/* ================================================================== *
+ * ProductImages — the remaining gallery images woven directly under the
+ * hero as one contiguous imagery block (NO separate "Gallery" heading or
+ * page). The column count adapts to how many images the product has, every
+ * image keeps its aspect ratio (contain-fit inside its card), and rows
+ * auto-flow onto the next page when there are many.
+ * ================================================================== */
+export function ProductImages(kit: PdfKit, images: LoadedImage[], onNewPage: () => void) {
+  const extra = images.slice(1); // the featured image is already the hero
+  if (extra.length === 0) return;
+
+  const x = PAGE.MX;
+  const gap = 6;
+  // Balanced grids: a single extra sits at half width; 2 or 4 ⇒ 2 columns;
+  // otherwise up to 3 columns. Every image keeps its aspect ratio (contain-fit).
+  const cols = extra.length === 1 ? 1
+    : (extra.length === 2 || extra.length === 4) ? 2
+      : 3;
+  const cellW = extra.length === 1 ? (CONTENT_W - gap) / 2 : (CONTENT_W - gap * (cols - 1)) / cols;
+  const cellH = cellW * 0.7;
+
+  extra.forEach((img, i) => {
+    const col = i % cols;
+    if (col === 0) kit.ensure(cellH + gap, onNewPage);
+    const cx = x + col * (cellW + gap);
+    kit.card(cx, kit.y, cellW, cellH, { radius: 3, fill: C.white, stroke: C.border });
+    kit.imageContain(img.dataUrl, img.format, { x: cx, y: kit.y, w: cellW, h: cellH }, img, 3);
+    if (col === cols - 1 || i === extra.length - 1) kit.y += cellH + gap;
+  });
+  kit.y += 4;
 }
 
 /* ================================================================== *
@@ -450,119 +477,6 @@ export function SpecificationTable(kit: PdfKit, specs: { label: string; value: s
 }
 
 /* ================================================================== *
- * FeatureList — two-column checklist.
- * ================================================================== */
-export function FeatureList(kit: PdfKit, features: string[], onNewPage: () => void) {
-  if (features.length === 0) return;
-  kit.sectionTitle('Machine Features', 'Every machine inspected and documented before listing');
-  const x = PAGE.MX;
-  const colGap = 8;
-  const colW = (CONTENT_W - colGap) / 2;
-  const rowsPerCol = Math.ceil(features.length / 2);
-
-  kit.ensure(rowsPerCol * 9 + 4, onNewPage);
-  const startY = kit.y;
-  let maxBottom = startY;
-  features.forEach((f, i) => {
-    const col = Math.floor(i / rowsPerCol);
-    const row = i % rowsPerCol;
-    const fx = x + col * (colW + colGap);
-    const fy = startY + row * 9;
-    kit.doc.setFillColor(...C.accentSoft);
-    kit.doc.roundedRect(fx, fy - 3.2, 5, 5, 1.4, 1.4, 'F');
-    kit.checkMark(fx + 1.3, fy - 1, 2.4, C.primary);
-    const h = kit.text(f, fx + 7.5, fy, { size: 9.2, color: [55, 65, 81], maxWidth: colW - 9, lh: 4.4 });
-    maxBottom = Math.max(maxBottom, fy + h);
-  });
-  kit.y = maxBottom + 8;
-}
-
-/* ================================================================== *
- * Applications — pill chips.
- * ================================================================== */
-export function Applications(kit: PdfKit, applications: string[]) {
-  if (applications.length === 0) return;
-  kit.sectionTitle('Typical Applications');
-  const x = PAGE.MX;
-  let px = x;
-  let py = kit.y;
-  const gap = 4;
-  applications.forEach((a) => {
-    const w = kit.textWidth(a, 8.4, 'bold') + 8;
-    if (px + w > x + CONTENT_W) { px = x; py += 9; }
-    kit.pill(px, py, a, { fill: C.light, textColor: [51, 65, 85], stroke: C.border });
-    px += w + gap;
-  });
-  kit.y = py + 9 + 6;
-}
-
-/* ================================================================== *
- * ImageGallery — 2-column grid of additional images.
- * ================================================================== */
-export function ImageGallery(kit: PdfKit, images: LoadedImage[], onNewPage: () => void) {
-  const extra = images.slice(1); // hero already shown on page 1
-  if (extra.length === 0) return;
-  kit.sectionTitle('Product Gallery');
-  const x = PAGE.MX;
-  const cols = 2;
-  const gap = 6;
-  const cellW = (CONTENT_W - gap) / cols;
-  const cellH = cellW * 0.66;
-
-  extra.slice(0, 6).forEach((img, i) => {
-    const col = i % cols;
-    if (col === 0) kit.ensure(cellH + gap, () => { onNewPage(); });
-    const cx = x + col * (cellW + gap);
-    kit.card(cx, kit.y, cellW, cellH, { radius: 3, fill: C.white, stroke: C.border });
-    kit.imageContain(img.dataUrl, img.format, { x: cx, y: kit.y, w: cellW, h: cellH }, img, 3);
-    if (col === cols - 1 || i === extra.slice(0, 6).length - 1) kit.y += cellH + gap;
-  });
-  kit.y += 4;
-}
-
-/* ================================================================== *
- * PDFContact — professional contact card.
- * ================================================================== */
-export function PDFContact(kit: PdfKit, data: BrochureData, assets: BrochureAssets, onNewPage: () => void) {
-  const x = PAGE.MX;
-  const h = 46;
-  kit.ensure(h + 14, () => { onNewPage(); });
-  kit.sectionTitle('Get in Touch');
-  kit.card(x, kit.y, CONTENT_W, h, { radius: 3.2, fill: C.light, stroke: C.border, shadow: true });
-  kit.doc.setFillColor(...C.primary);
-  kit.doc.rect(x, kit.y, CONTENT_W, 1.4, 'F');
-
-  const padX = 8;
-  let ty = kit.y + 11;
-  kit.text(data.company.name, x + padX, ty, { size: 13, weight: 'bold', color: C.text });
-  ty += 6.5;
-  const rows: [string, string][] = [
-    ['Phone', data.company.phone],
-    ['Email', data.company.email],
-    ['Web', data.company.website],
-    ['Address', data.company.address],
-  ];
-  rows.forEach(([k, v]) => {
-    kit.text(k.toUpperCase(), x + padX, ty, { size: 7.4, weight: 'bold', color: C.accent, letterSpacing: 0.3 });
-    kit.text(v, x + padX + 20, ty, { size: 9, weight: 'normal', color: [55, 65, 81], maxWidth: CONTENT_W - padX - 20 - 44 });
-    ty += 6.6;
-  });
-
-  // QR on the right.
-  const qrBox = 30;
-  const qx = x + CONTENT_W - qrBox - 8;
-  const qy = kit.y + (h - qrBox) / 2 - 2;
-  kit.doc.setFillColor(...C.white);
-  kit.doc.setDrawColor(...C.border);
-  kit.doc.setLineWidth(0.3);
-  kit.doc.roundedRect(qx, qy, qrBox, qrBox, 2.4, 2.4, 'FD');
-  if (assets.qr) kit.doc.addImage(assets.qr, 'PNG', qx + 2, qy + 2, qrBox - 4, qrBox - 4, undefined, 'FAST');
-  kit.text('Scan to view online', qx + qrBox / 2, qy + qrBox + 4, { size: 7.2, color: C.muted, align: 'center' });
-
-  kit.y += h + 8;
-}
-
-/* ================================================================== *
  * PDFFooter — drawn on every page at the end.
  * ================================================================== */
 export function PDFFooter(kit: PdfKit, data: BrochureData, assets: BrochureAssets) {
@@ -604,28 +518,34 @@ export function PDFFooter(kit: PdfKit, data: BrochureData, assets: BrochureAsset
  * ================================================================== */
 export function buildBrochureDoc(doc: jsPDF, data: BrochureData, assets: BrochureAssets) {
   const kit = new PdfKit(doc);
+  // Running header drawn whenever the flowing content spills onto a new page.
+  const runningHeader = () => PDFRunningHeader(kit, data, assets);
 
-  // ---- Page 1 ----
+  // ---- Brand header (page 1) ----
   PDFHeader(kit, data.company, assets);
+
+  // ---- Product identity: title + the prominent featured image ----
   PDFHero(kit, data, assets);
+
+  // ---- Product summary (product-specific key details) ----
   ProductInfoGrid(kit, data.product);
-  // Keep page-1 content clear of the enlarged footer band (divider at H-19).
-  // Reserve the QR card (40) + spacing so both it and the description fit above.
-  const footerTop = PAGE.H - 23;
-  PDFDescription(kit, data.description, footerTop - 48);
+
+  // ---- Remaining gallery images, integrated as a responsive grid that flows
+  //      naturally onto following pages (no separate gallery section/page) ----
+  ProductImages(kit, assets.images, runningHeader);
+
+  // ---- Product description ----
+  PDFDescription(kit, data.description, runningHeader);
+
+  // ---- Complete technical specifications (two-column table, auto-paginates) ----
+  kit.ensure(30, runningHeader);
+  kit.sectionTitle('Technical Specifications', 'As documented for this machine');
+  SpecificationTable(kit, data.specs, data.notes, runningHeader);
+
+  // ---- QR to the product details page, at the end of the specifications ----
+  kit.ensure(48, runningHeader);
   QRCodeCard(kit, data, assets);
 
-  // ---- Page 2+ (flowing content) ----
-  const startPage2 = () => PDFRunningHeader(kit, data, assets);
-  doc.addPage();
-  startPage2();
-  kit.sectionTitle('Technical Specifications', 'As documented for this machine');
-  SpecificationTable(kit, data.specs, data.notes, startPage2);
-  FeatureList(kit, data.features, startPage2);
-  Applications(kit, data.applications);
-  ImageGallery(kit, assets.images, startPage2);
-  PDFContact(kit, data, assets, startPage2);
-
-  // ---- Footer on every page ----
+  // ---- Footer (logo, contact, page numbering) on every page ----
   PDFFooter(kit, data, assets);
 }

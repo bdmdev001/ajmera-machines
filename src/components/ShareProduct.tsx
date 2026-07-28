@@ -32,8 +32,6 @@ export interface ShareProductProps {
   description: string;
   specs: ShareSpec[];
   notes: string[];
-  features: string[];
-  applications: string[];
   images: string[]; // absolute srcs, e.g. /machines/1024_1.jpg
 }
 
@@ -91,7 +89,7 @@ function downloadBlob(blob: Blob, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
-export default function ShareProduct({ product, description, specs, notes, features, applications, images }: ShareProductProps) {
+export default function ShareProduct({ product, description, specs, notes, images }: ShareProductProps) {
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<{ kind: ToastKind; msg: string } | null>(null);
 
@@ -129,11 +127,9 @@ export default function ShareProduct({ product, description, specs, notes, featu
     description,
     specs,
     notes,
-    features,
-    applications,
     productUrl: `${SITE_URL}/products/${getProductSlug(product)}`,
     generatedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-  }), [product, description, specs, notes, features, applications]);
+  }), [product, description, specs, notes]);
 
   const handleShare = useCallback(async () => {
     if (busy) return;

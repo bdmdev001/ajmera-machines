@@ -6,6 +6,7 @@ import { uploadImageBuffer, isCloudinaryConfigured } from '@/lib/cloudinary';
    the secure_url and the public_id. Nothing is written to local disk. */
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
 export async function POST(request: Request) {
   try {
@@ -26,8 +27,8 @@ export async function POST(request: Request) {
     if (!file || typeof file === 'string') {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json({ error: 'Only image files are allowed' }, { status: 400 });
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return NextResponse.json({ error: 'Unsupported format. Use JPG, JPEG, PNG or WebP.' }, { status: 400 });
     }
     if (file.size > MAX_BYTES) {
       return NextResponse.json({ error: 'Image exceeds the 10 MB limit' }, { status: 400 });
