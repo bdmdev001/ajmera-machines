@@ -28,23 +28,25 @@ const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20woul
    Additional slides are appended at request time from the admin-curated featured
    products below — drop dedicated hero shots into HERO_SLIDES to replace them. */
 const HERO_IMG_1 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/2_sfqimu.jpg';
-const HERO_IMG_2 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784962500/Ajmera_2_done_hjfgqf.jpg';
-const HERO_IMG_3 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/4_srdkch.jpg';
-const HERO_IMG_4 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/1_xpwhn5.jpg';
+const HERO_IMG_2 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785216758/2_ghh5ih.jpg';
+const HERO_IMG_3 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785216889/3_gyraju.jpg';
+const HERO_IMG_4 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785216927/1_kyfrzt.jpg';
 const HERO_IMG_5 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/5_fj5kdh.jpg';
 const HERO_IMG_6 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/6_fowcqt.jpg';
-const HERO_IMG_7 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784970986/7_vrrr5j.jpg';
+const HERO_IMG_7 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785217080/4_qzaxsb.jpg';
+const HERO_IMG_8 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785217110/5_i6xsso.jpg';
 
 /* Tablet / mobile hero slides — a SEPARATE set from desktop (rendered by its own
    HeroSlider instance and toggled by CSS below ~1024px). Replace these URLs with
    portrait/tablet-optimized crops; seeded with the desktop images for now. */
 const HERO_IMG_M1 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/Ajmera_1_ohn8cc.jpg';
-const HERO_IMG_M2 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/Ajmera_2_oe7vqe.jpg';
-const HERO_IMG_M3 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971461/Ajmera_3_l0qfh8.jpg';
-const HERO_IMG_M4 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/Ajmera_4_jpg_bk9lvp.jpg';
+const HERO_IMG_M2 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785216785/1_pozg2g.jpg';
+const HERO_IMG_M3 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785216866/2_evempc.jpg';
+const HERO_IMG_M4 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785216958/4_emsytk.jpg';
 const HERO_IMG_M5 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971459/5_wabszc.jpg';
 const HERO_IMG_M6 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/6_q0ucpw.jpg';
-const HERO_IMG_M7 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971459/7_uzm7wm.jpg';
+const HERO_IMG_M7 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785217056/5_wfwtuc.jpg';
+const HERO_IMG_M8 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785217151/3_tmw1rz.jpg';
 
 const CATEGORY_META: Record<string, string> = {
   'Grinder Surface': 'Surface grinders',
@@ -81,6 +83,7 @@ export default async function Home() {
     HERO_IMG_5,
     HERO_IMG_6,
     HERO_IMG_7,
+    HERO_IMG_8,
   ];
 
   // TABLET / MOBILE slides — swap these for portrait/tablet-optimized crops when
@@ -93,6 +96,7 @@ export default async function Home() {
     HERO_IMG_M5,
     HERO_IMG_M6,
     HERO_IMG_M7,
+    HERO_IMG_M8,
   ];
 
   return (

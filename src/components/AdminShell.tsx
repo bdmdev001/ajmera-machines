@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, LogOut, Package, ClipboardList,
-  ExternalLink, Tag, Users, Contact, Building2, Menu, X,
+  ExternalLink, Tag, Users, Contact, Menu, X,
 } from 'lucide-react';
 
 /* The website's light logo variant (the one used on the dark footer), so it
@@ -17,8 +17,7 @@ const NAV_ITEMS = [
   { name: 'Inventory', path: '/admin/inventory', icon: Package },
   { name: 'Categories', path: '/admin/categories', icon: Tag },
   { name: 'Enquiries', path: '/admin/enquiries', icon: ClipboardList },
-  { name: 'Customers', path: '/admin/customers', icon: Contact },
-  { name: 'Vendors', path: '/admin/vendors', icon: Building2 },
+  { name: 'Leads & Customers', path: '/admin/leads', icon: Contact },
   { name: 'Subscribers', path: '/admin/subscribers', icon: Users },
 ];
 

@@ -11,6 +11,8 @@
     "migrate:images": "node --env-file=.env scripts/migrate-images-to-cloudinary.mjs",
     "verify:cloudinary": "node --env-file=.env scripts/verify-cloudinary.mjs",
     "backfill:categories": "node --env-file=.env scripts/backfill-categories.mjs",
+    "migrate:leads": "node --env-file=.env scripts/migrate-customers-to-leads.mjs",
+    "migrate:enquiry-statuses": "node --env-file=.env scripts/migrate-enquiry-statuses.mjs",
     "update:products-csv": "node --env-file=.env scripts/update-products-from-csv.mjs"
   },
   "dependencies": {

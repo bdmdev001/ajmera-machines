@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { Plus, Edit3, Trash2, X, Save, Loader2, Tag } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Plus, Edit3, Trash2, X, Save, Loader2, Tag, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
 import FieldError from '@/components/FieldError';
 import { requiredMsg, urlMsg, isClean } from '@/lib/validation';
+
+type PageSize = 25 | 50 | 100 | 'all';
+const PAGE_SIZE_OPTIONS: PageSize[] = [25, 50, 100, 'all'];
 
 export interface CategoryRow {
   _id: string;
@@ -25,6 +28,11 @@ export default function AdminCategoryManager({ initialCategories }: { initialCat
   const [image, setImage] = useState('');
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Search + pagination (client-side, over the full category list).
+  const [query, setQuery] = useState('');
+  const [pageSize, setPageSize] = useState<PageSize>(25);
+  const [page, setPage] = useState(1);
 
   const { modal, showSuccess, showError, confirm } = useAdminAlert();
   const invalid = (k: string): React.CSSProperties => (errors[k] ? { borderColor: 'var(--hot)' } : {});
@@ -90,6 +98,32 @@ export default function AdminCategoryManager({ initialCategories }: { initialCat
     }
   };
 
+  // ---- Search (name / slug / description — partial, case-insensitive) ----
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return cats;
+    return cats.filter((c) =>
+      c.name.toLowerCase().includes(q) ||
+      c.slug.toLowerCase().includes(q) ||
+      (c.description || '').toLowerCase().includes(q),
+    );
+  }, [cats, query]);
+
+  // ---- Pagination (client-side over the filtered list) ----
+  const total = filtered.length;
+  const totalPages = pageSize === 'all' ? 1 : Math.max(1, Math.ceil(total / pageSize));
+  const safePage = Math.min(Math.max(1, page), totalPages);
+  const pageItems = pageSize === 'all' ? filtered : filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const rangeStart = total === 0 ? 0 : (safePage - 1) * (pageSize === 'all' ? total : pageSize) + 1;
+  const rangeEnd = pageSize === 'all' ? total : Math.min(safePage * pageSize, total);
+
+  // Changing the search or page size returns to page 1 (search/filter state is
+  // otherwise preserved across navigation — `query` is never reset here).
+  const onSearch = (v: string) => { setQuery(v); setPage(1); };
+  const changePageSize = (s: PageSize) => { setPageSize(s); setPage(1); };
+  const goToPage = (n: number) => { if (n < 1 || n > totalPages || n === safePage) return; setPage(n); };
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1).filter((n) => n === 1 || n === totalPages || Math.abs(n - safePage) <= 1);
+
   const th: React.CSSProperties = { padding: '16px 20px', fontSize: 13, fontWeight: 700, color: 'var(--text-muted)', textAlign: 'left' };
   const td: React.CSSProperties = { padding: '14px 20px', fontSize: 14 };
 
@@ -97,10 +131,23 @@ export default function AdminCategoryManager({ initialCategories }: { initialCat
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {modal}
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <button onClick={openAdd} className="btn btn-primary" style={{ padding: '10px 20px', borderRadius: 8, fontSize: 14 }}>
-          <Plus size={16} /> Add Category
-        </button>
+      {/* Toolbar: search + rows-per-page + add */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ position: 'relative', flex: '1 1 260px', minWidth: 200, maxWidth: 380 }}>
+          <input suppressHydrationWarning type="text" placeholder="Search categories…" value={query} onChange={(e) => onSearch(e.target.value)} style={{ width: '100%', padding: '10px 14px 10px 38px', fontSize: 14, borderRadius: 8 }} />
+          <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-muted)' }}>
+            Rows
+            <select value={String(pageSize)} onChange={(e) => changePageSize(e.target.value === 'all' ? 'all' : (Number(e.target.value) as PageSize))} style={{ width: 'auto', height: 40, padding: '0 30px 0 12px', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-display)' }}>
+              {PAGE_SIZE_OPTIONS.map((opt) => <option key={String(opt)} value={String(opt)}>{opt === 'all' ? 'All' : opt}</option>)}
+            </select>
+          </label>
+          <button onClick={openAdd} className="btn btn-primary" style={{ padding: '10px 20px', borderRadius: 8, fontSize: 14 }}>
+            <Plus size={16} /> Add Category
+          </button>
+        </div>
       </div>
 
       <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
@@ -115,7 +162,7 @@ export default function AdminCategoryManager({ initialCategories }: { initialCat
               </tr>
             </thead>
             <tbody>
-              {cats.map((c) => (
+              {pageItems.map((c) => (
                 <tr key={c._id} style={{ borderBottom: '1px solid var(--border-light)' }}>
                   <td style={td}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -138,12 +185,35 @@ export default function AdminCategoryManager({ initialCategories }: { initialCat
                   </td>
                 </tr>
               ))}
-              {cats.length === 0 && (
-                <tr><td colSpan={4} style={{ textAlign: 'center', padding: '48px 20px', color: 'var(--text-muted)', fontSize: 14 }}>No categories yet. Add your first one to populate the Add Machine dropdown.</td></tr>
+              {total === 0 && (
+                <tr><td colSpan={4} style={{ textAlign: 'center', padding: '48px 20px', color: 'var(--text-muted)', fontSize: 14 }}>
+                  {query.trim() ? 'No categories match your search.' : 'No categories yet. Add your first one to populate the Add Machine dropdown.'}
+                </td></tr>
               )}
             </tbody>
           </table>
         </div>
+
+        {/* Footer: count + pagination */}
+        {total > 0 && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12, padding: '14px 20px', borderTop: '1px solid var(--border-light)', background: 'var(--bg-surface-2)' }}>
+            <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>
+              Showing {rangeStart.toLocaleString('en-US')}–{rangeEnd.toLocaleString('en-US')} of {total.toLocaleString('en-US')} categor{total === 1 ? 'y' : 'ies'}
+            </span>
+            {pageSize !== 'all' && totalPages > 1 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <button type="button" onClick={() => goToPage(safePage - 1)} disabled={safePage === 1} aria-label="Previous page" style={{ width: 36, height: 36, display: 'grid', placeItems: 'center', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)', background: 'var(--bg-surface)', color: safePage === 1 ? 'var(--text-muted)' : 'var(--text-primary)', cursor: safePage === 1 ? 'not-allowed' : 'pointer', opacity: safePage === 1 ? 0.5 : 1 }}><ChevronLeft size={16} /></button>
+                {pageNumbers.map((n, idx) => (
+                  <span key={n} style={{ display: 'inline-flex', alignItems: 'center' }}>
+                    {idx > 0 && pageNumbers[idx - 1] !== n - 1 && <span style={{ color: 'var(--text-muted)', padding: '0 4px' }}>…</span>}
+                    <button type="button" onClick={() => goToPage(n)} style={{ minWidth: 36, height: 36, padding: '0 8px', borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13.5, cursor: 'pointer', border: '1px solid ' + (n === safePage ? 'var(--accent)' : 'var(--border-light)'), background: n === safePage ? 'var(--accent)' : 'var(--bg-surface)', color: n === safePage ? '#fff' : 'var(--text-primary)' }}>{n}</button>
+                  </span>
+                ))}
+                <button type="button" onClick={() => goToPage(safePage + 1)} disabled={safePage === totalPages} aria-label="Next page" style={{ width: 36, height: 36, display: 'grid', placeItems: 'center', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)', background: 'var(--bg-surface)', color: safePage === totalPages ? 'var(--text-muted)' : 'var(--text-primary)', cursor: safePage === totalPages ? 'not-allowed' : 'pointer', opacity: safePage === totalPages ? 0.5 : 1 }}><ChevronRight size={16} /></button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Add / Edit modal */}

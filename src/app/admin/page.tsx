@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import dbConnect from '@/lib/dbConnect';
 import Product from '@/models/Product';
-import Enquiry from '@/models/Enquiry';
+import Enquiry, { normalizeEnquiryStatus } from '@/models/Enquiry';
 import { isAdminAuthenticated } from '@/lib/auth';
 import Link from 'next/link';
 import { Package, ClipboardList, Clock, CheckCircle, ArrowRight, Plus, Inbox } from 'lucide-react';
@@ -12,14 +12,16 @@ interface EnquiryDoc {
   _id: { toString(): string };
   name: string; email: string; phone: string; company?: string;
   productTitle?: string; stockNo?: string; message: string;
-  status: 'Pending' | 'Reviewed' | 'Resolved';
+  status: string;
 }
 interface CatCount { _id: string; count: number; }
 
+// Pipeline-status badge tones (legacy values are normalized before lookup).
 const STATUS_TONE: Record<string, { bg: string; color: string }> = {
-  Pending: { bg: 'var(--accent-soft)', color: 'var(--accent)' },
-  Reviewed: { bg: 'var(--secondary-soft)', color: 'var(--secondary)' },
-  Resolved: { bg: 'rgba(31,175,82,0.12)', color: '#1faf52' },
+  New: { bg: 'var(--accent-soft)', color: 'var(--accent)' },
+  Contacted: { bg: 'var(--secondary-soft)', color: 'var(--secondary)' },
+  Qualified: { bg: 'rgba(31,175,82,0.12)', color: '#1faf52' },
+  'Closed/Lost': { bg: 'var(--hot-soft)', color: 'var(--hot)' },
 };
 
 export default async function AdminDashboardPage() {
@@ -29,15 +31,16 @@ export default async function AdminDashboardPage() {
 
   await dbConnect();
 
-  let productCount = 0, totalEnquiryCount = 0, pendingEnquiryCount = 0, resolvedEnquiryCount = 0;
+  let productCount = 0, totalEnquiryCount = 0, newEnquiryCount = 0, qualifiedEnquiryCount = 0;
   let recentEnquiries: EnquiryDoc[] = [];
   let categoryCounts: CatCount[] = [];
 
   try {
     productCount = await Product.countDocuments({});
     totalEnquiryCount = await Enquiry.countDocuments({});
-    pendingEnquiryCount = await Enquiry.countDocuments({ status: 'Pending' });
-    resolvedEnquiryCount = await Enquiry.countDocuments({ status: 'Resolved' });
+    // New = fresh incoming (also count legacy "Pending"); Qualified = ready to convert.
+    newEnquiryCount = await Enquiry.countDocuments({ status: { $in: ['New', 'Pending'] } });
+    qualifiedEnquiryCount = await Enquiry.countDocuments({ status: 'Qualified' });
     recentEnquiries = await Enquiry.find({}).sort({ createdAt: -1 }).limit(5).lean() as unknown as EnquiryDoc[];
     categoryCounts = await Product.aggregate([
       { $group: { _id: '$category', count: { $sum: 1 } } },
@@ -50,8 +53,8 @@ export default async function AdminDashboardPage() {
 
   const stats = [
     { icon: Package, value: productCount, label: 'Machines in stock', tone: 'var(--secondary)', bg: 'var(--secondary-soft)' },
-    { icon: Clock, value: pendingEnquiryCount, label: 'Pending enquiries', tone: 'var(--accent)', bg: 'var(--accent-soft)' },
-    { icon: CheckCircle, value: resolvedEnquiryCount, label: 'Resolved enquiries', tone: '#1faf52', bg: 'rgba(31,175,82,0.12)' },
+    { icon: Clock, value: newEnquiryCount, label: 'New enquiries', tone: 'var(--accent)', bg: 'var(--accent-soft)' },
+    { icon: CheckCircle, value: qualifiedEnquiryCount, label: 'Qualified enquiries', tone: '#1faf52', bg: 'rgba(31,175,82,0.12)' },
     { icon: ClipboardList, value: totalEnquiryCount, label: 'Total enquiries', tone: 'var(--text-primary)', bg: 'var(--bg-surface-2)' },
   ];
 
@@ -98,12 +101,13 @@ export default async function AdminDashboardPage() {
             {recentEnquiries.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {recentEnquiries.map((enq, i) => {
-                  const tone = STATUS_TONE[enq.status] ?? STATUS_TONE.Pending;
+                  const status = normalizeEnquiryStatus(enq.status);
+                  const tone = STATUS_TONE[status] ?? STATUS_TONE.New;
                   return (
                     <div key={enq._id.toString()} style={{ paddingBlock: 16, borderBottom: i < recentEnquiries.length - 1 ? '1px solid var(--border-light)' : 'none' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 6 }}>
                         <span style={{ fontWeight: 700, fontSize: 14.5 }}>{enq.name}</span>
-                        <span className="badge" style={{ background: tone.bg, color: tone.color }}>{enq.status}</span>
+                        <span className="badge" style={{ background: tone.bg, color: tone.color }}>{status}</span>
                       </div>
                       <div style={{ fontSize: 12.5, color: 'var(--text-muted)', marginBottom: enq.stockNo ? 6 : 8 }}>
                         {enq.email} · {enq.phone}{enq.company ? ` · ${enq.company}` : ''}

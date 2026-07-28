@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       gstNumber,
       panNumber,
       message,
-      status: 'Pending',
+      status: 'New',
     });
 
     await newEnquiry.save();

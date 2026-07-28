@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
-import Enquiry from '@/models/Enquiry';
+import Enquiry, { ENQUIRY_STATUSES } from '@/models/Enquiry';
 import { isAdminAuthenticated } from '@/lib/auth';
 
 export async function PATCH(
@@ -15,20 +15,29 @@ export async function PATCH(
     await dbConnect();
     const { id } = await params;
     const body = await request.json();
-    const { status, customerId } = body;
+    const { status, notes, nextFollowUpAt, followUpNote, leadId, customerId } = body;
 
     // Build a partial update from whichever fields were supplied. Status (when
-    // present) is validated; customerId links the enquiry to a Customer record.
+    // present) is validated; leadId links the enquiry to the Lead it became.
     const update: Record<string, unknown> = {};
     if (status !== undefined) {
-      if (!['Pending', 'Reviewed', 'Resolved'].includes(status)) {
+      if (!(ENQUIRY_STATUSES as readonly string[]).includes(status)) {
         return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
       }
       update.status = status;
     }
-    if (customerId !== undefined) {
-      update.customerId = customerId || null;
+    if (notes !== undefined) update.notes = String(notes);
+    if (followUpNote !== undefined) update.followUpNote = String(followUpNote);
+    if (nextFollowUpAt !== undefined) {
+      if (!nextFollowUpAt) update.nextFollowUpAt = null;
+      else {
+        const d = new Date(String(nextFollowUpAt));
+        update.nextFollowUpAt = Number.isNaN(d.getTime()) ? null : d;
+      }
     }
+    // leadId (new) and customerId (legacy) both mark the enquiry as converted.
+    if (leadId !== undefined) update.leadId = leadId || null;
+    if (customerId !== undefined) update.customerId = customerId || null;
     if (Object.keys(update).length === 0) {
       return NextResponse.json({ error: 'Nothing to update' }, { status: 400 });
     }
