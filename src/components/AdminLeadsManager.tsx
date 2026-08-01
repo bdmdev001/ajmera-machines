@@ -4,12 +4,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   Search, Plus, Edit3, Trash2, Loader2, ChevronLeft, ChevronRight, Eye,
-  Contact, FileSpreadsheet, FileDown, SlidersHorizontal, UserCheck, CalendarClock,
-  Mail, Phone, X, Filter, ArrowLeft,
+  Contact, FileSpreadsheet, FileText, SlidersHorizontal, UserCheck, CalendarClock,
+  Mail, Phone, X, Filter, ArrowLeft, Upload, UploadCloud, Download,
 } from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
+import ActionMenu, { type ActionMenuGroup } from '@/components/ActionMenu';
 import LeadFormModal from '@/components/LeadFormModal';
 import CrmListsModal from '@/components/CrmListsModal';
+import CrmImportModal, { type ImportFormat } from '@/components/CrmImportModal';
 import TransitionModal from '@/components/TransitionModal';
 import { SearchableSelect } from '@/components/CrmSelect';
 import { useCrmLists } from '@/hooks/useCrmLists';
@@ -65,6 +67,9 @@ export default function AdminLeadsManager() {
   const [formType, setFormType] = useState<RecordType>('Lead');
   const [editing, setEditing] = useState<Partial<LeadRecord> | undefined>(undefined);
   const [listsOpen, setListsOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+  const [importFormat, setImportFormat] = useState<ImportFormat>('csv');
+  const [exportScope, setExportScope] = useState<'filtered' | 'all'>('filtered');
   const [transitionTarget, setTransitionTarget] = useState<{ lead: LeadRecord; def: TransitionDef } | null>(null);
 
   const [listsKey, setListsKey] = useState(0);
@@ -73,21 +78,34 @@ export default function AdminLeadsManager() {
 
   const activeFilters = [recordType, leadStage, leadPotential, customerGroup, productGroup, tag, assignedTo, from, to].filter(Boolean).length;
 
+  // True when the visible set is narrower than the record-type tab alone — the
+  // only case where "filtered export" and "export everything" differ.
+  const narrowed = Boolean(q.trim()) || [leadStage, leadPotential, customerGroup, productGroup, tag, assignedTo, from, to].some(Boolean);
+
+  /** Search + filters + sort, shared by the listing fetch and the exports so a
+   *  download always mirrors what's on screen. */
+  const queryParams = useCallback(() => {
+    const params = new URLSearchParams({ sort });
+    if (q.trim()) params.set('q', q.trim());
+    if (recordType) params.set('recordType', recordType);
+    if (leadStage) params.set('leadStage', leadStage);
+    if (leadPotential) params.set('leadPotential', leadPotential);
+    if (customerGroup) params.set('customerGroup', customerGroup);
+    if (productGroup) params.set('productGroup', productGroup);
+    if (tag) params.set('tag', tag);
+    if (assignedTo) params.set('assignedTo', assignedTo);
+    if (from) params.set('from', from);
+    if (to) params.set('to', to);
+    return params;
+  }, [sort, q, recordType, leadStage, leadPotential, customerGroup, productGroup, tag, assignedTo, from, to]);
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const params = new URLSearchParams({ page: String(page), limit: String(pageSize), sort });
-        if (q.trim()) params.set('q', q.trim());
-        if (recordType) params.set('recordType', recordType);
-        if (leadStage) params.set('leadStage', leadStage);
-        if (leadPotential) params.set('leadPotential', leadPotential);
-        if (customerGroup) params.set('customerGroup', customerGroup);
-        if (productGroup) params.set('productGroup', productGroup);
-        if (tag) params.set('tag', tag);
-        if (assignedTo) params.set('assignedTo', assignedTo);
-        if (from) params.set('from', from);
-        if (to) params.set('to', to);
+        const params = queryParams();
+        params.set('page', String(page));
+        params.set('limit', String(pageSize));
         const res = await fetch(`/api/admin/crm/leads?${params.toString()}`);
         const data = await res.json();
         if (cancelled) return;
@@ -104,7 +122,7 @@ export default function AdminLeadsManager() {
       }
     })();
     return () => { cancelled = true; };
-  }, [page, pageSize, q, recordType, leadStage, leadPotential, customerGroup, productGroup, tag, assignedTo, from, to, sort, refreshKey, showError]);
+  }, [page, pageSize, queryParams, refreshKey, showError]);
 
   const reload = useCallback(() => { setLoading(true); setRefreshKey((k) => k + 1); }, []);
   const onFilter = (fn: () => void) => { setLoading(true); fn(); setPage(1); };
@@ -143,11 +161,106 @@ export default function AdminLeadsManager() {
     setRecordType(''); setLeadStage(''); setLeadPotential(''); setCustomerGroup(''); setProductGroup(''); setTag(''); setAssignedTo(''); setFrom(''); setTo('');
   });
 
+  const typeSlug = recordType === 'Customer' ? 'customer' : 'lead';
+  const sampleUrl = (format: string) => `/api/admin/crm/leads/sample?type=${typeSlug}&format=${format}`;
+
   const exportUrl = (format: string) => {
-    const params = new URLSearchParams({ format });
-    if (recordType) params.set('recordType', recordType);
+    // "All records" still honours the record-type tab — it only drops the
+    // search box and the filter panel.
+    const params = exportScope === 'all'
+      ? new URLSearchParams(recordType ? { recordType } : {})
+      : queryParams();
+    params.set('format', format);
+    params.set('scope', exportScope);
     return `/api/admin/crm/leads/export?${params.toString()}`;
   };
+
+  /* Toolbar menus. Adding a format later is a new entry here — the toolbar
+     itself never grows another button. */
+  const importGroups: ActionMenuGroup[] = [
+    {
+      key: 'upload',
+      label: 'Upload a file',
+      items: [
+        {
+          key: 'import-csv',
+          label: 'Import CSV',
+          description: 'Upload, preview issues, then commit',
+          icon: UploadCloud,
+          onSelect: () => { setImportFormat('csv'); setImportOpen(true); },
+        },
+        {
+          key: 'import-excel',
+          label: 'Import Excel',
+          description: '.xlsx from Excel, LibreOffice or Google Sheets',
+          icon: FileSpreadsheet,
+          onSelect: () => { setImportFormat('excel'); setImportOpen(true); },
+        },
+      ],
+    },
+    {
+      key: 'templates',
+      label: `${typeSlug === 'customer' ? 'Customer' : 'Lead'} templates`,
+      items: [
+        {
+          key: 'sample-csv',
+          label: 'Sample CSV',
+          description: 'Correct columns with two example rows',
+          icon: FileText,
+          href: sampleUrl('csv'),
+        },
+        {
+          key: 'sample-excel',
+          label: 'Sample Excel (.xlsx)',
+          description: 'Same template as a ready-to-fill workbook',
+          icon: FileSpreadsheet,
+          href: sampleUrl('xlsx'),
+        },
+      ],
+    },
+  ];
+
+  const exportGroups: ActionMenuGroup[] = [
+    {
+      key: 'files',
+      items: [
+        {
+          key: 'export-excel',
+          label: 'Export Excel',
+          description: 'Spreadsheet — opens in Excel & Google Sheets',
+          icon: FileSpreadsheet,
+          href: exportUrl('xlsx'),
+        },
+        {
+          key: 'export-csv',
+          label: 'Export CSV',
+          description: 'Plain comma-separated file',
+          icon: FileText,
+          href: exportUrl('csv'),
+        },
+      ],
+    },
+  ];
+
+  const scopeBtn = (on: boolean): React.CSSProperties => ({
+    padding: '6px 11px', fontSize: 11.5, fontWeight: 600, border: 'none', cursor: 'pointer',
+    background: on ? 'var(--accent)' : 'transparent', color: on ? '#fff' : 'var(--text-secondary)',
+  });
+
+  // Only worth showing when a filtered export and a full export would differ.
+  const exportFooter = narrowed ? (
+    <div style={{ padding: '4px 6px' }}>
+      <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 7 }}>Export scope</div>
+      <div style={{ display: 'inline-flex', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
+        <button type="button" onClick={() => setExportScope('filtered')} style={scopeBtn(exportScope === 'filtered')}>
+          Current view ({total.toLocaleString('en-US')})
+        </button>
+        <button type="button" onClick={() => setExportScope('all')} style={scopeBtn(exportScope === 'all')}>
+          All records
+        </button>
+      </div>
+    </div>
+  ) : undefined;
 
   const pageNumbers = useMemo(
     () => Array.from({ length: totalPages }, (_, i) => i + 1).filter((n) => n === 1 || n === totalPages || Math.abs(n - page) <= 1),
@@ -166,6 +279,15 @@ export default function AdminLeadsManager() {
       {listsOpen && (
         <CrmListsModal onClose={() => setListsOpen(false)} onChanged={() => setListsKey((k) => k + 1)} onError={showError} />
       )}
+      {importOpen && (
+        <CrmImportModal
+          defaultType={recordType === 'Customer' ? 'Customer' : 'Lead'}
+          defaultFormat={importFormat}
+          onClose={() => setImportOpen(false)}
+          onImported={(r) => { reload(); if (r.imported > 0) showSuccess('Import complete', `${r.imported} ${r.type === 'Customer' ? 'customer' : 'lead'}${r.imported === 1 ? '' : 's'} imported.`); }}
+          onError={showError}
+        />
+      )}
       {transitionTarget && (
         <TransitionModal lead={transitionTarget.lead} def={transitionTarget.def} onClose={() => setTransitionTarget(null)} onDone={onTransitionDone} onError={showError} />
       )}
@@ -181,8 +303,8 @@ export default function AdminLeadsManager() {
         </div>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           <button onClick={() => setListsOpen(true)} className="btn btn-secondary btn-sm"><SlidersHorizontal size={15} /> Manage lists</button>
-          <a href={exportUrl('csv')} download className="btn btn-secondary btn-sm"><FileDown size={15} /> CSV</a>
-          <a href={exportUrl('xlsx')} download className="btn btn-secondary btn-sm"><FileSpreadsheet size={15} /> Excel</a>
+          <ActionMenu label="Import" icon={Upload} groups={importGroups} />
+          <ActionMenu label="Export" icon={Download} groups={exportGroups} footer={exportFooter} minWidth={276} />
           <button onClick={() => openAdd('Lead')} className="btn btn-secondary btn-sm"><Plus size={15} /> Add lead</button>
           <button onClick={() => openAdd('Customer')} className="btn btn-primary btn-sm"><Plus size={15} /> Add customer</button>
         </div>

@@ -4,6 +4,7 @@ import Lead from '@/models/Lead';
 import Activity from '@/models/Activity';
 import { isAdminAuthenticated } from '@/lib/auth';
 import { validateLead, serializeLead } from '@/lib/lead';
+import { buildLeadFilter, buildLeadSort } from '@/lib/leadQuery';
 
 /* Unified Leads & Customers collection — paginated + searchable + filterable
    list, and create.
@@ -14,18 +15,6 @@ import { validateLead, serializeLead } from '@/lib/lead';
 const ALLOWED_LIMITS = [25, 50, 100];
 const SHOW_ALL_CAP = 2000;
 
-function escapeRegex(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-const SORTS: Record<string, Record<string, 1 | -1>> = {
-  newest: { createdAt: -1 },
-  oldest: { createdAt: 1 },
-  name_asc: { firstName: 1, lastName: 1 },
-  name_desc: { firstName: -1, lastName: -1 },
-  followup: { nextFollowUpAt: 1 },
-};
-
 export async function GET(request: Request) {
   try {
     if (!(await isAdminAuthenticated())) {
@@ -34,52 +23,13 @@ export async function GET(request: Request) {
     await dbConnect();
 
     const { searchParams } = new URL(request.url);
-    const q = (searchParams.get('q') || '').trim();
     const limitParam = (searchParams.get('limit') || '25').toLowerCase();
     const isAll = limitParam === 'all';
     let limit = parseInt(limitParam, 10);
     if (!isAll && !ALLOWED_LIMITS.includes(limit)) limit = 25;
 
-    const filter: Record<string, unknown> = {};
-
-    const recordType = searchParams.get('recordType');
-    if (recordType === 'Lead' || recordType === 'Customer') filter.recordType = recordType;
-
-    const eq = (param: string, field: string) => {
-      const v = (searchParams.get(param) || '').trim();
-      if (v) filter[field] = v;
-    };
-    eq('leadStage', 'leadStage');
-    eq('leadPotential', 'leadPotential');
-    eq('customerGroup', 'customerGroup');
-    eq('assignedTo', 'assignedTo');
-
-    const productGroup = (searchParams.get('productGroup') || '').trim();
-    if (productGroup) filter.productGroups = productGroup;
-    const tag = (searchParams.get('tag') || '').trim();
-    if (tag) filter.tags = tag;
-
-    // Created-date range (inclusive). `to` is pushed to end-of-day.
-    const from = (searchParams.get('from') || '').trim();
-    const to = (searchParams.get('to') || '').trim();
-    if (from || to) {
-      const range: Record<string, Date> = {};
-      if (from) { const d = new Date(from); if (!Number.isNaN(d.getTime())) range.$gte = d; }
-      if (to) { const d = new Date(to); if (!Number.isNaN(d.getTime())) { d.setHours(23, 59, 59, 999); range.$lte = d; } }
-      if (Object.keys(range).length) filter.createdAt = range;
-    }
-
-    if (q) {
-      const rx = new RegExp(escapeRegex(q), 'i');
-      filter.$or = [
-        { firstName: rx }, { lastName: rx }, { email: rx }, { mobile: rx },
-        { organisation: rx }, { whatsapp: rx }, { gstNumber: rx }, { panNumber: rx },
-        { city: rx }, { designation: rx },
-      ];
-    }
-
-    const sortKey = (searchParams.get('sort') || 'newest').toLowerCase();
-    const sort = SORTS[sortKey] || SORTS.newest;
+    const filter = buildLeadFilter(searchParams);
+    const sort = buildLeadSort(searchParams);
 
     const total = await Lead.countDocuments(filter);
     const effectiveLimit = isAll ? SHOW_ALL_CAP : limit;

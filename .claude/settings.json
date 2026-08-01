@@ -53,7 +53,31 @@
       "Bash(python -c ' *)",
       "Bash(python -c \"import json;print\\(json.load\\(open\\(r'C:/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/3ae43fda-196e-4723-b181-498866489a3e/scratchpad/imgA.json'\\)\\)['image']['public_id']\\)\")",
       "Bash(grep -iE 'error|failed|unhandled|cannot find' __TRACKED_VAR__/upl.log)",
-      "Bash(grep -vE \"^\\\\s*$\")"
+      "Bash(grep -vE \"^\\\\s*$\")",
+      "Bash(curl -s --max-time 90 -H 'Cookie: __TRACKED_VAR__' __TRACKED_VAR__/api/admin/crm/leads/sample?type=lead -D -)",
+      "Bash(python -c \"import sys,json;print\\(json.load\\(sys.stdin\\)['categories'][0]['name']\\)\")",
+      "Bash(rm -f __TRACKED_VAR__/imp.py __TRACKED_VAR__/impc.py)",
+      "Bash(curl -s --max-time 60 -H \"Cookie: admin_session=ajmera_admin_authenticated_session\" \"http://localhost:3133/api/admin/crm/leads?q=importtest&limit=all\")",
+      "Bash(python -c \"import sys,json;print\\('importtest leads:',json.load\\(sys.stdin\\)['total']\\)\")",
+      "Bash(curl -s --max-time 60 -H \"Cookie: admin_session=ajmera_admin_authenticated_session\" \"http://localhost:3133/api/admin/crm/leads?q=impcust&limit=all\")",
+      "Bash(python -c \"import sys,json;print\\('impcust leads:',json.load\\(sys.stdin\\)['total']\\)\")",
+      "Bash(node -p \"require\\('./node_modules/next/package.json'\\).version\")",
+      "Bash(cd \"d:/Jatin Works/my_projects/ajmera-machines-clone\" && find . -iname \"*.xlsx\" -not -path \"./node_modules/*\" 2>/dev/null | head; echo \"--- node_modules ---\"; find ./node_modules -iname \"*.xlsx\" 2>/dev/null | head -5; echo \"--- user dirs ---\"; find /c/Users/ADMIN/Downloads /c/Users/ADMIN/Documents /c/Users/ADMIN/Desktop -iname \"*.xlsx\" 2>/dev/null | head -5)",
+      "Read(//c/Users/ADMIN/Downloads/**)",
+      "Read(//c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad/**)",
+      "Bash(node test-real.mjs __TRACKED_VAR__/client-sample.xlsx __TRACKED_VAR__/deal-sample.xlsx __TRACKED_VAR__/employees-sample.xlsx /c/Users/ADMIN/Documents/Backups_and_Restored_updated.xlsx)",
+      "Bash(node 38f32391-03e9-4656-ad82-c71d377eb1eb-probe.mjs \"/c/Users/ADMIN/Documents/Backups_and_Restored_updated.xlsx\" \"xl/worksheets/sheet1.xml\" 1400)",
+      "Read(//c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/**)",
+      "Bash(node -e ' *)",
+      "Bash(node 38f32391-03e9-4656-ad82-c71d377eb1eb-probe.mjs \"/c/Users/ADMIN/Documents/Backups_and_Restored_updated.xlsx\" \"xl/worksheets/sheet1.xml\" 999999)",
+      "Bash(node 38f32391-03e9-4656-ad82-c71d377eb1eb-probe.mjs \"/c/Users/ADMIN/Documents/Backups_and_Restored_updated.xlsx\" \"xl/styles.xml\" 999999)",
+      "Bash(node 38f32391-03e9-4656-ad82-c71d377eb1eb-build.mjs)",
+      "Bash(sed -i \"s#'./scratchpad/lib/xlsx.js'#'./38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad/lib/xlsx.js'#\" 38f32391-03e9-4656-ad82-c71d377eb1eb-build.mjs)",
+      "Bash(node test-write.mjs)",
+      "Bash(rm -rf lib unzipped *.mjs *.xlsx)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\claude\\d--Jatin-Works-my-projects-ajmera-machines-clone"
     ]
   }
 }

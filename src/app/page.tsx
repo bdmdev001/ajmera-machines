@@ -39,14 +39,14 @@ const HERO_IMG_8 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785217110
 /* Tablet / mobile hero slides — a SEPARATE set from desktop (rendered by its own
    HeroSlider instance and toggled by CSS below ~1024px). Replace these URLs with
    portrait/tablet-optimized crops; seeded with the desktop images for now. */
-const HERO_IMG_M1 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/Ajmera_1_ohn8cc.jpg';
-const HERO_IMG_M2 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785216785/1_pozg2g.jpg';
-const HERO_IMG_M3 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785216866/2_evempc.jpg';
-const HERO_IMG_M4 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785216958/4_emsytk.jpg';
-const HERO_IMG_M5 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971459/5_wabszc.jpg';
-const HERO_IMG_M6 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1784971460/6_q0ucpw.jpg';
-const HERO_IMG_M7 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785217056/5_wfwtuc.jpg';
-const HERO_IMG_M8 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785217151/3_tmw1rz.jpg';
+const HERO_IMG_M1 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785399902/4_iwei5d.webp';
+const HERO_IMG_M2 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785399903/7_haobot.webp';
+const HERO_IMG_M3 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785399902/2__tjl2yw.webp';
+const HERO_IMG_M4 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785399902/6_lmnwy5.webp';
+const HERO_IMG_M5 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785399902/1_bkqqqw.webp';
+const HERO_IMG_M6 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785399902/3_m9c6nz.webp';
+const HERO_IMG_M7 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785583424/5_wfwtuc_hfniaw.webp';
+const HERO_IMG_M8 = 'https://res.cloudinary.com/z5xktswf/image/upload/v1785583277/drilldown_xgkgjo.webp';
 
 const CATEGORY_META: Record<string, string> = {
   'Grinder Surface': 'Surface grinders',
@@ -270,7 +270,7 @@ export default async function Home() {
         <div className="container">
           <div className="stats-grid surface" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24, textAlign: 'center', padding: 'clamp(28px, 4vw, 48px)', borderRadius: 'var(--radius-xl)' }}>
             {[
-              { icon: CalendarClock, to: 30, suffix: '+', label: 'Years in business' },
+              { icon: CalendarClock, to: 40, suffix: '+', label: 'Years in business' },
               { icon: PackageCheck, to: total, suffix: '+', label: 'Machines catalogued' },
               { icon: Globe, to: 25, suffix: '+', label: 'Countries served' },
               { icon: Gauge, to: 1500, suffix: '+', label: 'Buyers served', format: true },

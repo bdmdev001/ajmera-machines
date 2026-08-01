@@ -3,9 +3,16 @@ import dbConnect from '@/lib/dbConnect';
 import Lead from '@/models/Lead';
 import { isAdminAuthenticated } from '@/lib/auth';
 import { toCSV, toExcelXML, type ExportColumn, type ExportRow } from '@/lib/exporters';
+import { buildLeadFilter, buildLeadSort } from '@/lib/leadQuery';
 
-/* GET /api/admin/crm/leads/export?format=csv|xlsx&recordType=Lead|Customer
-   Admin-only export of the unified Leads & Customers list.                      */
+/* GET /api/admin/crm/leads/export?format=csv|xlsx&scope=filtered|all
+        &q=&recordType=&leadStage=&leadPotential=&customerGroup=&productGroup=
+        &tag=&assignedTo=&from=&to=&sort=
+   Admin-only export of the unified Leads & Customers list.
+
+   The search/filter/sort params are the same ones the listing route takes, so
+   the file mirrors what the admin is looking at. `scope=all` ignores every
+   filter except the record-type tab; omitting all params exports everything. */
 
 const COLUMNS: ExportColumn[] = [
   { header: 'Type', key: 'recordType' },
@@ -57,10 +64,16 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const format = (searchParams.get('format') || 'csv').toLowerCase();
     const recordType = searchParams.get('recordType');
-    const filter: Record<string, unknown> = {};
-    if (recordType === 'Lead' || recordType === 'Customer') filter.recordType = recordType;
 
-    const docs = await Lead.find(filter).sort({ createdAt: -1 }).lean();
+    // `scope=all` drops the search & filters but keeps the record-type tab, so
+    // "export all customers" still means customers.
+    const scopeAll = (searchParams.get('scope') || 'filtered').toLowerCase() === 'all';
+    const filter = scopeAll
+      ? (recordType === 'Lead' || recordType === 'Customer' ? { recordType } : {})
+      : buildLeadFilter(searchParams);
+    const sort = scopeAll ? { createdAt: -1 as const } : buildLeadSort(searchParams);
+
+    const docs = await Lead.find(filter).sort(sort).lean();
     const rows: ExportRow[] = docs.map((d) => ({
       recordType: d.recordType || '',
       firstName: d.firstName || '',
