@@ -1,13 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Search, Plus, Edit3, Trash2, X, Save, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  Search, Plus, Edit3, Trash2, X, Save, Loader2, ChevronLeft, ChevronRight, Sparkles, CalendarClock,
+} from 'lucide-react';
 import { imageUrl, normalizeImages, type ProductImage } from '@/lib/images';
 import { useAdminAlert } from '@/components/AdminModal';
 import FieldError from '@/components/FieldError';
 import ProductImageUploader from '@/components/ProductImageUploader';
 import { requiredMsg, yearMsg, urlMsg, isClean } from '@/lib/validation';
+import {
+  latestArrivalState, toDateInput, parseScheduleDate, validateSchedule,
+  PRIORITY_MIN, PRIORITY_MAX, LATEST_ARRIVALS_LIMIT, type LatestArrivalState,
+} from '@/lib/latestArrivals';
 
 const PAGE_SIZE_OPTIONS: (number | 'all')[] = [25, 50, 100, 'all'];
 
@@ -30,9 +36,31 @@ interface ProductData {
   isFeatured?: boolean;
   stockStatus?: 'In Stock' | 'Out of Stock';
   badges?: string[];
+  isLatestArrival?: boolean;
+  latestArrivalPriority?: number;
+  /** ISO strings across the server→client boundary; '' when unset. */
+  latestArrivalFrom?: string;
+  latestArrivalUntil?: string;
 }
 
 const BADGE_SUGGESTIONS = ['Sold', 'Rare Machine', 'Coming Soon', 'Special Offer', 'New', 'Reserved', 'Price Drop'];
+
+/** Latest Arrivals listing filter. */
+type ArrivalFilter = 'all' | 'yes' | 'no';
+
+const ARRIVAL_TONE: Record<Exclude<LatestArrivalState, 'off'>, { label: string; bg: string; color: string }> = {
+  live: { label: 'Latest Arrival', bg: 'rgba(31,175,82,0.12)', color: '#1faf52' },
+  scheduled: { label: 'Arrival scheduled', bg: 'rgba(59,130,246,0.12)', color: '#3b82f6' },
+  expired: { label: 'Arrival expired', bg: 'var(--bg-surface-2)', color: 'var(--text-muted)' },
+};
+
+function ArrivalBadge({ state }: { state: LatestArrivalState }) {
+  if (state === 'off') return null;
+  const t = ARRIVAL_TONE[state];
+  return (
+    <span className="badge" style={{ background: t.bg, color: t.color, fontSize: 10.5, fontWeight: 700 }}>{t.label}</span>
+  );
+}
 
 interface Props {
   initialProducts: ProductData[];
@@ -42,8 +70,13 @@ interface Props {
 export default function AdminInventoryManager({ initialProducts, categories }: Props) {
   const [products, setProducts] = useState<ProductData[]>(initialProducts);
   const [searchQuery, setSearchQuery] = useState('');
+  const [arrivalFilter, setArrivalFilter] = useState<ArrivalFilter>('all');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number | 'all'>(25);
+
+  // Bulk selection (by product id, so it survives paging and re-filtering).
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   // Modal / Form States
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -65,6 +98,10 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
   const [stockStatus, setStockStatus] = useState<'In Stock' | 'Out of Stock'>('In Stock');
   const [badges, setBadges] = useState<string[]>([]);
   const [badgeDraft, setBadgeDraft] = useState('');
+  const [isLatestArrival, setIsLatestArrival] = useState(false);
+  const [arrivalPriority, setArrivalPriority] = useState('0');
+  const [arrivalFrom, setArrivalFrom] = useState('');
+  const [arrivalUntil, setArrivalUntil] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -91,6 +128,10 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     setStockStatus('In Stock');
     setBadges([]);
     setBadgeDraft('');
+    setIsLatestArrival(false);
+    setArrivalPriority('0');
+    setArrivalFrom('');
+    setArrivalUntil('');
     setErrors({});
     setIsFormOpen(true);
   };
@@ -114,6 +155,10 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     setStockStatus(p.stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock');
     setBadges(Array.isArray(p.badges) ? p.badges : []);
     setBadgeDraft('');
+    setIsLatestArrival(Boolean(p.isLatestArrival));
+    setArrivalPriority(String(p.latestArrivalPriority ?? 0));
+    setArrivalFrom(toDateInput(p.latestArrivalFrom));
+    setArrivalUntil(toDateInput(p.latestArrivalUntil));
     setIsFormOpen(true);
   };
 
@@ -134,6 +179,10 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
       title: requiredMsg(title, 'Machine title'),
       myear: yearMsg(myear),
       videoUrl: urlMsg(videoUrl, false, 'YouTube video link'),
+      // Only meaningful while the section is switched on.
+      arrivalUntil: isLatestArrival
+        ? validateSchedule(parseScheduleDate(arrivalFrom, 'start'), parseScheduleDate(arrivalUntil, 'end'))
+        : '',
     };
     setErrors(found);
     if (!isClean(found)) return;
@@ -155,6 +204,10 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
       isFeatured,
       stockStatus,
       badges,
+      isLatestArrival,
+      latestArrivalPriority: arrivalPriority,
+      latestArrivalFrom: arrivalFrom,
+      latestArrivalUntil: arrivalUntil,
     };
 
     try {
@@ -205,15 +258,63 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
     }
   };
 
-  // Filter products by search query
-  const filteredProducts = products.filter(
-    (p) =>
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.stockNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.make.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Bulk add/remove for the current selection.
+  const runBulkArrival = async (action: 'add' | 'remove') => {
+    const ids = [...selected];
+    if (ids.length === 0) return;
+    setBulkBusy(true);
+    try {
+      const res = await fetch('/api/products/latest-arrivals', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids, action }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { showError('Could not update Latest Arrivals', data.error || 'Please try again.'); return; }
+      const patch = data.latestArrival as Partial<ProductData>;
+      const touched = new Set(ids);
+      setProducts((prev) => prev.map((p) => (touched.has(p.id)
+        ? { ...p, ...patch, latestArrivalFrom: '', latestArrivalUntil: '' }
+        : p)));
+      setSelected(new Set());
+      showSuccess(
+        action === 'add' ? 'Added to Latest Arrivals' : 'Removed from Latest Arrivals',
+        `${data.modified ?? ids.length} machine${(data.modified ?? ids.length) === 1 ? '' : 's'} updated.`,
+      );
+    } catch {
+      showError('Network error', 'Could not reach the server. Please try again.');
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
+  // Live description of the Latest Arrivals settings currently in the form.
+  const arrivalStatusText = useMemo(() => {
+    if (!isLatestArrival) return 'Not shown in Latest Arrivals.';
+    const state = latestArrivalState({
+      isLatestArrival: true,
+      latestArrivalFrom: parseScheduleDate(arrivalFrom, 'start'),
+      latestArrivalUntil: parseScheduleDate(arrivalUntil, 'end'),
+    });
+    if (state === 'scheduled') return `Scheduled — starts showing on ${arrivalFrom}.`;
+    if (state === 'expired') return `Expired on ${arrivalUntil} — no longer shown. Clear or extend the end date to bring it back.`;
+    return arrivalUntil ? `Showing on the homepage now, until the end of ${arrivalUntil}.` : 'Showing on the homepage now.';
+  }, [isLatestArrival, arrivalFrom, arrivalUntil]);
+
+  // Filter products by search query, then by the Latest Arrivals filter.
+  const query = searchQuery.toLowerCase();
+  const filteredProducts = products.filter((p) => {
+    const matchesQuery =
+      p.title.toLowerCase().includes(query) ||
+      p.stockNo.toLowerCase().includes(query) ||
+      p.make.toLowerCase().includes(query) ||
+      p.model.toLowerCase().includes(query) ||
+      p.category.toLowerCase().includes(query);
+    if (!matchesQuery) return false;
+    if (arrivalFilter === 'yes') return Boolean(p.isLatestArrival);
+    if (arrivalFilter === 'no') return !p.isLatestArrival;
+    return true;
+  });
 
   // Pagination (clamped so deletes / filtering never leave an empty page)
   const effectiveSize = pageSize === 'all' ? Math.max(filteredProducts.length, 1) : pageSize;
@@ -224,13 +325,30 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
     .filter((n) => n === 1 || n === totalPages || Math.abs(n - currentPage) <= 1);
 
+  // Select-all applies to the rows actually on screen.
+  const pageIds = pageItems.map((p) => p.id);
+  const allOnPageSelected = pageIds.length > 0 && pageIds.every((id) => selected.has(id));
+  const someOnPageSelected = pageIds.some((id) => selected.has(id));
+
+  const toggleRow = (id: string) => setSelected((prev) => {
+    const next = new Set(prev);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    return next;
+  });
+  const togglePage = () => setSelected((prev) => {
+    const next = new Set(prev);
+    if (allOnPageSelected) pageIds.forEach((id) => next.delete(id));
+    else pageIds.forEach((id) => next.add(id));
+    return next;
+  });
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {modal}
       {/* Controls Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         {/* Search */}
-        <div style={{ position: 'relative', width: '100%', maxWidth: '360px' }}>
+        <div style={{ position: 'relative', flex: '1 1 260px', maxWidth: '360px' }}>
           <input
             suppressHydrationWarning
             type="text"
@@ -256,11 +374,47 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
           />
         </div>
 
-        {/* Add Machine Button */}
-        <button onClick={handleOpenAdd} className="btn btn-primary" style={{ padding: '10px 20px', borderRadius: '8px', fontSize: '14px' }}>
-          <Plus size={16} /> Add Machine
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text-muted)' }}>
+            Latest Arrivals
+            <select
+              suppressHydrationWarning
+              value={arrivalFilter}
+              onChange={(e) => { setArrivalFilter(e.target.value as ArrivalFilter); setPage(1); }}
+              style={{ width: 'auto', height: 40, padding: '0 30px 0 12px', fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-display)' }}
+            >
+              <option value="all">All</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </label>
+
+          {/* Add Machine Button */}
+          <button onClick={handleOpenAdd} className="btn btn-primary" style={{ padding: '10px 20px', borderRadius: '8px', fontSize: '14px' }}>
+            <Plus size={16} /> Add Machine
+          </button>
+        </div>
       </div>
+
+      {/* Bulk action bar — only present once something is selected. */}
+      {selected.size > 0 && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', padding: '12px 16px', border: '1px solid var(--accent)', borderRadius: 'var(--radius-sm)', background: 'var(--accent-soft)' }}>
+          <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)' }}>
+            {selected.size} selected
+          </span>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginLeft: 'auto' }}>
+            <button type="button" onClick={() => runBulkArrival('add')} disabled={bulkBusy} className="btn btn-primary btn-sm">
+              {bulkBusy ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} /> : <Sparkles size={14} />} Add to Latest Arrivals
+            </button>
+            <button type="button" onClick={() => runBulkArrival('remove')} disabled={bulkBusy} className="btn btn-secondary btn-sm">
+              <X size={14} /> Remove from Latest Arrivals
+            </button>
+            <button type="button" onClick={() => setSelected(new Set())} disabled={bulkBusy} className="btn btn-secondary btn-sm">
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Inventory Table List */}
       <div
@@ -276,6 +430,16 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
             <thead>
               <tr style={{ background: 'var(--bg-surface-2)', borderBottom: '1px solid var(--border-light)' }}>
+                <th style={{ padding: '16px 8px 16px 20px', width: 36 }}>
+                  <input
+                    type="checkbox"
+                    checked={allOnPageSelected}
+                    ref={(el) => { if (el) el.indeterminate = !allOnPageSelected && someOnPageSelected; }}
+                    onChange={togglePage}
+                    aria-label="Select all machines on this page"
+                    style={{ width: 16, height: 16, cursor: 'pointer', accentColor: 'var(--accent)' }}
+                  />
+                </th>
                 <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>Image</th>
                 <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>Stock #</th>
                 <th style={{ padding: '16px 20px', fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)' }}>Title / Manufacturer</th>
@@ -288,8 +452,18 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
             <tbody>
               {pageItems.map((p) => {
                 const thumb = p.images && p.images.length > 0 ? imageUrl(p.images[0]) : 'https://placehold.co/60x60/eef1f4/93a0af?text=Machine';
+                const isChecked = selected.has(p.id);
                 return (
-                  <tr key={p.id} style={{ borderBottom: '1px solid var(--border-light)', transition: 'background-color 0.2s' }}>
+                  <tr key={p.id} style={{ borderBottom: '1px solid var(--border-light)', transition: 'background-color 0.2s', background: isChecked ? 'var(--accent-soft)' : undefined }}>
+                    <td style={{ padding: '14px 8px 14px 20px' }}>
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => toggleRow(p.id)}
+                        aria-label={`Select ${p.title}`}
+                        style={{ width: 16, height: 16, cursor: 'pointer', accentColor: 'var(--accent)' }}
+                      />
+                    </td>
                     <td style={{ padding: '14px 20px' }}>
                       <img
                         src={thumb}
@@ -307,6 +481,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                         {p.isFeatured && (
                           <span className="badge" style={{ background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 10.5, fontWeight: 700 }}>Featured</span>
                         )}
+                        <ArrivalBadge state={latestArrivalState(p)} />
                       </div>
                       <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Make: {p.make}</div>
                     </td>
@@ -354,8 +529,10 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
               })}
               {filteredProducts.length === 0 && (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)', fontSize: '14px' }}>
-                    No machines found in inventory.
+                  <td colSpan={8} style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-muted)', fontSize: '14px' }}>
+                    {arrivalFilter === 'yes' && !searchQuery
+                      ? 'No machines are marked as Latest Arrivals yet — edit a machine, or select rows and use the bulk action.'
+                      : 'No machines found in inventory.'}
                   </td>
                 </tr>
               )}
@@ -687,9 +864,84 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                 />
                 <span style={{ display: 'flex', flexDirection: 'column' }}>
                   <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>Mark as Featured</span>
-                  <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Shows in the homepage &ldquo;Featured machines&rdquo; section. Latest Arrivals updates automatically by date.</span>
+                  <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Shows in the homepage &ldquo;Featured machines&rdquo; section.</span>
                 </span>
               </label>
+
+              {/* ---- Latest Arrivals ---- */}
+              <fieldset style={{ border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', padding: '14px 16px 16px', margin: 0 }}>
+                <legend style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '0 6px', fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+                  <Sparkles size={14} style={{ color: 'var(--accent)' }} /> Latest Arrivals
+                </legend>
+
+                <div className="form-group" style={{ marginBottom: isLatestArrival ? 14 : 0 }}>
+                  <label>Show in Latest Arrivals</label>
+                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                    {([['Yes', true], ['No', false]] as const).map(([label, val]) => (
+                      <label key={label} style={{ flex: '1 1 120px', display: 'flex', alignItems: 'center', gap: 9, padding: '11px 14px', border: `1px solid ${isLatestArrival === val ? 'var(--accent)' : 'var(--border-light)'}`, borderRadius: 'var(--radius-sm)', background: isLatestArrival === val ? 'var(--accent-soft)' : 'var(--bg-surface)', cursor: 'pointer' }}>
+                        <input type="radio" name="isLatestArrival" checked={isLatestArrival === val} onChange={() => setIsLatestArrival(val)} style={{ width: 16, height: 16, accentColor: 'var(--accent)', cursor: 'pointer' }} />
+                        <span style={{ fontSize: 14, fontWeight: 600, color: isLatestArrival === val ? 'var(--accent)' : 'var(--text-primary)' }}>{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <span style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6 }}>
+                    The homepage section shows up to {LATEST_ARRIVALS_LIMIT} machines. Set to No to remove this one immediately — the listing itself stays active.
+                  </span>
+                </div>
+
+                {isLatestArrival && (
+                  <>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="form-row">
+                      <div className="form-group">
+                        <label>Display Priority</label>
+                        <input
+                          type="number"
+                          min={PRIORITY_MIN}
+                          max={PRIORITY_MAX}
+                          step={1}
+                          value={arrivalPriority}
+                          onChange={(e) => setArrivalPriority(e.target.value)}
+                          onBlur={() => setArrivalPriority((v) => String(Math.min(PRIORITY_MAX, Math.max(PRIORITY_MIN, Math.trunc(Number(v)) || 0))))}
+                          style={{ padding: '10px 14px', fontSize: '14px' }}
+                        />
+                        <span style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>Lower shows first. Equal priorities fall back to the most recently updated.</span>
+                      </div>
+                      <div className="form-group">
+                        <label>Display From</label>
+                        <input
+                          type="date"
+                          value={arrivalFrom}
+                          onChange={(e) => { setArrivalFrom(e.target.value); setErrors((p) => (p.arrivalUntil ? { ...p, arrivalUntil: '' } : p)); }}
+                          style={{ padding: '10px 14px', fontSize: '14px' }}
+                        />
+                        <span style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>Leave blank to show immediately.</span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="form-row">
+                      <div className="form-group">
+                        <label>Display Until</label>
+                        <input
+                          type="date"
+                          value={arrivalUntil}
+                          onChange={(e) => { setArrivalUntil(e.target.value); setErrors((p) => (p.arrivalUntil ? { ...p, arrivalUntil: '' } : p)); }}
+                          aria-invalid={!!errors.arrivalUntil}
+                          style={{ padding: '10px 14px', fontSize: '14px', ...invalidStyle('arrivalUntil') }}
+                        />
+                        <FieldError message={errors.arrivalUntil} />
+                        <span style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>Shown through the end of this day, then drops off on its own. Blank = no end date.</span>
+                      </div>
+                      <div className="form-group" style={{ justifyContent: 'flex-end' }}>
+                        {/* Live read-out of what the settings above actually mean right now. */}
+                        <span style={{ display: 'inline-flex', alignItems: 'flex-start', gap: 7, fontSize: 12.5, color: 'var(--text-secondary)', padding: '10px 12px', borderRadius: 'var(--radius-sm)', background: 'var(--bg-surface-2)' }}>
+                          <CalendarClock size={14} style={{ flexShrink: 0, marginTop: 1 }} />
+                          <span>{arrivalStatusText}</span>
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </fieldset>
 
               {/* Image Upload Gallery — multi-select, drag-drop, reorder, replace, featured */}
               <div>

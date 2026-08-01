@@ -3,6 +3,7 @@ import dbConnect from '@/lib/dbConnect';
 import Product, { type IProduct } from '@/models/Product';
 import { imageUrl, normalizeImages, type ImageRef } from '@/lib/images';
 import { getProductUrl } from '@/lib/productUrl';
+import { latestArrivalFilter, LATEST_ARRIVAL_SORT, LATEST_ARRIVALS_LIMIT } from '@/lib/latestArrivals';
 import rawProducts from '@/data/products.json';
 
 /**
@@ -65,7 +66,12 @@ function normalize(p: IProduct): IProduct {
     isFeatured: Boolean(p.isFeatured),
     stockStatus: p.stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock',
     badges: Array.isArray(p.badges) ? p.badges.filter((b) => typeof b === 'string' && b.trim()) : [],
+    isLatestArrival: Boolean(p.isLatestArrival),
+    latestArrivalPriority: Number.isFinite(Number(p.latestArrivalPriority)) ? Number(p.latestArrivalPriority) : 0,
+    latestArrivalFrom: p.latestArrivalFrom ?? null,
+    latestArrivalUntil: p.latestArrivalUntil ?? null,
     createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
   };
 }
 
@@ -88,19 +94,53 @@ export async function getFeaturedProducts(limit = 12): Promise<IProduct[]> {
 }
 
 /**
- * Homepage "Latest Arrivals" — fully automatic, like a standard e-commerce
- * store: the newest `limit` products by creation date, descending. No manual
- * flag, no hardcoded ids. Newly-added products surface here automatically and
- * push the oldest out. Falls back to the bundled seed (newest first) only when
- * the DB is unavailable so the section is never empty during local dev.
+ * Homepage "Latest Arrivals" — ONLY products an admin has switched on via the
+ * product form's Latest Arrivals section, and only while inside their optional
+ * from/until window. Nothing is derived from `createdAt`: a brand-new machine
+ * does not appear until it is marked, and an expired one drops out on its own
+ * while the listing itself stays active.
+ *
+ * Ordered by the admin's Display Priority (ascending), then most recently
+ * updated. Like Featured, an empty result is a legitimate state — the section
+ * simply doesn't render — so there is deliberately no "newest products"
+ * fallback that would put the automatic behaviour back.
  */
-export async function getLatestArrivals(limit = 8): Promise<IProduct[]> {
+export async function getLatestArrivals(limit = LATEST_ARRIVALS_LIMIT): Promise<IProduct[]> {
   try {
     await dbConnect();
-    const newest = await Product.find({}).sort({ createdAt: -1 }).limit(limit).lean();
-    if (newest.length > 0) return newest.map((d) => normalize(d as unknown as IProduct));
+    const docs = await Product.find(latestArrivalFilter())
+      .sort(LATEST_ARRIVAL_SORT)
+      .limit(limit)
+      .lean();
+    // Defensive dedupe: one card per machine even if the catalogue ever holds
+    // a duplicate id, so the section can never repeat a product.
+    const seen = new Set<string>();
+    const out: IProduct[] = [];
+    for (const d of docs) {
+      const p = normalize(d as unknown as IProduct);
+      if (seen.has(p.id)) continue;
+      seen.add(p.id);
+      out.push(p);
+    }
+    return out;
   } catch (error) {
-    console.error('getLatestArrivals: DB unavailable, using seed fallback.', error);
+    console.error('getLatestArrivals: DB unavailable.', error);
+    return [];
+  }
+}
+
+/**
+ * The most recently added machines, by creation date. This is NOT the homepage
+ * Latest Arrivals section (that one is admin-curated — see above); it backs
+ * places that genuinely want "recent stock", like the About page collage pool.
+ */
+export async function getNewestProducts(limit = 18): Promise<IProduct[]> {
+  try {
+    await dbConnect();
+    const docs = await Product.find({}).sort({ createdAt: -1 }).limit(limit).lean();
+    if (docs.length > 0) return docs.map((d) => normalize(d as unknown as IProduct));
+  } catch (error) {
+    console.error('getNewestProducts: DB unavailable, using seed fallback.', error);
   }
   return seed.slice(0, limit).map(fromRaw);
 }

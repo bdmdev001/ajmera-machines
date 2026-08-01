@@ -1376,6 +1376,59 @@ th {
   cursor: not-allowed;
 }
 
+/* Pagination indicators. The button is a comfortable 24px touch target; the
+   inner span is the visible dot, so tapping on a phone stays forgiving. */
+.fcar__dots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fcar__dot {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.fcar__dot span {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+  transition: var(--transition-fast);
+}
+
+.fcar__dot:hover span {
+  background: var(--text-muted);
+}
+
+.fcar__dot.is-active span {
+  width: 22px;
+  background: var(--accent);
+}
+
+.fcar__dot:focus-visible {
+  outline: none;
+}
+
+.fcar__dot:focus-visible span {
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Respect the OS reduce-motion setting: no smooth sliding (autoplay is
+   disabled in the component for the same reason). */
+@media (prefers-reduced-motion: reduce) {
+  .fcar__track {
+    scroll-behavior: auto;
+  }
+}
+
 /* ============================================================================
    MACHINE FINDER — Category + single free-text Size / Capacity field + Search.
    Desktop: three inline controls with the free-text input taking the most room.

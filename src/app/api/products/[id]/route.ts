@@ -7,6 +7,7 @@ import { deleteImages } from '@/lib/cloudinary';
 import { normalizeImages, type ImageRef } from '@/lib/images';
 import { resolveCategory } from '@/lib/categories';
 import { isValidYear, isValidUrl } from '@/lib/validation';
+import { readLatestArrivalInput } from '@/lib/latestArrivals';
 
 /** Read a product's stored images WITHOUT hydration (legacy docs may still hold
  *  bare strings, which would CastError against the structured subdoc schema). */
@@ -42,6 +43,11 @@ export async function PATCH(
       return NextResponse.json({ error: 'YouTube video link must be a valid URL.' }, { status: 400 });
     }
 
+    const arrival = readLatestArrivalInput(body);
+    if (!arrival.data) {
+      return NextResponse.json({ error: arrival.error }, { status: 400 });
+    }
+
     const cat = await resolveCategory(categoryId, category);
     const nextImages = normalizeImages(images);
     const nextPublicIds = new Set(nextImages.map((im) => im.public_id).filter(Boolean));
@@ -65,6 +71,7 @@ export async function PATCH(
         isFeatured: Boolean(isFeatured),
         stockStatus: stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock',
         badges: Array.isArray(badges) ? badges.map((b: unknown) => String(b).trim()).filter(Boolean) : [],
+        ...arrival.data,
         // Only touch the description when the edit actually sends one, so it is
         // preserved intact when other fields are updated by any partial caller.
         ...(typeof description === 'string' ? { description: description.trim() } : {}),

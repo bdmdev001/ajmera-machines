@@ -6,6 +6,7 @@ import { isAdminAuthenticated } from '@/lib/auth';
 import { normalizeImages } from '@/lib/images';
 import { resolveCategory } from '@/lib/categories';
 import { isValidYear, isValidUrl } from '@/lib/validation';
+import { readLatestArrivalInput } from '@/lib/latestArrivals';
 
 export async function POST(request: Request) {
   try {
@@ -28,6 +29,11 @@ export async function POST(request: Request) {
     }
     if (videoUrl && !isValidUrl(String(videoUrl))) {
       return NextResponse.json({ error: 'YouTube video link must be a valid URL.' }, { status: 400 });
+    }
+
+    const arrival = readLatestArrivalInput(body);
+    if (!arrival.data) {
+      return NextResponse.json({ error: arrival.error }, { status: 400 });
     }
 
     // Resolve the category NAME from the selected id so name + id stay linked.
@@ -79,6 +85,7 @@ export async function POST(request: Request) {
       isFeatured: Boolean(isFeatured),
       stockStatus: stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock',
       badges: Array.isArray(badges) ? badges.map((b: unknown) => String(b).trim()).filter(Boolean) : [],
+      ...arrival.data,
     });
 
     await newProduct.save();

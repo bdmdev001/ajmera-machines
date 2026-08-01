@@ -7,7 +7,7 @@ import {
 import Reveal from '@/components/Reveal';
 import Counter from '@/components/Counter';
 import StoryCollage, { type CollageSlide } from '@/components/StoryCollage';
-import { getFeaturedProducts, getLatestArrivals, getTotalMachines } from '@/lib/products';
+import { getFeaturedProducts, getNewestProducts, getTotalMachines } from '@/lib/products';
 import type { IProduct } from '@/models/Product';
 import { getProductUrl } from '@/lib/productUrl';
 
@@ -73,10 +73,12 @@ export default async function AboutPage() {
   const total = getTotalMachines();
 
   // Build the collage image pool from real, published products: prefer
-  // admin-featured machines, then fall back to the latest arrivals. Dedupe by
-  // product, drop anything without a gallery image, then mix categories so the
-  // three sliders continuously reveal different kinds of machinery.
-  const [featured, latest] = await Promise.all([getFeaturedProducts(12), getLatestArrivals(18)]);
+  // admin-featured machines, then fall back to the most recently added stock.
+  // (Deliberately not the homepage Latest Arrivals section — that one is a
+  // curated, schedulable shortlist and would leave this collage nearly empty.)
+  // Dedupe by product, drop anything without a gallery image, then mix
+  // categories so the three sliders reveal different kinds of machinery.
+  const [featured, latest] = await Promise.all([getFeaturedProducts(12), getNewestProducts(18)]);
   const seen = new Set<string>();
   const withImages: IProduct[] = [];
   for (const p of [...featured, ...latest]) {

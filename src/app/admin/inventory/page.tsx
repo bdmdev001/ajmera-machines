@@ -46,6 +46,11 @@ export default async function AdminInventoryPage() {
       isFeatured: Boolean(p.isFeatured),
       stockStatus: (p.stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock') as 'In Stock' | 'Out of Stock',
       badges: Array.isArray(p.badges) ? p.badges.filter((b: unknown) => typeof b === 'string' && b.trim()) : [],
+      isLatestArrival: Boolean(p.isLatestArrival),
+      latestArrivalPriority: Number.isFinite(Number(p.latestArrivalPriority)) ? Number(p.latestArrivalPriority) : 0,
+      // Dates cross the server→client boundary as ISO strings.
+      latestArrivalFrom: p.latestArrivalFrom ? new Date(p.latestArrivalFrom).toISOString() : '',
+      latestArrivalUntil: p.latestArrivalUntil ? new Date(p.latestArrivalUntil).toISOString() : '',
     };
   });
 

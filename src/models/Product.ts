@@ -29,10 +29,16 @@ export interface IProduct {
   stockStatus?: 'In Stock' | 'Out of Stock';
   /** Admin-managed free-form badge labels (e.g. "Sold", "Rare Machine"). */
   badges?: string[];
-  /** @deprecated Latest Arrivals is now derived automatically from `createdAt`
-   *  (newest first). Retained only so historic documents don't error; nothing
-   *  in the app reads it any more. */
+  /* ---- Latest Arrivals (admin-curated, never derived from createdAt) ------ */
+  /** Master switch: the product is a candidate for the homepage section. */
   isLatestArrival?: boolean;
+  /** Manual sort order within the section, ascending (ties break on updatedAt). */
+  latestArrivalPriority?: number;
+  /** Optional schedule. Empty `from` ⇒ visible immediately; empty `until` ⇒
+   *  visible indefinitely. Passing `until` drops it from the section without
+   *  touching the listing itself. */
+  latestArrivalFrom?: Date | null;
+  latestArrivalUntil?: Date | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -66,11 +72,17 @@ const ProductSchema = new Schema<IProduct>(
     isFeatured: { type: Boolean, default: false, index: true },
     stockStatus: { type: String, enum: ['In Stock', 'Out of Stock'], default: 'In Stock', index: true },
     badges: { type: [String], default: [] },
-    // Deprecated (kept for back-compat with existing docs; no longer read).
-    isLatestArrival: { type: Boolean, default: false },
+    isLatestArrival: { type: Boolean, default: false, index: true },
+    latestArrivalPriority: { type: Number, default: 0 },
+    latestArrivalFrom: { type: Date, default: null },
+    latestArrivalUntil: { type: Date, default: null },
   },
   { timestamps: true }
 );
+
+/* Serves the homepage query end-to-end: match on the flag, then walk the index
+   in the exact display order (priority ascending, newest-updated first). */
+ProductSchema.index({ isLatestArrival: 1, latestArrivalPriority: 1, updatedAt: -1 });
 
 // Fallback to avoid error on Next.js hot-reload compile
 export default models.Product || model<IProduct>('Product', ProductSchema);

@@ -8,13 +8,12 @@ import Reveal from '@/components/Reveal';
 import Counter from '@/components/Counter';
 import MachineFinder from '@/components/MachineFinder';
 import HeroSlider from '@/components/HeroSlider';
-import FeaturedCarousel from '@/components/FeaturedCarousel';
-import ProductCard from '@/components/ProductCard';
+import ProductCarousel from '@/components/ProductCarousel';
 import WhyChooseProducts from '@/components/WhyChooseProducts';
-import type { IProduct } from '@/models/Product';
 import {
   getFeaturedProducts, getLatestArrivals, getCategoryStats, getTotalMachines, getProductCategories,
 } from '@/lib/products';
+import { LATEST_ARRIVALS_LIMIT } from '@/lib/latestArrivals';
 import { cldUrl, type ImageRef } from '@/lib/images';
 
 export const revalidate = 3600;
@@ -67,7 +66,9 @@ const INSIGHTS = [
 
 export default async function Home() {
   const products = await getFeaturedProducts(12);
-  const latestArrivals = await getLatestArrivals(8);
+  // Admin-curated + scheduled; capped at LATEST_ARRIVALS_LIMIT, fewer if fewer
+  // are marked. Ordered by the admin's Display Priority, then newest-updated.
+  const latestArrivals = await getLatestArrivals(LATEST_ARRIVALS_LIMIT);
   const categories = getCategoryStats().slice(0, 6);
   const total = getTotalMachines();
   const finderCategories = await getProductCategories();
@@ -231,7 +232,18 @@ export default async function Home() {
               <p>Freshly inspected arrivals across our most-requested categories.</p>
             </div>
           </Reveal>
-          <Reveal delay={80}><FeaturedCarousel products={products} /></Reveal>
+          <Reveal delay={80}>
+            <ProductCarousel
+              products={products}
+              label="Featured machines"
+              badge={{ label: 'Featured', tone: 'new' }}
+              empty={(
+                <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '40px 0' }}>
+                  No featured machines yet — <a href="/contact" style={{ color: 'var(--accent)', fontWeight: 600 }}>send an enquiry</a> and we&apos;ll help you source one.
+                </p>
+              )}
+            />
+          </Reveal>
         </div>
       </section>
 
@@ -290,26 +302,31 @@ export default async function Home() {
       </section>
 
       {/* ================= 6 — LATEST ARRIVALS ================= */}
-      <section className="section band-paper">
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 14, marginBottom: 36 }}>
-            <Reveal>
-              <div>
-                <span className="eyebrow" style={{ marginBottom: 10 }}>Just added</span>
-                <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 38px)' }}>Latest arrivals</h2>
-              </div>
-            </Reveal>
-            <Reveal delay={80}><Link href="/products" className="btn btn-secondary">View all inventory <ArrowRight size={16} /></Link></Reveal>
-          </div>
-          <div className="best-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 22 }}>
-            {latestArrivals.map((p, i) => (
-              <Reveal key={p.id} delay={(i % 4) * 70}>
-                <ProductCardWrap product={p} />
+      {/* Admin-curated: the section is omitted entirely when no machine is
+          currently marked, rather than rendering an empty heading. */}
+      {latestArrivals.length > 0 && (
+        <section className="section band-paper">
+          <div className="container">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 14, marginBottom: 36 }}>
+              <Reveal>
+                <div>
+                  <span className="eyebrow" style={{ marginBottom: 10 }}>Just added</span>
+                  <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 38px)' }}>Latest arrivals</h2>
+                </div>
               </Reveal>
-            ))}
+              <Reveal delay={80}><Link href="/products" className="btn btn-secondary">View all inventory <ArrowRight size={16} /></Link></Reveal>
+            </div>
+            <Reveal delay={80}>
+              {/* Same carousel component, card and controls as Featured above. */}
+              <ProductCarousel
+                products={latestArrivals}
+                label="Latest arrivals"
+                badge={{ label: 'New', tone: 'new' }}
+              />
+            </Reveal>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ================= 7 — INSIGHTS ================= */}
       {/* <section className="section">
@@ -364,10 +381,4 @@ export default async function Home() {
       </section> */}
     </div>
   );
-}
-
-/* Small server wrapper for the "Latest arrivals" grid. Every card here is, by
-   definition, one of the newest products — so each carries the "New" badge. */
-function ProductCardWrap({ product }: { product: IProduct }) {
-  return <ProductCard product={product} badge={{ label: 'New', tone: 'new' }} />;
 }

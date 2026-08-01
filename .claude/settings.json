@@ -74,10 +74,24 @@
       "Bash(node 38f32391-03e9-4656-ad82-c71d377eb1eb-build.mjs)",
       "Bash(sed -i \"s#'./scratchpad/lib/xlsx.js'#'./38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad/lib/xlsx.js'#\" 38f32391-03e9-4656-ad82-c71d377eb1eb-build.mjs)",
       "Bash(node test-write.mjs)",
-      "Bash(rm -rf lib unzipped *.mjs *.xlsx)"
+      "Bash(rm -rf lib unzipped *.mjs *.xlsx)",
+      "Bash(node la-test.mjs)",
+      "Bash(cp /tmp/probe-la.mjs ./probe-la.mjs)",
+      "Bash(node --env-file=.env ./probe-la.mjs)",
+      "Bash(rm -f ./probe-la.mjs /tmp/probe-la.mjs)",
+      "Bash(npm run *)",
+      "Bash(rm -rf la la-test.mjs)",
+      "Bash(git rm *)",
+      "Bash(node --env-file=.env ./count-probe.mjs)",
+      "Read(//tmp/**)",
+      "Bash(ls /tmp/)",
+      "Bash(mkdir -p /c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad)",
+      "Bash(curl -s -o /c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad/home.html -w 'status=%{http_code}\\\\n' --max-time 120 http://localhost:3000/)",
+      "Bash(S=\"/c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad\"; rm -rf \"$S\"/*.png \"$S\"/*.html \"$S\"/prof-* \"$S\"/chrome-profile 2>/dev/null; ls -A \"$S\" 2>/dev/null | head; echo \"--- scratch cleaned ---\"; cd \"d:/Jatin Works/my_projects/ajmera-machines-clone\" && git status --short)"
     ],
     "additionalDirectories": [
-      "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\claude\\d--Jatin-Works-my-projects-ajmera-machines-clone"
+      "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\claude\\d--Jatin-Works-my-projects-ajmera-machines-clone",
+      "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\claude\\d--Jatin-Works-my-projects-ajmera-machines-clone\\38f32391-03e9-4656-ad82-c71d277eb1eb\\scratchpad"
     ]
   }
 }
