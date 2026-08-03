@@ -14,6 +14,7 @@ import ShareProduct from '@/components/ShareProduct';
 import { getAllProducts, getProductByStockNo } from '@/lib/products';
 import { buildProductDescription } from '@/lib/productDescription';
 import { imageUrl } from '@/lib/images';
+import { youtubeEmbed } from '@/lib/youtube';
 import {
   getProductSlug, getProductUrl, getProductAbsoluteUrl, extractIdToken,
 } from '@/lib/productUrl';
@@ -65,12 +66,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: image ? [image] : undefined,
     },
   };
-}
-
-function youtubeEmbed(url?: string): string {
-  if (!url) return '';
-  const m = url.match(/(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i);
-  return m?.[1] ? `https://www.youtube.com/embed/${m[1]}` : '';
 }
 
 type SpecRow = { label: string; value: string } | { note: string };

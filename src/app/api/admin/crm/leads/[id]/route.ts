@@ -107,6 +107,9 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
     const deleted = await Lead.findByIdAndDelete(id);
     if (!deleted) return NextResponse.json({ error: 'Record not found' }, { status: 404 });
     await Activity.deleteMany({ leadId: id }).catch(() => { /* non-fatal */ });
+    // Conversion history would otherwise be orphaned — same cleanup the bulk
+    // delete performs, so the two paths leave the collection in one shape.
+    await ConversionLog.deleteMany({ leadId: id }).catch(() => { /* non-fatal */ });
     // Unlink any enquiries that pointed at this record (best-effort).
     await Enquiry.updateMany({ customerId: id }, { $unset: { customerId: '' } }).catch(() => { /* non-fatal */ });
     return NextResponse.json({ success: true, message: 'Record deleted' });

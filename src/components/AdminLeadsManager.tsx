@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   Search, Plus, Edit3, Trash2, Loader2, ChevronLeft, ChevronRight, Eye,
@@ -72,6 +72,12 @@ export default function AdminLeadsManager() {
   const [exportScope, setExportScope] = useState<'filtered' | 'all'>('filtered');
   const [transitionTarget, setTransitionTarget] = useState<{ lead: LeadRecord; def: TransitionDef } | null>(null);
 
+  // Bulk selection — keyed by _id so it survives paging, sorting and filtering.
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
+  /** Anchor row for shift-click range selection, as an index into `leads`. */
+  const anchor = useRef<number | null>(null);
+
   const [listsKey, setListsKey] = useState(0);
   const { lists, names } = useCrmLists(listsKey);
   const { modal, showSuccess, showError, confirm } = useAdminAlert();
@@ -125,7 +131,17 @@ export default function AdminLeadsManager() {
   }, [page, pageSize, queryParams, refreshKey, showError]);
 
   const reload = useCallback(() => { setLoading(true); setRefreshKey((k) => k + 1); }, []);
-  const onFilter = (fn: () => void) => { setLoading(true); fn(); setPage(1); };
+  /** Any change to the result set (search, tab, filter, sort, page size) drops
+   *  the selection. Keeping it would let an admin select rows under one filter,
+   *  switch to another, and delete records they can no longer see. Paging alone
+   *  does NOT clear it — that's the case where carrying the selection helps. */
+  const onFilter = (fn: () => void) => {
+    setLoading(true);
+    setSelected(new Set());
+    anchor.current = null;
+    fn();
+    setPage(1);
+  };
 
   const openAdd = (type: RecordType) => { setFormMode('add'); setFormType(type); setEditing({ recordType: type }); setFormOpen(true); };
   const openEdit = (l: LeadRecord) => { setFormMode('edit'); setFormType(l.recordType); setEditing(l); setFormOpen(true); };
@@ -150,11 +166,119 @@ export default function AdminLeadsManager() {
       const res = await fetch(`/api/admin/crm/leads/${l._id}`, { method: 'DELETE' });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) { showError('Could not delete', data.error || 'Please try again.'); return; }
+      setSelected((prev) => { // keep the bulk bar's count honest
+        if (!prev.has(idOf(l))) return prev;
+        const next = new Set(prev);
+        next.delete(idOf(l));
+        return next;
+      });
       const targetPage = leads.length === 1 && page > 1 ? page - 1 : page;
       setLoading(true);
       if (targetPage !== page) setPage(targetPage); else reload();
       showSuccess('Record deleted', `“${fullName(l)}” has been removed.`);
     } catch { showError('Network error', 'Could not delete. Please try again.'); }
+  };
+
+  /* ---- Bulk selection ---------------------------------------------------- */
+
+  const pageIds = leads.map(idOf).filter(Boolean);
+  const allOnPageSelected = pageIds.length > 0 && pageIds.every((id) => selected.has(id));
+  const someOnPageSelected = pageIds.some((id) => selected.has(id));
+  const offPageSelected = selected.size - pageIds.filter((id) => selected.has(id)).length;
+
+  /** Toggle a row. Shift-click extends from the last row clicked, matching the
+   *  behaviour of every file manager and mail client. */
+  const toggleRow = (index: number, id: string, shiftKey: boolean) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (shiftKey && anchor.current !== null) {
+        const [lo, hi] = anchor.current < index ? [anchor.current, index] : [index, anchor.current];
+        // The anchor's resulting state is applied across the whole range.
+        const turnOn = !prev.has(id);
+        for (let i = lo; i <= hi; i += 1) {
+          const row = leads[i];
+          const rid = row ? idOf(row) : '';
+          if (!rid) continue;
+          if (turnOn) next.add(rid); else next.delete(rid);
+        }
+      } else if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+    anchor.current = index;
+  };
+
+  const togglePage = () => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) pageIds.forEach((id) => next.delete(id));
+      else pageIds.forEach((id) => next.add(id));
+      return next;
+    });
+    anchor.current = null;
+  };
+
+  const clearSelection = () => { setSelected(new Set()); anchor.current = null; };
+
+  /** Select every record matching the current search + filters, not just this
+   *  page — the case that matters when clearing up after a bad bulk import. */
+  const selectAllMatching = async () => {
+    setBulkBusy(true);
+    try {
+      const params = queryParams();
+      params.set('page', '1');
+      params.set('limit', 'all');
+      const res = await fetch(`/api/admin/crm/leads?${params.toString()}`);
+      const data = await res.json();
+      if (!res.ok) { showError('Could not select all', data.error || 'Please try again.'); return; }
+      setSelected(new Set((data.leads as LeadRecord[]).map(idOf).filter(Boolean)));
+      anchor.current = null;
+      if (data.capped) {
+        showError('Selection capped', `Only the first ${data.cap} matching records could be selected. Narrow your filters and repeat.`);
+      }
+    } catch {
+      showError('Network error', 'Could not reach the server. Please try again.');
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    const ids = [...selected];
+    if (ids.length === 0) return;
+    const ok = await confirm({
+      title: `Delete ${ids.length} record${ids.length === 1 ? '' : 's'}?`,
+      message: `The selected ${ids.length === 1 ? 'record' : 'records'} and their activity timeline and conversion history will be permanently removed. Linked enquiries are kept but unlinked. This cannot be undone.`,
+      confirmLabel: `Delete ${ids.length}`,
+      danger: true,
+    });
+    if (!ok) return;
+
+    setBulkBusy(true);
+    try {
+      const res = await fetch('/api/admin/crm/leads/bulk-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { showError('Could not delete records', data.error || 'Please try again.'); return; }
+      clearSelection();
+      setLoading(true);
+      setRefreshKey((k) => k + 1);
+      const gone = data.deleted ?? ids.length;
+      showSuccess(
+        `${gone} record${gone === 1 ? '' : 's'} deleted`,
+        data.notFound ? `${data.notFound} had already been removed.` : 'The selected records have been removed.',
+      );
+    } catch {
+      showError('Network error', 'Could not reach the server. Please try again.');
+    } finally {
+      setBulkBusy(false);
+    }
   };
 
   const clearFilters = () => onFilter(() => {
@@ -360,6 +484,45 @@ export default function AdminLeadsManager() {
         </div>
       )}
 
+      {/* Bulk action bar — sticky so it stays reachable down a long table. */}
+      {selected.size > 0 && (
+        <div
+          style={{
+            position: 'sticky', top: 8, zIndex: 20,
+            display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
+            padding: '12px 16px', borderRadius: 'var(--radius-sm)',
+            border: '1px solid var(--accent)', background: 'var(--accent-soft)',
+            boxShadow: 'var(--shadow-lg)',
+          }}
+        >
+          <span style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)' }}>
+            {selected.size.toLocaleString('en-US')} selected
+          </span>
+          {offPageSelected > 0 && (
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+              ({offPageSelected.toLocaleString('en-US')} on other pages)
+            </span>
+          )}
+          {allOnPageSelected && total > leads.length && selected.size < total && (
+            <button type="button" onClick={selectAllMatching} disabled={bulkBusy}
+              style={{ background: 'none', border: 'none', padding: 0, fontSize: 12.5, fontWeight: 700, color: 'var(--accent)', textDecoration: 'underline', cursor: 'pointer' }}>
+              Select all {total.toLocaleString('en-US')} matching
+            </button>
+          )}
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginLeft: 'auto' }}>
+            <button type="button" onClick={clearSelection} disabled={bulkBusy} className="btn btn-secondary btn-sm">
+              Clear
+            </button>
+            <button type="button" onClick={handleBulkDelete} disabled={bulkBusy} className="btn btn-sm"
+              style={{ background: '#ff4d4d', color: '#fff', border: '1px solid #ff4d4d' }}>
+              {bulkBusy
+                ? <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />
+                : <Trash2 size={14} />} Delete selected
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Table / cards */}
       <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
         {loading ? (
@@ -377,6 +540,14 @@ export default function AdminLeadsManager() {
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 940 }}>
                 <thead>
                   <tr style={{ background: 'var(--bg-surface-2)', borderBottom: '1px solid var(--border-light)' }}>
+                    <th style={{ ...th, width: 40, paddingRight: 0 }}>
+                      <SelectBox
+                        checked={allOnPageSelected}
+                        indeterminate={!allOnPageSelected && someOnPageSelected}
+                        onToggle={togglePage}
+                        label={allOnPageSelected ? 'Deselect all rows on this page' : 'Select all rows on this page'}
+                      />
+                    </th>
                     <th style={th}>Name / Company</th>
                     <th style={th}>Contact</th>
                     <th style={th}>Lifecycle</th>
@@ -388,8 +559,15 @@ export default function AdminLeadsManager() {
                   </tr>
                 </thead>
                 <tbody>
-                  {leads.map((l) => (
-                    <tr key={l._id} style={{ borderBottom: '1px solid var(--border-light)' }}>
+                  {leads.map((l, i) => (
+                    <tr key={l._id} style={{ borderBottom: '1px solid var(--border-light)', background: selected.has(idOf(l)) ? 'var(--accent-soft)' : undefined }}>
+                      <td style={{ ...td, paddingRight: 0 }}>
+                        <SelectBox
+                          checked={selected.has(idOf(l))}
+                          onToggle={(shift) => toggleRow(i, idOf(l), shift)}
+                          label={`Select ${fullName(l)}`}
+                        />
+                      </td>
                       <td style={td}>
                         <Link href={`/admin/leads/${l._id}`} style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{fullName(l)}</Link>
                         <div style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>{l.organisation || (l.designation || '—')}</div>
@@ -414,12 +592,19 @@ export default function AdminLeadsManager() {
 
             {/* Mobile cards */}
             <div className="lead-cards" style={{ display: 'none', flexDirection: 'column' }}>
-              {leads.map((l) => (
-                <div key={l._id} style={{ padding: '16px 18px', borderBottom: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {leads.map((l, i) => (
+                <div key={l._id} style={{ padding: '16px 18px', borderBottom: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', gap: 10, background: selected.has(idOf(l)) ? 'var(--accent-soft)' : undefined }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-                    <div style={{ minWidth: 0 }}>
-                      <Link href={`/admin/leads/${l._id}`} style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{fullName(l)}</Link>
-                      <div style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>{l.organisation || '—'}</div>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, minWidth: 0 }}>
+                      <SelectBox
+                        checked={selected.has(idOf(l))}
+                        onToggle={(shift) => toggleRow(i, idOf(l), shift)}
+                        label={`Select ${fullName(l)}`}
+                      />
+                      <div style={{ minWidth: 0 }}>
+                        <Link href={`/admin/leads/${l._id}`} style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{fullName(l)}</Link>
+                        <div style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>{l.organisation || '—'}</div>
+                      </div>
                     </div>
                     <StageBadge stage={stageOf(l)} />
                   </div>
@@ -479,7 +664,34 @@ export default function AdminLeadsManager() {
   );
 }
 
-function fullName(l: LeadRecord): string { return `${l.firstName} ${l.lastName}`.trim() || l.email; }
+function fullName(l: LeadRecord): string { return `${l.firstName} ${l.lastName}`.trim() || l.email || l.mobile || 'Untitled record'; }
+
+/** Every record served by the API carries an _id; the type just leaves it
+ *  optional, so this narrows it once instead of asserting at each use. */
+function idOf(l: LeadRecord): string { return l._id ?? ''; }
+
+/** Selection checkbox. The toggle is driven from onClick rather than onChange so
+ *  the shift key is available for range selection — keyboard activation raises a
+ *  click too, so Space still works (with shift reported as false). */
+function SelectBox({ checked, indeterminate, onToggle, label }: {
+  checked: boolean;
+  indeterminate?: boolean;
+  onToggle: (shiftKey: boolean) => void;
+  label: string;
+}) {
+  return (
+    <input
+      type="checkbox"
+      checked={checked}
+      ref={(el) => { if (el) el.indeterminate = Boolean(indeterminate); }}
+      onChange={() => { /* handled in onClick, which carries shiftKey */ }}
+      onClick={(e) => onToggle(e.shiftKey)}
+      aria-label={label}
+      title={label}
+      style={{ width: 17, height: 17, cursor: 'pointer', accentColor: 'var(--accent)', flexShrink: 0, margin: 0 }}
+    />
+  );
+}
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (

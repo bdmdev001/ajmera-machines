@@ -3,6 +3,20 @@
    and per-row validation + mapping onto the unified Lead model. Pure/server-safe
    (no DB, no browser) — the API route supplies the allowed-value lookups
    (categories, customer groups, lead stages, lead potentials).
+
+   VALIDATION SCOPE — this file is the import pipeline's OWN validation layer and
+   is intentionally more permissive than the rest of the app:
+
+     Bulk import (here, validateAndMapRow)  every column optional; a supplied
+                                            value is format-checked, a blank one
+                                            is imported as empty.
+     Manual add/edit (src/lib/lead.ts,      First Name, Email and Mobile stay
+     validateLead + the form modals)        REQUIRED — unchanged.
+
+   Nothing is shared between the two: validateAndMapRow() is called only by
+   /api/admin/crm/leads/import, and validateLead() only by the manual create
+   (POST /api/admin/crm/leads) and edit (PATCH /api/admin/crm/leads/[id])
+   routes. Relaxing a rule here must never be mirrored into lead.ts.
    ========================================================================= */
 
 import { isValidEmail, isValidPhone, isValidGST, isValidPAN, isValidUrl } from '@/lib/validation';
@@ -132,38 +146,48 @@ function parseImportDate(s: string): Date | null | 'invalid' {
   return 'invalid';
 }
 
-/** Validate + map one parsed record onto a Lead insert object. */
+/** Validate + map one parsed record onto a Lead insert object.
+ *
+ *  IMPORT-ONLY VALIDATION POLICY — every column is optional here:
+ *    · a blank cell imports as an empty value and NEVER raises an error;
+ *    · a supplied value is still format-checked and a bad one IS an error.
+ *
+ *  This deliberately differs from manual create/edit, which goes through
+ *  validateLead() in src/lib/lead.ts and still requires First Name, Email and
+ *  Mobile. The two paths share no validation code — see the note at the top of
+ *  this file. Do not call this function from the manual create/edit routes. */
 export function validateAndMapRow(values: Record<string, string>, type: ImportType, look: Lookups): RowResult {
   const pick = (header: string) => values[normalizeHeader(header)] ?? '';
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  // Names
+  // A row whose every template column is blank would import as an entirely
+  // empty contact. That is a malformed row rather than "missing values", so it
+  // is reported instead of silently creating a blank record.
+  if (!headersFor(type).some((h) => pick(h) !== '')) {
+    return { errors: ['Row has no data in any recognised column.'], warnings, email: '', phone: '' };
+  }
+
+  // Names — optional. A Customer's "Contact Person" is split into first/last.
   let firstName = '';
   let lastName = '';
   if (type === 'Customer') {
-    const contact = pick('Contact Person');
-    const parts = contact.split(/\s+/).filter(Boolean);
+    const parts = pick('Contact Person').split(/\s+/).filter(Boolean);
     firstName = parts.shift() || '';
     lastName = parts.join(' ');
-    if (!contact) errors.push('Contact Person is required.');
-    if (!pick('Company Name')) errors.push('Company Name is required.');
   } else {
     firstName = pick('First Name');
     lastName = pick('Last Name');
-    if (!firstName) errors.push('First Name is required.');
   }
 
-  // Email
+  // Email — optional; validated only when supplied.
   const email = pick('Email').toLowerCase();
-  if (!email) errors.push('Email is required.');
-  else if (!isValidEmail(email)) errors.push(`Invalid email “${email}”.`);
+  if (email && !isValidEmail(email)) errors.push(`Invalid email “${email}”.`);
 
-  // Phone (Country Code + Phone Number)
+  // Phone (Country Code + Phone Number) — optional; validated only when supplied.
   const code = pick('Country Code');
   const phone = combinePhone(code, pick('Phone Number'));
-  if (!phone) errors.push('Phone Number is required.');
-  else if (!isValidPhone(phone)) errors.push(`Invalid phone number “${phone}”.`);
+  if (phone && !isValidPhone(phone)) errors.push(`Invalid phone number “${phone}”.`);
   const whatsapp = combinePhone(code, pick('WhatsApp Number'));
   if (whatsapp && !isValidPhone(whatsapp)) warnings.push(`WhatsApp number “${whatsapp}” looks invalid — left blank.`);
 

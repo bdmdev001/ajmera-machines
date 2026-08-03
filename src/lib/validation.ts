@@ -6,8 +6,6 @@
    valid. Optional fields validate their FORMAT only when a value is present.
    ========================================================================= */
 
-import { isValidPhoneNumber } from 'libphonenumber-js';
-
 // Email — pragmatic RFC-ish check (also used by the subscribe route).
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Indian GSTIN — 15 chars: 2 state digits, 5 PAN letters, 4 digits, 1 letter,
@@ -20,15 +18,64 @@ export function isValidEmail(v: string): boolean {
   return EMAIL_RE.test(v.trim());
 }
 
-/** Phone / WhatsApp. Forms now submit E.164 (e.g. "+919876543210"), which we
- *  validate per-country via libphonenumber-js. A digit-count fallback keeps any
- *  pre-existing, non-E.164 stored values from being rejected. */
+/* ------------------------------------------------------------------ */
+/* Phone numbers                                                       */
+/*                                                                     */
+/* A number is a country calling code of up to 4 digits followed by a  */
+/* national (subscriber) number of up to 15 digits, so a full E.164-   */
+/* style value carries at most 19 digits. Validation is deliberately   */
+/* length-based rather than per-country (libphonenumber-js): the CRM   */
+/* holds international numbers whose national plans we don't track, and*/
+/* a strict per-country check rejected legitimate long numbers.        */
+/* ------------------------------------------------------------------ */
+
+export const MAX_COUNTRY_CODE_DIGITS = 4;
+export const MAX_PHONE_DIGITS = 15;
+/** Shortest complete number (code + national digits) we accept. */
+export const MIN_PHONE_DIGITS = 5;
+
+// Digits plus the usual separators; an optional "+" may only lead.
+const PHONE_CHARS_RE = /^\+?[\d\s()./-]+$/;
+
+/** Digits only — drops "+", spaces, brackets and dashes. */
+export function phoneDigits(v: string): string {
+  return String(v ?? '').replace(/\D/g, '');
+}
+
+/** Country calling code on its own, with or without "+" (e.g. "91", "+1242"). */
+export function isValidCountryCode(v: string): boolean {
+  const s = v.trim();
+  if (!s || !PHONE_CHARS_RE.test(s)) return false;
+  const d = phoneDigits(s);
+  return d.length >= 1 && d.length <= MAX_COUNTRY_CODE_DIGITS;
+}
+
+/** National number on its own, i.e. the part after the country code. Only the
+ *  upper bound is enforced here — a short national number is fine behind a
+ *  calling code, so the floor is checked on the complete number by
+ *  isValidPhone(). A value that already carries "+" is a complete number. */
+export function isValidNationalNumber(v: string): boolean {
+  const s = v.trim();
+  if (!s || !PHONE_CHARS_RE.test(s)) return false;
+  if (s.startsWith('+')) return isValidPhone(s);
+  const d = phoneDigits(s);
+  return d.length >= 1 && d.length <= MAX_PHONE_DIGITS;
+}
+
+/** Longest value accepted for a complete number — with a leading "+" the
+ *  country code and the national number stack. */
+function maxDigitsFor(s: string): number {
+  return s.startsWith('+') ? MAX_COUNTRY_CODE_DIGITS + MAX_PHONE_DIGITS : MAX_PHONE_DIGITS;
+}
+
+/** Phone / WhatsApp. Forms submit E.164 (e.g. "+919876543210"); bare national
+ *  numbers (legacy stored values, import cells with no country code) are also
+ *  accepted. */
 export function isValidPhone(v: string): boolean {
   const s = v.trim();
-  if (!s) return false;
-  if (s.startsWith('+')) return isValidPhoneNumber(s);
-  const digits = s.replace(/\D/g, '');
-  return digits.length >= 7 && digits.length <= 15;
+  if (!s || !PHONE_CHARS_RE.test(s)) return false;
+  const d = phoneDigits(s);
+  return d.length >= MIN_PHONE_DIGITS && d.length <= maxDigitsFor(s);
 }
 
 export function isValidGST(v: string): boolean {

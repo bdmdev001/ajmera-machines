@@ -6,7 +6,7 @@ import Category from '@/models/Category';
 import CrmList from '@/models/CrmList';
 import { isAdminAuthenticated } from '@/lib/auth';
 import {
-  recordsFromMatrix, validateAndMapRow, normalizeHeader,
+  recordsFromMatrix, validateAndMapRow, normalizeHeader, headersFor,
   type ImportType, type Lookups,
 } from '@/lib/crmImport';
 import { parseSpreadsheet, isXlsxBuffer, isLegacyXls } from '@/lib/xlsx';
@@ -78,14 +78,16 @@ export async function POST(request: Request) {
     const { matrix, source } = matrixFrom(body ?? {});
     const { headers, records, emptyRows } = recordsFromMatrix(matrix);
 
-    // Verify the required header columns are present (tolerant matching).
+    // Every column is optional for bulk import, so no specific header is
+    // demanded. The file must still be a recognisable template, though —
+    // otherwise a spreadsheet of unrelated columns would import as a batch of
+    // blank contacts. Requiring one known column is enough to establish that.
     const presentKeys = new Set(headers.map(normalizeHeader));
-    const requiredHeaders = type === 'Customer'
-      ? ['Company Name', 'Contact Person', 'Email', 'Phone Number']
-      : ['First Name', 'Email', 'Phone Number'];
-    const missing = requiredHeaders.filter((h) => !presentKeys.has(normalizeHeader(h)));
-    if (missing.length) {
-      return NextResponse.json({ error: `The file is missing required column(s): ${missing.join(', ')}. Download the sample template for the correct headers.` }, { status: 400 });
+    const known = headersFor(type).filter((h) => presentKeys.has(normalizeHeader(h)));
+    if (known.length === 0) {
+      return NextResponse.json({
+        error: `None of the columns in this file match the ${type.toLowerCase()} template. Download the sample CSV or Excel template for the correct headers.`,
+      }, { status: 400 });
     }
     if (records.length === 0) {
       return NextResponse.json({ error: 'No data rows found — the first row must be the column headers.' }, { status: 400 });
@@ -160,20 +162,44 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, report });
     }
 
-    // Commit — insert the valid records (order preserved) and log an activity.
+    /* Commit — insert the valid records (order preserved) and log an activity.
+       Every import column is optional, but the shared Lead schema still marks
+       firstName/email/mobile `required` for the manual create/edit path (which
+       enforces them again in validateLead). Mongoose's insertMany() has no way
+       to skip document validation, so a partial row would be rejected there
+       even though the importer accepted it. Documents are therefore built
+       THROUGH the model — so schema defaults, casting and setters such as the
+       email lowercase still apply — and then written with the raw driver,
+       which skips only the presence checks. The schema is left untouched, and
+       nothing outside this block is affected. */
     let imported = 0;
     if (valid.length) {
+      const now = new Date();
+      const docs = valid.map((v) => ({
+        ...new Lead(v.record).toObject(),
+        createdAt: now,   // raw inserts bypass Mongoose's timestamp handling
+        updatedAt: now,
+      }));
+
+      const failed = new Set<number>();
       try {
-        const docs = await Lead.insertMany(valid.map((v) => v.record), { ordered: false });
-        imported = docs.length;
-        await Activity.insertMany(
-          docs.map((d) => ({ leadId: d._id, type: 'created', title: `Imported from ${source}` })),
-          { ordered: false },
-        ).catch(() => { /* non-fatal */ });
+        const res = await Lead.collection.insertMany(docs, { ordered: false });
+        imported = res.insertedCount ?? docs.length;
       } catch (err) {
-        const inserted = (err as { insertedDocs?: unknown[] })?.insertedDocs;
-        imported = Array.isArray(inserted) ? inserted.length : 0;
+        // Unordered bulk writes report per-document failures by index.
+        const e = err as { writeErrors?: ({ index?: number; err?: { index?: number } })[]; result?: { insertedCount?: number } };
+        for (const we of e.writeErrors ?? []) {
+          const i = we?.index ?? we?.err?.index;
+          if (typeof i === 'number') failed.add(i);
+        }
+        imported = e.result?.insertedCount ?? Math.max(0, docs.length - failed.size);
       }
+
+      const insertedDocs = docs.filter((_, i) => !failed.has(i));
+      await Activity.insertMany(
+        insertedDocs.map((d) => ({ leadId: d._id, type: 'created', title: `Imported from ${source}` })),
+        { ordered: false },
+      ).catch(() => { /* non-fatal */ });
     }
 
     return NextResponse.json({ success: true, report: { ...report, committed: true, imported } });

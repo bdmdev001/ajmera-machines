@@ -87,7 +87,13 @@
       "Bash(ls /tmp/)",
       "Bash(mkdir -p /c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad)",
       "Bash(curl -s -o /c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad/home.html -w 'status=%{http_code}\\\\n' --max-time 120 http://localhost:3000/)",
-      "Bash(S=\"/c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad\"; rm -rf \"$S\"/*.png \"$S\"/*.html \"$S\"/prof-* \"$S\"/chrome-profile 2>/dev/null; ls -A \"$S\" 2>/dev/null | head; echo \"--- scratch cleaned ---\"; cd \"d:/Jatin Works/my_projects/ajmera-machines-clone\" && git status --short)"
+      "Bash(S=\"/c/Users/ADMIN/AppData/Local/Temp/claude/d--Jatin-Works-my-projects-ajmera-machines-clone/38f32391-03e9-4656-ad82-c71d277eb1eb/scratchpad\"; rm -rf \"$S\"/*.png \"$S\"/*.html \"$S\"/prof-* \"$S\"/chrome-profile 2>/dev/null; ls -A \"$S\" 2>/dev/null | head; echo \"--- scratch cleaned ---\"; cd \"d:/Jatin Works/my_projects/ajmera-machines-clone\" && git status --short)",
+      "Bash(cd \"d:/Jatin Works/my_projects/ajmera-machines-clone\" && find . -iname \"*ajmer*\" -not -path \"./node_modules/*\" 2>/dev/null; echo \"--- wider search ---\"; find /c/Users/ADMIN/Downloads /c/Users/ADMIN/Documents /c/Users/ADMIN/Desktop -iname \"*ajmer*.csv\" 2>/dev/null | head)",
+      "Bash(cp -r __TRACKED_VAR__/yt ./yt-tmp)",
+      "Bash(sed 's#'\\\\''./yt/youtube.js'\\\\''#'\\\\''./yt-tmp/youtube.js'\\\\''#' __TRACKED_VAR__/yt-test.mjs)",
+      "Bash(node ./yt-test.mjs)",
+      "Bash(rm -rf ./yt-test.mjs ./yt-tmp)",
+      "Bash(awk '/interface InsertManyOptions/,/^  }/' node_modules/mongoose/types/models.d.ts)"
     ],
     "additionalDirectories": [
       "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\claude\\d--Jatin-Works-my-projects-ajmera-machines-clone",
