@@ -19,7 +19,11 @@
    routes. Relaxing a rule here must never be mirrored into lead.ts.
    ========================================================================= */
 
-import { isValidEmail, isValidPhone, isValidGST, isValidPAN, isValidUrl } from '@/lib/validation';
+import {
+  isValidEmail, isValidPhone, isValidGST, isValidPAN, isValidUrl,
+  isValidCountryCode, isValidNationalNumber, phoneDigits,
+  MAX_COUNTRY_CODE_DIGITS, MAX_PHONE_DIGITS,
+} from '@/lib/validation';
 import { toCSV, type ExportColumn, type ExportRow } from '@/lib/exporters';
 import { parseCsv } from '@/lib/csv';
 
@@ -120,14 +124,26 @@ export interface RowResult {
 
 const splitMulti = (s: string): string[] => s.split(/[;|,]/).map((x) => x.trim()).filter(Boolean);
 
-/** Combine a country code + local number into an E.164-ish string. */
+/** Combine a country code + local number into an E.164-ish string. A cell that
+ *  already carries its own "+" is a complete number — the code column is then
+ *  ignored rather than prefixed twice. */
 function combinePhone(code: string, num: string): string {
   const raw = String(num || '').trim();
   if (!raw) return '';
-  if (raw.startsWith('+')) return `+${raw.replace(/\D/g, '')}`;
-  const digits = raw.replace(/\D/g, '');
-  const cc = String(code || '').replace(/\D/g, '');
+  if (raw.startsWith('+')) return `+${phoneDigits(raw)}`;
+  const digits = phoneDigits(raw);
+  const cc = phoneDigits(code);
   return cc ? `+${cc}${digits}` : digits; // no code ⇒ bare digits (validated by length)
+}
+
+/** Check one phone cell against the combined number it produced. The cell holds
+ *  the national number on its own (≤ 15 digits) unless it carries a "+"; the
+ *  combined value is what gets stored. Returns '' when acceptable, otherwise a
+ *  message with no trailing punctuation, so the caller can append its own. */
+function phoneCellError(label: string, cell: string, combined: string): string {
+  if (!cell) return '';
+  if (!isValidNationalNumber(cell)) return `${label} “${cell}” isn’t valid (up to ${MAX_PHONE_DIGITS} digits)`;
+  return isValidPhone(combined) ? '' : `${label} “${combined}” isn’t a valid number`;
 }
 
 /** Parse an import date. Returns a Date, null (empty) or 'invalid'. */
@@ -184,12 +200,23 @@ export function validateAndMapRow(values: Record<string, string>, type: ImportTy
   const email = pick('Email').toLowerCase();
   if (email && !isValidEmail(email)) errors.push(`Invalid email “${email}”.`);
 
-  // Phone (Country Code + Phone Number) — optional; validated only when supplied.
+  // Phone (Country Code + Phone Number) — optional; validated only when
+  // supplied. The code (up to 4 digits) and the number (up to 15) are checked
+  // separately so the report names the half that's wrong.
   const code = pick('Country Code');
-  const phone = combinePhone(code, pick('Phone Number'));
-  if (phone && !isValidPhone(phone)) errors.push(`Invalid phone number “${phone}”.`);
-  const whatsapp = combinePhone(code, pick('WhatsApp Number'));
-  if (whatsapp && !isValidPhone(whatsapp)) warnings.push(`WhatsApp number “${whatsapp}” looks invalid — left blank.`);
+  if (code && !isValidCountryCode(code))
+    errors.push(`Invalid country code “${code}” — up to ${MAX_COUNTRY_CODE_DIGITS} digits, e.g. “+91”.`);
+
+  const phoneCell = pick('Phone Number');
+  const phone = combinePhone(code, phoneCell);
+  const phoneErr = phoneCellError('Phone number', phoneCell, phone);
+  if (phoneErr) errors.push(`${phoneErr}.`);
+
+  const waCell = pick('WhatsApp Number');
+  const whatsappRaw = combinePhone(code, waCell);
+  const waErr = phoneCellError('WhatsApp number', waCell, whatsappRaw);
+  if (waErr) warnings.push(`${waErr} — left blank.`);
+  const whatsapp = waErr ? '' : whatsappRaw;
 
   // Website
   const website = pick('Website');
@@ -242,7 +269,7 @@ export function validateAndMapRow(values: Record<string, string>, type: ImportTy
     organisation: pick('Company Name'),
     email,
     mobile: phone,
-    whatsapp: whatsapp && isValidPhone(whatsapp) ? whatsapp : '',
+    whatsapp,
     website: website && isValidUrl(website) ? website : '',
     addressLine1: pick('Address Line 1'),
     addressLine2: pick('Address Line 2'),

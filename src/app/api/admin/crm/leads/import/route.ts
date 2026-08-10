@@ -164,8 +164,8 @@ export async function POST(request: Request) {
 
     /* Commit — insert the valid records (order preserved) and log an activity.
        Every import column is optional, but the shared Lead schema still marks
-       firstName/email/mobile `required` for the manual create/edit path (which
-       enforces them again in validateLead). Mongoose's insertMany() has no way
+       firstName `required` for the manual create/edit path (which enforces it
+       again in validateLead). Mongoose's insertMany() has no way
        to skip document validation, so a partial row would be rejected there
        even though the importer accepted it. Documents are therefore built
        THROUGH the model — so schema defaults, casting and setters such as the

@@ -18,6 +18,27 @@ export function isValidEmail(v: string): boolean {
   return EMAIL_RE.test(v.trim());
 }
 
+/* ============================================================================
+   TEMPORARY — are Email / Mobile mandatory on the admin Add & Edit
+   lead/customer form?
+
+   Set to false so a record can be saved with those two fields left BLANK while
+   the team back-fills contact details. Only the presence check is affected:
+   a value that IS entered is still format-checked exactly as before, on the
+   form and on the API route. Flipping this back to true restores the
+   requirement everywhere in one step:
+
+     · LeadFormModal      required markers + "is required" messages
+     · validateLead()     "Email is required" / "Mobile number is required"
+                          (src/lib/lead.ts)
+     · Lead schema        `required` on email + mobile (src/models/Lead.ts)
+
+   Nothing else reads this flag — the public enquiry form, the CRM bulk import
+   and every other validator are untouched.
+   ========================================================================= */
+// Typed as boolean (not the `false` literal) so flipping it needs no other edit.
+export const ADMIN_CONTACT_REQUIRED: boolean = false;
+
 /* ------------------------------------------------------------------ */
 /* Phone numbers                                                       */
 /*                                                                     */
@@ -119,7 +140,13 @@ export function emailMsg(value: string, required = false): string {
 export function phoneMsg(value: string, required = false, label = 'Phone number'): string {
   const v = value.trim();
   if (!v) return required ? `${label} is required.` : '';
-  return isValidPhone(v) ? '' : `Enter a valid ${label.toLowerCase()}.`;
+  if (isValidPhone(v)) return '';
+  // Over-length is the one failure worth spelling out — otherwise "invalid"
+  // gives no clue that the number simply has too many digits.
+  if (phoneDigits(v).length > maxDigitsFor(v)) {
+    return `${label} can have at most ${MAX_PHONE_DIGITS} digits, plus a country code of up to ${MAX_COUNTRY_CODE_DIGITS} digits.`;
+  }
+  return `Enter a valid ${label.toLowerCase()}.`;
 }
 
 export function gstMsg(value: string): string {

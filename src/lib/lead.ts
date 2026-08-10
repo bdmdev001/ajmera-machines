@@ -4,7 +4,9 @@
    place. Server-only usage, but dependency-free (safe to import anywhere).
    ========================================================================= */
 
-import { isValidEmail, isValidPhone, isValidGST, isValidPAN, isValidUrl } from '@/lib/validation';
+import {
+  isValidEmail, isValidPhone, isValidGST, isValidPAN, isValidUrl, ADMIN_CONTACT_REQUIRED,
+} from '@/lib/validation';
 import type { ILead, ICustomField, IPurchase } from '@/models/Lead';
 
 export type LeadInput = Omit<ILead, '_id' | 'createdAt' | 'updatedAt'>;
@@ -62,10 +64,13 @@ export function validateLead(body: unknown): { data?: Partial<LeadInput>; error?
   const mobile = str(b.mobile);
 
   if (!firstName) return { error: 'First name is required.' };
-  if (!email) return { error: 'Email is required.' };
-  if (!isValidEmail(email)) return { error: 'Please provide a valid email address.' };
-  if (!mobile) return { error: 'Mobile number is required.' };
-  if (!isValidPhone(mobile)) return { error: 'Please provide a valid mobile number.' };
+  // Email / Mobile may be left blank while ADMIN_CONTACT_REQUIRED is off, so the
+  // form and this route stay in lock-step (see the flag in src/lib/validation.ts).
+  // A value that IS supplied is format-checked either way.
+  if (ADMIN_CONTACT_REQUIRED && !email) return { error: 'Email is required.' };
+  if (email && !isValidEmail(email)) return { error: 'Please provide a valid email address.' };
+  if (ADMIN_CONTACT_REQUIRED && !mobile) return { error: 'Mobile number is required.' };
+  if (mobile && !isValidPhone(mobile)) return { error: 'Please provide a valid mobile number.' };
 
   const whatsapp = str(b.whatsapp);
   if (whatsapp && !isValidPhone(whatsapp)) return { error: 'Please provide a valid WhatsApp number.' };

@@ -1,4 +1,5 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, deleteModel } from 'mongoose';
+import { ADMIN_CONTACT_REQUIRED } from '@/lib/validation';
 
 /* ============================================================================
    Unified Leads & Customers record.
@@ -117,8 +118,11 @@ const LeadSchema = new Schema<ILead>(
     lastName: { type: String, trim: true, default: '' },
     designation: { type: String, trim: true, default: '' },
     organisation: { type: String, trim: true, default: '' },
-    email: { type: String, required: true, trim: true, lowercase: true, index: true },
-    mobile: { type: String, required: true, trim: true },
+    // `required` follows ADMIN_CONTACT_REQUIRED — with it off the admin form may
+    // save a contact without an email or mobile, so the schema must not reject
+    // one either. Flipping the flag restores both checks.
+    email: { type: String, required: ADMIN_CONTACT_REQUIRED, trim: true, lowercase: true, default: '', index: true },
+    mobile: { type: String, required: ADMIN_CONTACT_REQUIRED, trim: true, default: '' },
     whatsapp: { type: String, trim: true, default: '' },
     website: { type: String, trim: true, default: '' },
     telephoneDirect: { type: String, trim: true, default: '' },
@@ -169,5 +173,14 @@ const LeadSchema = new Schema<ILead>(
 LeadSchema.index({ createdAt: -1 });
 LeadSchema.index({ leadStage: 1 });
 
-// Fallback avoids the "OverwriteModelError" on Next.js hot-reload.
+/* Reusing the registered model avoids "OverwriteModelError" on Next.js
+   hot-reload — but the mongoose singleton outlives a reload, so the cached
+   model would also keep an OUTDATED SCHEMA: edits here (a changed `required`,
+   a new field) silently do nothing until the dev server is restarted. In
+   development the stale model is therefore dropped and rebuilt from the schema
+   below; production imports once, so it just reuses the model. */
+if (process.env.NODE_ENV !== 'production' && models.Lead) {
+  deleteModel('Lead');
+}
+
 export default models.Lead || model<ILead>('Lead', LeadSchema);

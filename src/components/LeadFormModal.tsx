@@ -12,6 +12,7 @@ import { useCrmLists } from '@/hooks/useCrmLists';
 import { emptyLead, type LeadRecord, type RecordType } from '@/types/crm';
 import {
   requiredMsg, emailMsg, phoneMsg, gstMsg, panMsg, urlMsg, isClean,
+  ADMIN_CONTACT_REQUIRED,
 } from '@/lib/validation';
 
 interface Props {
@@ -42,6 +43,10 @@ const FIELD_SECTION: Record<string, SectionId> = {
 const labelStyle: React.CSSProperties = { fontSize: 12.5, fontWeight: 600, color: 'var(--text-secondary)', fontFamily: 'var(--font-display)', display: 'block', marginBottom: 6 };
 const inputStyle: React.CSSProperties = { padding: '12px 14px', fontSize: 14, width: '100%' };
 const req = <span style={{ color: 'var(--hot)' }}> *</span>;
+/* Email / Mobile carry the asterisk only while ADMIN_CONTACT_REQUIRED is on —
+   see the flag in src/lib/validation.ts. With it off the two may be left blank;
+   anything typed into them is still format-checked as usual. */
+const contactReq = ADMIN_CONTACT_REQUIRED ? req : null;
 
 export default function LeadFormModal({ mode, initial, defaultRecordType = 'Lead', linkEnquiryId, onClose, onSaved, onError }: Props) {
   const [form, setForm] = useState<LeadRecord>(() => ({ ...emptyLead(defaultRecordType), ...initial } as LeadRecord));
@@ -62,8 +67,8 @@ export default function LeadFormModal({ mode, initial, defaultRecordType = 'Lead
 
   const validate = (f: LeadRecord): Record<string, string> => ({
     firstName: requiredMsg(f.firstName, 'First name'),
-    email: emailMsg(f.email, true),
-    mobile: phoneMsg(f.mobile ?? '', true, 'Mobile number'),
+    email: emailMsg(f.email, ADMIN_CONTACT_REQUIRED),
+    mobile: phoneMsg(f.mobile ?? '', ADMIN_CONTACT_REQUIRED, 'Mobile number'),
     whatsapp: phoneMsg(f.whatsapp ?? '', false, 'WhatsApp number'),
     website: urlMsg(f.website ?? '', false, 'website'),
     gstNumber: gstMsg(f.gstNumber ?? ''),
@@ -178,13 +183,13 @@ export default function LeadFormModal({ mode, initial, defaultRecordType = 'Lead
                 </div>
                 <div className="lead-form__row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                   <div>
-                    <label style={labelStyle}>Email{req}</label>
-                    <input type="email" value={form.email} onChange={set('email')} onBlur={() => setErrors((p) => ({ ...p, email: emailMsg(form.email, true) }))} placeholder="name@company.com" style={{ ...inputStyle, ...invalid('email') }} aria-invalid={!!errors.email} />
+                    <label style={labelStyle}>Email{contactReq}</label>
+                    <input type="email" value={form.email} onChange={set('email')} onBlur={() => setErrors((p) => ({ ...p, email: emailMsg(form.email, ADMIN_CONTACT_REQUIRED) }))} placeholder="name@company.com" style={{ ...inputStyle, ...invalid('email') }} aria-invalid={!!errors.email} />
                     <FieldError message={errors.email} />
                   </div>
                   <div>
-                    <label style={labelStyle}>Mobile{req}</label>
-                    <PhoneField value={form.mobile ?? ''} onChange={setVal('mobile')} onBlur={() => setErrors((p) => ({ ...p, mobile: phoneMsg(form.mobile ?? '', true, 'Mobile number') }))} invalid={!!errors.mobile} required ariaLabel="Mobile number" />
+                    <label style={labelStyle}>Mobile{contactReq}</label>
+                    <PhoneField value={form.mobile ?? ''} onChange={setVal('mobile')} onBlur={() => setErrors((p) => ({ ...p, mobile: phoneMsg(form.mobile ?? '', ADMIN_CONTACT_REQUIRED, 'Mobile number') }))} invalid={!!errors.mobile} required={ADMIN_CONTACT_REQUIRED} ariaLabel="Mobile number" />
                     <FieldError message={errors.mobile} />
                   </div>
                 </div>
