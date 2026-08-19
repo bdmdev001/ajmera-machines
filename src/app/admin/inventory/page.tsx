@@ -5,6 +5,7 @@ import Category from '@/models/Category';
 import AdminInventoryManager, { type CategoryOption } from '@/components/AdminInventoryManager';
 import { isAdminAuthenticated } from '@/lib/auth';
 import { normalizeImages } from '@/lib/images';
+import { productVideoUrl } from '@/lib/youtube';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,7 +39,8 @@ export default async function AdminInventoryPage() {
       category: p.category,
       country: p.country,
       myear: p.myear || '',
-      videoUrl: p.videoUrl || '',
+      // Strip the default channel link so the edit form never shows it.
+      videoUrl: productVideoUrl(p.videoUrl),
       technicalSpecifications: p.technicalSpecifications || '',
       description: p.description || '',
       categoryId: p.categoryId ? String(p.categoryId) : '',

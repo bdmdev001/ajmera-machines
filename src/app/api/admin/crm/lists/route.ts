@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import CrmList, { CRM_LIST_KINDS, seedDefaultsIfEmpty, type CrmListKind } from '@/models/CrmList';
+import Lead from '@/models/Lead';
 import { isAdminAuthenticated } from '@/lib/auth';
 
 /* Admin-configurable CRM option lists (Product/Customer groups, Lead stages,
@@ -15,7 +16,12 @@ export interface CrmListItem {
   order: number;
   color: string;
   archived: boolean;
+  createdAt: string | null;
+  updatedAt: string | null;
+  usage?: number;
 }
+
+const iso = (v: unknown) => (v ? new Date(v as string).toISOString() : null);
 
 function serialize(d: Record<string, unknown>): CrmListItem {
   return {
@@ -25,7 +31,22 @@ function serialize(d: Record<string, unknown>): CrmListItem {
     order: (d.order as number) ?? 0,
     color: (d.color as string) || '',
     archived: Boolean(d.archived),
+    createdAt: iso(d.createdAt),
+    updatedAt: iso(d.updatedAt),
   };
+}
+
+/** How many Lead/Customer records sit in each customer group, keyed lowercase.
+ *  Feeds the "in use" count in Manage lists and the delete guard, so a group
+ *  that is still assigned to someone can be deactivated but not removed. */
+export async function customerGroupUsage(): Promise<Map<string, number>> {
+  const rows = await Lead.aggregate<{ _id: string; n: number }>([
+    { $match: { customerGroup: { $nin: ['', null] } } },
+    { $group: { _id: '$customerGroup', n: { $sum: 1 } } },
+  ]);
+  const map = new Map<string, number>();
+  for (const r of rows) map.set(String(r._id).trim().toLowerCase(), r.n);
+  return map;
 }
 
 export async function GET() {
@@ -36,10 +57,17 @@ export async function GET() {
     await dbConnect();
     await seedDefaultsIfEmpty();
 
-    const docs = await CrmList.find({}).sort({ kind: 1, order: 1, name: 1 }).lean();
+    const [docs, usage] = await Promise.all([
+      CrmList.find({}).sort({ kind: 1, order: 1, name: 1 }).lean(),
+      customerGroupUsage(),
+    ]);
     const lists: Record<string, CrmListItem[]> = {};
     for (const kind of CRM_LIST_KINDS) lists[kind] = [];
-    for (const d of docs) lists[d.kind as string]?.push(serialize(d as unknown as Record<string, unknown>));
+    for (const d of docs) {
+      const item = serialize(d as unknown as Record<string, unknown>);
+      if (item.kind === 'customerGroup') item.usage = usage.get(item.name.trim().toLowerCase()) ?? 0;
+      lists[d.kind as string]?.push(item);
+    }
 
     return NextResponse.json({ lists });
   } catch (error) {

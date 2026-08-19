@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { X, Plus, Trash2, Loader2, Check, SlidersHorizontal } from 'lucide-react';
+import { X, Plus, Trash2, Loader2, Check, SlidersHorizontal, ToggleLeft, ToggleRight } from 'lucide-react';
 import { EMPTY_LISTS, type CrmLists, type CrmListItem, type CrmListKind } from '@/types/crm';
 
 interface Props {
@@ -85,6 +85,22 @@ export default function CrmListsModal({ onClose, onChanged, onError }: Props) {
     onChanged();
   };
 
+  /** Active ⇄ Inactive. An inactive value stays on the records that already
+   *  carry it but is no longer offered in the add/edit dropdowns. */
+  const toggleStatus = async (item: CrmListItem) => {
+    const res = await fetch(`/api/admin/crm/lists/${item._id}`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ archived: !item.archived }),
+    });
+    if (!res.ok) {
+      const d = await res.json().catch(() => ({}));
+      onError('Could not update status', d.error || 'Please try again.');
+      return;
+    }
+    reload();
+    onChanged();
+  };
+
   const remove = async (item: CrmListItem) => {
     const res = await fetch(`/api/admin/crm/lists/${item._id}`, { method: 'DELETE' });
     if (!res.ok) { const d = await res.json().catch(() => ({})); onError('Could not delete', d.error); return; }
@@ -128,7 +144,15 @@ export default function CrmListsModal({ onClose, onChanged, onError }: Props) {
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {items.map((item) => (
-                    <ListRow key={`${item._id}:${item.name}`} item={item} colored={!!current.colored} onRename={rename} onRecolor={recolor} onRemove={remove} />
+                    <ListRow
+                      key={`${item._id}:${item.name}:${item.archived}`}
+                      item={item}
+                      colored={!!current.colored}
+                      onRename={rename}
+                      onRecolor={recolor}
+                      onRemove={remove}
+                      onToggleStatus={toggleStatus}
+                    />
                   ))}
                 </div>
               )}
@@ -141,27 +165,80 @@ export default function CrmListsModal({ onClose, onChanged, onError }: Props) {
   );
 }
 
-function ListRow({ item, colored, onRename, onRecolor, onRemove }: {
+/** Date only, fixed locale + IST so server and client render the same string. */
+function formatDay(iso?: string | null): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' });
+}
+
+function ListRow({ item, colored, onRename, onRecolor, onRemove, onToggleStatus }: {
   item: CrmListItem; colored: boolean;
   onRename: (i: CrmListItem, name: string) => void;
   onRecolor: (i: CrmListItem, color: string) => void;
   onRemove: (i: CrmListItem) => void;
+  onToggleStatus: (i: CrmListItem) => void;
 }) {
-  // Keyed by `${_id}:${name}` in the parent, so this remounts (re-seeding the
-  // local editable value) whenever the persisted name changes externally.
+  // Keyed by `${_id}:${name}:${archived}` in the parent, so this remounts
+  // (re-seeding the local editable value) whenever the record changes elsewhere.
   const [name, setName] = useState(item.name);
   const dirty = name.trim() !== item.name && name.trim().length > 0;
+  const active = !item.archived;
+
+  // Usage is served for customer groups only; a value still in use can be
+  // deactivated but never deleted (the API enforces the same rule).
+  const inUse = item.usage ?? 0;
+  const locked = inUse > 0;
+
+  const created = formatDay(item.createdAt);
+  const updated = formatDay(item.updatedAt);
+  const meta = [
+    created && `Added ${created}`,
+    updated && updated !== created && `Updated ${updated}`,
+    item.usage !== undefined && `${inUse} record${inUse === 1 ? '' : 's'}`,
+  ].filter(Boolean).join(' · ');
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', background: 'var(--bg-surface-2)' }}>
-      {colored && (
-        <input type="color" value={item.color || '#94a3b8'} onChange={(e) => onRecolor(item, e.target.value)} aria-label={`Colour for ${item.name}`} style={{ width: 34, height: 30, padding: 2, flexShrink: 0, cursor: 'pointer' }} />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: '6px 8px', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', background: 'var(--bg-surface-2)', opacity: active ? 1 : 0.72 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {colored && (
+          <input type="color" value={item.color || '#94a3b8'} onChange={(e) => onRecolor(item, e.target.value)} aria-label={`Colour for ${item.name}`} style={{ width: 34, height: 30, padding: 2, flexShrink: 0, cursor: 'pointer' }} />
+        )}
+        <input value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') onRename(item, name); }} style={{ flex: 1, minWidth: 0, padding: '7px 10px', fontSize: 13.5, border: '1px solid transparent', background: 'transparent', textDecoration: active ? 'none' : 'line-through' }} />
+        {dirty && (
+          <button type="button" onClick={() => onRename(item, name)} aria-label="Save" style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', padding: 4 }}><Check size={16} /></button>
+        )}
+        <button
+          type="button"
+          onClick={() => onToggleStatus(item)}
+          aria-pressed={active}
+          title={active ? 'Deactivate — stops it being offered on new records' : 'Activate'}
+          style={{
+            flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 9px',
+            fontSize: 11.5, fontWeight: 700, borderRadius: 999, cursor: 'pointer',
+            border: `1px solid ${active ? 'rgba(31,175,82,0.35)' : 'var(--border-light)'}`,
+            background: active ? 'rgba(31,175,82,0.12)' : 'var(--bg-surface)',
+            color: active ? '#1faf52' : 'var(--text-muted)',
+          }}
+        >
+          {active ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
+          {active ? 'Active' : 'Inactive'}
+        </button>
+        <button
+          type="button"
+          onClick={() => onRemove(item)}
+          disabled={locked}
+          aria-label={`Delete ${item.name}`}
+          title={locked ? `Assigned to ${inUse} record${inUse === 1 ? '' : 's'} — deactivate it instead` : `Delete ${item.name}`}
+          style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: locked ? 'not-allowed' : 'pointer', opacity: locked ? 0.4 : 1, padding: 4 }}
+        >
+          <Trash2 size={15} />
+        </button>
+      </div>
+      {meta && (
+        <div style={{ fontSize: 11, color: 'var(--text-muted)', padding: '0 10px 2px', marginLeft: colored ? 42 : 0 }}>{meta}</div>
       )}
-      <input value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') onRename(item, name); }} style={{ flex: 1, padding: '7px 10px', fontSize: 13.5, border: '1px solid transparent', background: 'transparent' }} />
-      {dirty && (
-        <button type="button" onClick={() => onRename(item, name)} aria-label="Save" style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', padding: 4 }}><Check size={16} /></button>
-      )}
-      <button type="button" onClick={() => onRemove(item)} aria-label={`Delete ${item.name}`} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 4 }}><Trash2 size={15} /></button>
     </div>
   );
 }

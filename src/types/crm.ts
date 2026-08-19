@@ -142,7 +142,14 @@ export interface CrmListItem {
   name: string;
   order: number;
   color: string;
+  /** Status flag: archived === inactive, so the value stays on the records that
+   *  already carry it but is no longer offered in the add/edit dropdowns. */
   archived: boolean;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  /** Records currently assigned to this value. Populated for customerGroup
+   *  only — it drives the "in use" count and the delete guard. */
+  usage?: number;
 }
 
 export type CrmLists = Record<CrmListKind, CrmListItem[]>;

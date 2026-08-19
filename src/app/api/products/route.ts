@@ -7,6 +7,7 @@ import { normalizeImages } from '@/lib/images';
 import { resolveCategory } from '@/lib/categories';
 import { isValidYear, isValidUrl } from '@/lib/validation';
 import { readLatestArrivalInput } from '@/lib/latestArrivals';
+import { productVideoUrl } from '@/lib/youtube';
 
 /* ---------------------------------------------------------------------------
    ID / Stock-No sequence.
@@ -84,7 +85,8 @@ export async function POST(request: Request) {
       myear: myear || '',
       technicalSpecifications: technicalSpecifications || '',
       description: typeof description === 'string' ? description.trim() : '',
-      videoUrl: videoUrl || '',
+      // The default channel link is never a product video — see lib/youtube.
+      videoUrl: productVideoUrl(videoUrl),
       images: cleanImages,
       isFeatured: Boolean(isFeatured),
       stockStatus: stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock',

@@ -4,6 +4,7 @@ import Product, { type IProduct } from '@/models/Product';
 import { imageUrl, normalizeImages, type ImageRef } from '@/lib/images';
 import { getProductUrl } from '@/lib/productUrl';
 import { latestArrivalFilter, LATEST_ARRIVAL_SORT, LATEST_ARRIVALS_LIMIT } from '@/lib/latestArrivals';
+import { productVideoUrl } from '@/lib/youtube';
 import rawProducts from '@/data/products.json';
 
 /**
@@ -39,7 +40,7 @@ function fromRaw(r: RawProduct): IProduct {
     category: r.category || 'N/A',
     country: r.country || 'N/A',
     myear: r.myear ?? '',
-    videoUrl: r.video_url ?? '',
+    videoUrl: productVideoUrl(r.video_url),
     technicalSpecifications: r.technical_specifications ?? '',
     description: '',
     images: normalizeImages(r.images),
@@ -59,7 +60,7 @@ function normalize(p: IProduct): IProduct {
     category: p.category ?? 'N/A',
     country: p.country ?? 'N/A',
     myear: p.myear ?? '',
-    videoUrl: p.videoUrl ?? '',
+    videoUrl: productVideoUrl(p.videoUrl),
     technicalSpecifications: p.technicalSpecifications ?? '',
     description: p.description ?? '',
     images: normalizeImages(p.images),

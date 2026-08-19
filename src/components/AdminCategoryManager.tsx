@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { Plus, Edit3, Trash2, X, Save, Loader2, Tag, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
 import FieldError from '@/components/FieldError';
+import PageJump from '@/components/PageJump';
 import { requiredMsg, urlMsg, isClean } from '@/lib/validation';
 
 type PageSize = 25 | 50 | 100 | 'all';
@@ -210,6 +211,7 @@ export default function AdminCategoryManager({ initialCategories }: { initialCat
                   </span>
                 ))}
                 <button type="button" onClick={() => goToPage(safePage + 1)} disabled={safePage === totalPages} aria-label="Next page" style={{ width: 36, height: 36, display: 'grid', placeItems: 'center', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)', background: 'var(--bg-surface)', color: safePage === totalPages ? 'var(--text-muted)' : 'var(--text-primary)', cursor: safePage === totalPages ? 'not-allowed' : 'pointer', opacity: safePage === totalPages ? 0.5 : 1 }}><ChevronRight size={16} /></button>
+                <PageJump totalPages={totalPages} onGo={goToPage} />
               </div>
             )}
           </div>

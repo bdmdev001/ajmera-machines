@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
 import CustomerFormModal, { type CustomerData } from '@/components/CustomerFormModal';
+import PageJump from '@/components/PageJump';
 
 type PageSize = 25 | 50 | 100 | 'all';
 const PAGE_SIZE_OPTIONS: PageSize[] = [25, 50, 100, 'all'];
@@ -235,6 +236,7 @@ export default function AdminCustomersManager() {
                   </span>
                 ))}
                 <button type="button" onClick={() => goToPage(page + 1)} disabled={page === totalPages} aria-label="Next page" style={{ width: 36, height: 36, display: 'grid', placeItems: 'center', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)', background: 'var(--bg-surface)', color: page === totalPages ? 'var(--text-muted)' : 'var(--text-primary)', cursor: page === totalPages ? 'not-allowed' : 'pointer', opacity: page === totalPages ? 0.5 : 1 }}><ChevronRight size={16} /></button>
+                <PageJump totalPages={totalPages} onGo={goToPage} />
               </div>
             )}
           </div>

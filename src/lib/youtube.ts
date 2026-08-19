@@ -10,6 +10,32 @@
    rendering a player that can't load.
    ========================================================================= */
 
+/* ---------------------------------------------------------------------------
+   The company's own YouTube CHANNEL. The scraped catalogue assigned it to every
+   product as if it were that machine's video, so 57 of the seeded products
+   carried it instead of a real clip. It is not a product video: it is stripped
+   from a product's videoUrl wherever one is read or written, and the stored
+   values were cleared by scripts/remove-default-video-url.mjs.
+
+   Matched on the channel ID so every form of the link is caught (/videos, a
+   trailing slash, http vs https, a bare www). The Footer's social link to the
+   same channel is deliberate and is NOT affected — only product videos are.
+   ------------------------------------------------------------------------- */
+const DEFAULT_CHANNEL_ID = 'UC5T7NF6DRqDvlj224nO_fbg';
+export const DEFAULT_CHANNEL_URL = `https://www.youtube.com/channel/${DEFAULT_CHANNEL_ID}/videos`;
+
+/** True when a link points at the default channel rather than a product video. */
+export function isDefaultChannelUrl(url?: string | null): boolean {
+  return (url ?? '').includes(DEFAULT_CHANNEL_ID);
+}
+
+/** A product's video link, with the default channel URL dropped. Any other
+ *  link — including a genuine per-product one — is returned untouched. */
+export function productVideoUrl(url?: string | null): string {
+  const v = (url ?? '').trim();
+  return isDefaultChannelUrl(v) ? '' : v;
+}
+
 /** A YouTube video id is always 11 URL-safe characters. */
 const VIDEO_ID = /^[\w-]{11}$/;
 

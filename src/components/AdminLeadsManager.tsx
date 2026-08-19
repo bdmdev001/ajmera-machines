@@ -5,13 +5,14 @@ import Link from 'next/link';
 import {
   Search, Plus, Edit3, Trash2, Loader2, ChevronLeft, ChevronRight, Eye,
   Contact, FileSpreadsheet, FileText, SlidersHorizontal, UserCheck, CalendarClock,
-  Mail, Phone, X, Filter, ArrowLeft, Upload, UploadCloud, Download,
+  Mail, Phone, X, Filter, ArrowLeft, Upload, UploadCloud, Download, Check,
 } from 'lucide-react';
 import { useAdminAlert } from '@/components/AdminModal';
 import ActionMenu, { type ActionMenuGroup } from '@/components/ActionMenu';
 import LeadFormModal from '@/components/LeadFormModal';
 import CrmListsModal from '@/components/CrmListsModal';
 import CrmImportModal, { type ImportFormat } from '@/components/CrmImportModal';
+import PageJump from '@/components/PageJump';
 import TransitionModal from '@/components/TransitionModal';
 import { SearchableSelect } from '@/components/CrmSelect';
 import { useCrmLists } from '@/hooks/useCrmLists';
@@ -81,6 +82,17 @@ export default function AdminLeadsManager() {
   const [listsKey, setListsKey] = useState(0);
   const { lists, names } = useCrmLists(listsKey);
   const { modal, showSuccess, showError, confirm } = useAdminAlert();
+
+  /** Transient confirmation for inline edits (see <Toast/>). */
+  const [toast, setToast] = useState('');
+  const dismissToast = useCallback(() => setToast(''), []);
+
+  /** Patch one row in place after an inline save — no refetch, so the current
+   *  search, filters, sort, page and scroll position are all preserved. */
+  const applyCustomerGroup = useCallback((id: string, group: string, name: string) => {
+    setLeads((prev) => prev.map((l) => (idOf(l) === id ? { ...l, customerGroup: group } : l)));
+    setToast(`${name} → ${group || 'No group'}`);
+  }, []);
 
   const activeFilters = [recordType, leadStage, leadPotential, customerGroup, productGroup, tag, assignedTo, from, to].filter(Boolean).length;
 
@@ -471,7 +483,9 @@ export default function AdminLeadsManager() {
           <div className="lead-filters" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
             <Field label="Lead stage"><SearchableSelect value={leadStage} onChange={(v) => onFilter(() => setLeadStage(v))} options={names('leadStage')} placeholder="Any stage" /></Field>
             <Field label="Lead potential"><SearchableSelect value={leadPotential} onChange={(v) => onFilter(() => setLeadPotential(v))} options={names('leadPotential')} placeholder="Any potential" /></Field>
-            <Field label="Customer group"><SearchableSelect value={customerGroup} onChange={(v) => onFilter(() => setCustomerGroup(v))} options={names('customerGroup')} placeholder="Any group" /></Field>
+            {/* Deactivated groups stay filterable — records assigned to one
+                before it was switched off must still be reachable here. */}
+            <Field label="Customer group"><SearchableSelect value={customerGroup} onChange={(v) => onFilter(() => setCustomerGroup(v))} options={lists.customerGroup.map((g) => g.name)} placeholder="Any group" /></Field>
             <Field label="Product group"><SearchableSelect value={productGroup} onChange={(v) => onFilter(() => setProductGroup(v))} options={names('productGroup')} placeholder="Any product group" /></Field>
             <Field label="Tag"><SearchableSelect value={tag} onChange={(v) => onFilter(() => setTag(v))} options={names('tag')} placeholder="Any tag" /></Field>
             <Field label="Salesperson"><SearchableSelect value={assignedTo} onChange={(v) => onFilter(() => setAssignedTo(v))} options={names('salesperson')} placeholder="Any salesperson" /></Field>
@@ -537,7 +551,7 @@ export default function AdminLeadsManager() {
         ) : (
           <>
             <div className="lead-table-wrap" style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 940 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 1060 }}>
                 <thead>
                   <tr style={{ background: 'var(--bg-surface-2)', borderBottom: '1px solid var(--border-light)' }}>
                     <th style={{ ...th, width: 40, paddingRight: 0 }}>
@@ -553,6 +567,7 @@ export default function AdminLeadsManager() {
                     <th style={th}>Lifecycle</th>
                     <th style={th}>Stage</th>
                     <th style={th}>Potential</th>
+                    <th style={th}>Customer group</th>
                     <th style={th}>Follow-up</th>
                     <th style={th}>Created</th>
                     <th style={{ ...th, textAlign: 'right' }}>Actions</th>
@@ -579,6 +594,9 @@ export default function AdminLeadsManager() {
                       <td style={td}><StageBadge stage={stageOf(l)} /></td>
                       <td style={td}>{l.leadStage ? <Chip label={l.leadStage} color={colorFor(lists.leadStage, l.leadStage)} /> : '—'}</td>
                       <td style={td}>{l.leadPotential ? <Chip label={l.leadPotential} color={colorFor(lists.leadPotential, l.leadPotential)} /> : '—'}</td>
+                      <td style={td}>
+                        <CustomerGroupCell lead={l} options={names('customerGroup')} onSaved={applyCustomerGroup} onError={showError} />
+                      </td>
                       <td style={{ ...td, color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>{l.nextFollowUpAt ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><CalendarClock size={13} /> {formatDate(l.nextFollowUpAt)}</span> : '—'}</td>
                       <td style={{ ...td, color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>{formatDate(l.createdAt)}</td>
                       <td style={{ ...td, textAlign: 'right', whiteSpace: 'nowrap' }}>
@@ -616,6 +634,10 @@ export default function AdminLeadsManager() {
                     {l.leadStage && <Chip label={l.leadStage} color={colorFor(lists.leadStage, l.leadStage)} />}
                     {l.leadPotential && <Chip label={l.leadPotential} color={colorFor(lists.leadPotential, l.leadPotential)} />}
                   </div>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--text-muted)', flexWrap: 'wrap' }}>
+                    Customer group
+                    <CustomerGroupCell lead={l} options={names('customerGroup')} onSaved={applyCustomerGroup} onError={showError} />
+                  </label>
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                     <RowActions l={l} onEdit={() => openEdit(l)} onTransition={openTransition} onDelete={() => handleDelete(l)} labelled />
                   </div>
@@ -647,14 +669,18 @@ export default function AdminLeadsManager() {
                   </span>
                 ))}
                 <PageBtn onClick={() => page < totalPages && (setLoading(true), setPage(page + 1))} disabled={page === totalPages} aria="Next page"><ChevronRight size={16} /></PageBtn>
+                <PageJump totalPages={totalPages} onGo={(n) => { if (n !== page) { setLoading(true); setPage(n); } }} />
               </div>
             )}
           </div>
         )}
       </div>
 
+      {toast && <Toast message={toast} onDone={dismissToast} />}
+
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes crmToastIn { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
         @media (max-width: 860px) {
           .lead-table-wrap { display: none; }
           .lead-cards { display: flex !important; }
@@ -669,6 +695,108 @@ function fullName(l: LeadRecord): string { return `${l.firstName} ${l.lastName}`
 /** Every record served by the API carries an _id; the type just leaves it
  *  optional, so this narrows it once instead of asserting at each use. */
 function idOf(l: LeadRecord): string { return l._id ?? ''; }
+
+const NO_GROUP = '— No group —';
+
+/**
+ * Inline Customer Group editor for a listing row. Saves on change through the
+ * single-field endpoint, without opening the record or reloading the list, so
+ * the current search, filters, sort and page are all left untouched.
+ *
+ * The select is optimistic: it shows the new value immediately, and restores
+ * the previous one if the request fails. It is disabled while in flight, which
+ * is what stops a second request being fired over the first.
+ */
+function CustomerGroupCell({ lead, options, onSaved, onError }: {
+  lead: LeadRecord;
+  options: string[];
+  onSaved: (id: string, group: string, name: string) => void;
+  onError: (title: string, message?: string) => void;
+}) {
+  const current = lead.customerGroup || '';
+  const [saving, setSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
+
+  // A group that was archived (or renamed) after this record was tagged would
+  // otherwise vanish from the list and look like "No group" — keep showing it.
+  const choices = current && !options.includes(current) ? [current, ...options] : options;
+
+  const save = async (next: string) => {
+    if (saving || next === current) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/admin/crm/leads/${idOf(lead)}/customer-group`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customerGroup: next }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        // Nothing local changed, so the select still shows the previous value.
+        onError('Could not change customer group', data.error || 'Please try again.');
+        return;
+      }
+      onSaved(idOf(lead), data.customerGroup ?? next, fullName(lead));
+      setJustSaved(true);
+      window.setTimeout(() => setJustSaved(false), 1600);
+    } catch {
+      onError('Network error', 'Could not reach the server. The customer group was not changed.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+      <select
+        value={current}
+        disabled={saving}
+        onChange={(e) => save(e.target.value)}
+        aria-label={`Customer group for ${fullName(lead)}`}
+        style={{
+          width: 'auto', minWidth: 148, maxWidth: 210, height: 34,
+          padding: '0 28px 0 10px', fontSize: 13,
+          fontWeight: current ? 600 : 400,
+          color: current ? 'var(--text-primary)' : 'var(--text-muted)',
+          opacity: saving ? 0.6 : 1,
+          cursor: saving ? 'wait' : 'pointer',
+        }}
+      >
+        <option value="">{NO_GROUP}</option>
+        {choices.map((g) => <option key={g} value={g}>{g}</option>)}
+      </select>
+      {saving && <Loader2 size={13} style={{ animation: 'spin 1s linear infinite', color: 'var(--text-muted)' }} />}
+      {!saving && justSaved && <Check size={14} style={{ color: '#1faf52' }} aria-label="Saved" />}
+    </span>
+  );
+}
+
+/** Brief, non-blocking confirmation. A modal per change would defeat the point
+ *  of editing inline, so success is a toast and only failures interrupt. */
+function Toast({ message, onDone }: { message: string; onDone: () => void }) {
+  useEffect(() => {
+    const t = window.setTimeout(onDone, 2600);
+    return () => window.clearTimeout(t);
+  }, [message, onDone]);
+
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      style={{
+        position: 'fixed', left: '50%', bottom: 26, transform: 'translateX(-50%)',
+        zIndex: 9998, display: 'inline-flex', alignItems: 'center', gap: 9,
+        padding: '11px 18px', borderRadius: 'var(--radius-pill)',
+        background: 'var(--text-primary)', color: 'var(--bg-surface)',
+        fontSize: 13.5, fontWeight: 600, boxShadow: 'var(--shadow-lg)',
+        animation: 'crmToastIn 0.24s var(--ease-out-expo)', maxWidth: 'calc(100vw - 32px)',
+      }}
+    >
+      <Check size={15} style={{ color: '#1faf52', flexShrink: 0 }} />
+      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{message}</span>
+    </div>
+  );
+}
 
 /** Selection checkbox. The toggle is driven from onClick rather than onChange so
  *  the shift key is available for range selection — keyboard activation raises a

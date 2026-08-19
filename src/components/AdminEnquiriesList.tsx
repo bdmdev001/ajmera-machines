@@ -10,6 +10,7 @@ import {
 import { useAdminAlert } from '@/components/AdminModal';
 import { getProductUrl } from '@/lib/productUrl';
 import { ENQUIRY_STATUSES, type EnquiryStatus } from '@/types/enquiry';
+import PageJump from '@/components/PageJump';
 
 interface EnquiryData {
   _id: string;
@@ -409,6 +410,7 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
                 </span>
               ))}
               <button type="button" onClick={() => goToPage(safePage + 1)} disabled={safePage === totalPages} aria-label="Next page" style={{ width: 36, height: 36, display: 'grid', placeItems: 'center', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-light)', background: 'var(--bg-surface)', color: safePage === totalPages ? 'var(--text-muted)' : 'var(--text-primary)', cursor: safePage === totalPages ? 'not-allowed' : 'pointer', opacity: safePage === totalPages ? 0.5 : 1 }}><ChevronRight size={16} /></button>
+              <PageJump totalPages={totalPages} onGo={goToPage} />
             </div>
           )}
         </div>

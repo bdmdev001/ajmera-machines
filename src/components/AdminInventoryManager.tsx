@@ -9,6 +9,7 @@ import { imageUrl, normalizeImages, type ProductImage } from '@/lib/images';
 import { useAdminAlert } from '@/components/AdminModal';
 import FieldError from '@/components/FieldError';
 import ProductImageUploader from '@/components/ProductImageUploader';
+import PageJump from '@/components/PageJump';
 import { requiredMsg, yearMsg, urlMsg, isClean } from '@/lib/validation';
 import {
   latestArrivalState, toDateInput, parseScheduleDate, validateSchedule,
@@ -603,6 +604,7 @@ export default function AdminInventoryManager({ initialProducts, categories }: P
                 >
                   <ChevronRight size={16} />
                 </button>
+                <PageJump totalPages={totalPages} onGo={setPage} />
               </div>
             )}
           </div>

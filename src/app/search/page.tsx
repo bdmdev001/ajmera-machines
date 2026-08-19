@@ -2,6 +2,7 @@ import Link from 'next/link';
 import dbConnect from '@/lib/dbConnect';
 import Product from '@/models/Product';
 import { getProductUrl } from '@/lib/productUrl';
+import PageJumpNav from '@/components/PageJumpNav';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,6 +41,16 @@ export default async function SearchPage({
   const [products, total] = await Promise.all([productsPromise, countPromise]);
 
   const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  /** Page links carry every active parameter forward. The old href hardcoded
+   *  only `q`, so anything else in the query string was dropped on paging. */
+  const pageHref = (n: number) => {
+    const u = new URLSearchParams();
+    for (const [k, v] of Object.entries(params)) if (v && k !== 'page') u.set(k, String(v));
+    if (n > 1) u.set('page', String(n));
+    const qs = u.toString();
+    return `/search${qs ? `?${qs}` : ''}`;
+  };
 
   return (
     <div style={{ padding: '60px 0', minHeight: '80vh' }}>
@@ -161,11 +172,12 @@ export default async function SearchPage({
             </div>
 
             {/* Pagination */}
-            <div style={{ marginTop: 28, display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
+            {totalPages > 1 && (
+            <div style={{ marginTop: 28, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
               {Array.from({ length: totalPages }, (_, i) => i + 1).slice(Math.max(0, page - 3), Math.min(totalPages, page + 2)).map((p) => (
                 <Link
                   key={p}
-                  href={`/search?q=${encodeURIComponent(q)}&page=${p}`}
+                  href={pageHref(p)}
                   style={{
                     textDecoration: 'none',
                     fontWeight: 900,
@@ -179,7 +191,9 @@ export default async function SearchPage({
                   {p}
                 </Link>
               ))}
+              <PageJumpNav totalPages={totalPages} />
             </div>
+            )}
           </div>
         )}
       </div>

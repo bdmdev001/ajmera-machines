@@ -8,6 +8,7 @@ import { normalizeImages, type ImageRef } from '@/lib/images';
 import { resolveCategory } from '@/lib/categories';
 import { isValidYear, isValidUrl } from '@/lib/validation';
 import { readLatestArrivalInput } from '@/lib/latestArrivals';
+import { productVideoUrl } from '@/lib/youtube';
 
 /** Read a product's stored images WITHOUT hydration (legacy docs may still hold
  *  bare strings, which would CastError against the structured subdoc schema). */
@@ -66,7 +67,8 @@ export async function PATCH(
         country: country || 'N/A',
         myear: myear || '',
         technicalSpecifications: technicalSpecifications || '',
-        videoUrl: videoUrl || '',
+        // The default channel link is never a product video — see lib/youtube.
+        videoUrl: productVideoUrl(videoUrl),
         images: nextImages,
         isFeatured: Boolean(isFeatured),
         stockStatus: stockStatus === 'Out of Stock' ? 'Out of Stock' : 'In Stock',

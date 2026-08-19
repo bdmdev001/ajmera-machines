@@ -7,6 +7,7 @@ import SortSelect from '@/components/SortSelect';
 import FiltersPanel from '@/components/FiltersPanel';
 import FiltersDrawer from '@/components/FiltersDrawer';
 import WhyChooseProducts from '@/components/WhyChooseProducts';
+import PageJumpNav from '@/components/PageJumpNav';
 import { getAllProducts, productMatchesSize, productMatchesCapacity, productMatchesQuery, productMatchesSpecPair } from '@/lib/products';
 import type { IProduct } from '@/models/Product';
 
@@ -225,6 +226,9 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                     </span>
                   ))}
                 <PageLink disabled={current === totalPages} href={hrefWith({ page: String(current + 1) })}><ChevronRight size={16} /></PageLink>
+                {/* Reads the live query string, so every active filter and the
+                    sort order carry over to the jumped-to page. */}
+                <PageJumpNav totalPages={totalPages} />
               </div>
             )}
           </main>
