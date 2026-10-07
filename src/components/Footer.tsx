@@ -32,7 +32,7 @@ const USPS = [
 const COMPANY: [string, string][] = [
   ['Home', '/'],
   ['About Us', '/about'],
-  ['Pre-owned Machines', '/pre-owned-machines'],
+  ['Pre-Owned Machines', '/pre-owned-machines'],
   ['Contact Us', '/contact'],
 ];
 

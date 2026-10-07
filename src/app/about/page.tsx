@@ -136,7 +136,7 @@ export default async function AboutPage() {
                     </span>
                   ))}
                 </div>
-                <Link href="/pre-owned-machines" className="btn btn-primary">Browse Pre-owned Machines <ArrowRight size={16} /></Link>
+                <Link href="/pre-owned-machines" className="btn btn-primary">Browse Pre-Owned Machines <ArrowRight size={16} /></Link>
               </div>
             </Reveal>
 
@@ -312,7 +312,7 @@ export default async function AboutPage() {
                 Tell us what you need. We'll help you find the right option for your requirement.
               </p>
               <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-                <Link href="/pre-owned-machines" className="btn btn-dark btn-lg">Browse Pre-owned Machines <ArrowRight size={18} /></Link>
+                <Link href="/pre-owned-machines" className="btn btn-dark btn-lg">Browse Pre-Owned Machines <ArrowRight size={18} /></Link>
                 <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-lg" style={{ background: '#fff', color: 'var(--accent)' }}><MessageCircle size={18} /> WhatsApp us</a>
               </div>
             </div>

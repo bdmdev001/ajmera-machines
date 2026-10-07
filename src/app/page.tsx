@@ -140,7 +140,7 @@ export default async function Home() {
               </Reveal>
               <Reveal delay={220}>
                 <div className="hero-cta" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 34 }}>
-                  <Link href="/pre-owned-machines" className="btn btn-primary btn-lg">Browse Pre-owned Machines <ArrowRight size={18} /></Link>
+                  <Link href="/pre-owned-machines" className="btn btn-primary btn-lg">Browse Pre-Owned Machines <ArrowRight size={18} /></Link>
                   <Link href="/contact" className="btn btn-hot btn-lg">Get Best Price</Link>
                   <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-lg"><MessageCircle size={18} /> WhatsApp</a>
                 </div>

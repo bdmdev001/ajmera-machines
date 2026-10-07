@@ -16,7 +16,7 @@ const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20woul
 const NAV = [
   { name: 'Home', path: '/' },
   { name: 'About Us', path: '/about' },
-  { name: 'Pre-owned Machines', path: '/pre-owned-machines' },
+  { name: 'Pre-Owned Machines', path: '/pre-owned-machines' },
   { name: 'Contact', path: '/contact' },
 ];
 
