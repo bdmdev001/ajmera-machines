@@ -97,11 +97,11 @@ export default async function ProductDetailPage({ params }: Props) {
   const product = await getProductByStockNo(extractIdToken(slug));
   if (!product) notFound();
 
-  // Enforce the canonical SEO slug: any legacy numeric URL (/products/2010) or a
+  // Enforce the canonical SEO slug: any legacy numeric URL (/pre-owned-machines/2010) or a
   // stale/incorrect descriptive slug with a valid stock number is permanently
   // redirected to the single canonical URL — never rendering duplicate content.
   const canonicalSlug = getProductSlug(product);
-  if (slug !== canonicalSlug) permanentRedirect(`/products/${canonicalSlug}`);
+  if (slug !== canonicalSlug) permanentRedirect(`/pre-owned-machines/${canonicalSlug}`);
 
   const all = await getAllProducts();
   const related = all.filter((p) => p.id !== product.id && p.category === product.category).slice(0, 4);
@@ -161,8 +161,8 @@ export default async function ProductDetailPage({ params }: Props) {
         <div className="container" style={{ padding: '16px 20px' }}>
           <nav style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--text-muted)', flexWrap: 'wrap' }}>
             <Link href="/">Home</Link><ChevronRight size={14} />
-            <Link href="/products">Product List</Link><ChevronRight size={14} />
-            <Link href={`/products?category=${encodeURIComponent(product.category)}`} style={{ color: 'var(--text-secondary)' }}>{product.category}</Link>
+            <Link href="/pre-owned-machines">Product List</Link><ChevronRight size={14} />
+            <Link href={`/pre-owned-machines?category=${encodeURIComponent(product.category)}`} style={{ color: 'var(--text-secondary)' }}>{product.category}</Link>
             <ChevronRight size={14} />
             <span style={{
               color: 'var(--text-primary)',
@@ -368,7 +368,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 <span className="eyebrow" style={{ marginBottom: 8 }}>You may also like</span>
                 <h2 style={{ fontSize: 'clamp(22px, 2.8vw, 32px)' }}>Related machines</h2>
               </div>
-              <Link href={`/products?category=${encodeURIComponent(product.category)}`} className="btn btn-secondary btn-sm">More in {product.category} <ArrowRight size={15} /></Link>
+              <Link href={`/pre-owned-machines?category=${encodeURIComponent(product.category)}`} className="btn btn-secondary btn-sm">More in {product.category} <ArrowRight size={15} /></Link>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 22 }}>
               {relatedList.map((p: IProduct) => <ProductCard key={p.id} product={p} />)}

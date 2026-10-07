@@ -16,7 +16,7 @@ const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20woul
 const NAV = [
   { name: 'Home', path: '/' },
   { name: 'About Us', path: '/about' },
-  { name: 'Products', path: '/products' },
+  { name: 'Pre-owned Machines', path: '/pre-owned-machines' },
   { name: 'Contact', path: '/contact' },
 ];
 
@@ -34,7 +34,7 @@ export default function Header({ searchIndex }: { searchIndex: SearchIndex }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
 
-  const catLink = (c: string) => `/products?category=${encodeURIComponent(c)}`;
+  const catLink = (c: string) => `/pre-owned-machines?category=${encodeURIComponent(c)}`;
 
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 1000 }}>

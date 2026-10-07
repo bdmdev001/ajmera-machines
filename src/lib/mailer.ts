@@ -71,8 +71,8 @@ export async function sendEnquiryNotification(data: EnquiryMail): Promise<{ sent
   // route can't resolve is only a last-resort fallback.
   if (data.stockNo || data.productId) {
     const path = data.stockNo
-      ? `/products/${getProductSlug({ title: data.productTitle, stockNo: data.stockNo })}`
-      : `/products/${data.productId}`;
+      ? `/pre-owned-machines/${getProductSlug({ title: data.productTitle, stockNo: data.stockNo })}`
+      : `/pre-owned-machines/${data.productId}`;
     rows.push(['Link', `${SITE_URL}${path}`]);
   }
 

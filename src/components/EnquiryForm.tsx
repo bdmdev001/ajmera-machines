@@ -93,7 +93,7 @@ export default function EnquiryForm({ productId, productTitle, stockNo, initialM
         </p>
         <p style={{ fontSize: 13.5, color: 'var(--text-muted)', marginBottom: 28 }}>Prefer to talk now? Message us on WhatsApp for an instant response.</p>
         <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/products" className="btn btn-primary">Browse more machines <ArrowRight size={16} /></Link>
+          <Link href="/pre-owned-machines" className="btn btn-primary">Browse more machines <ArrowRight size={16} /></Link>
           <a href="https://api.whatsapp.com/send?phone=919322401398" target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp">WhatsApp us</a>
         </div>
       </div>

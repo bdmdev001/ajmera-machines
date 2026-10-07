@@ -32,7 +32,7 @@ export default function FiltersPanel({ sp, values, options, hasFilters }: Filter
     const u = new URLSearchParams();
     for (const [k, v] of Object.entries(merged)) if (v) u.set(k, v);
     const qs = u.toString();
-    return `/products${qs ? `?${qs}` : ''}`;
+    return `/pre-owned-machines${qs ? `?${qs}` : ''}`;
   };
 
   const filterGroup = (label: string, value: string | undefined, opts: string[], param: string, allLabel = `All ${label}`) => (
@@ -60,7 +60,7 @@ export default function FiltersPanel({ sp, values, options, hasFilters }: Filter
           <SlidersHorizontal size={17} style={{ color: 'var(--accent)' }} /> Filters
         </h3>
         {hasFilters && (
-          <Link href="/products" style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--hot)', display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Link href="/pre-owned-machines" style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--hot)', display: 'flex', alignItems: 'center', gap: 4 }}>
             <RotateCcw size={13} /> Reset
           </Link>
         )}

@@ -120,7 +120,7 @@ export async function POST(request: Request) {
     // (revalidate = 3600). Invalidate them so a newly-added / featured product
     // surfaces on the next visit instead of waiting out the cache window.
     revalidatePath('/');
-    revalidatePath('/products');
+    revalidatePath('/pre-owned-machines');
 
     return NextResponse.json({ success: true, product: newProduct }, { status: 201 });
   } catch (error: any) {

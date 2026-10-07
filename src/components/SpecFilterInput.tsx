@@ -93,7 +93,7 @@ export default function SpecFilterInput({ category = '', initialValue = '', sp }
     if (cat) p.set('category', cat);
     const s = specValue.trim();
     if (s) p.set('spec', s);
-    router.push(`/products${p.toString() ? `?${p.toString()}` : ''}`);
+    router.push(`/pre-owned-machines${p.toString() ? `?${p.toString()}` : ''}`);
   };
 
   const pick = (s: Suggestion) => {

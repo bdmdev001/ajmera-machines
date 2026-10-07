@@ -20,7 +20,7 @@ export default function SortSelect() {
     if (value === 'newest') p.delete('sort');
     else p.set('sort', value);
     p.delete('page');
-    router.push(`/products${p.toString() ? `?${p.toString()}` : ''}`);
+    router.push(`/pre-owned-machines${p.toString() ? `?${p.toString()}` : ''}`);
   };
 
   return (

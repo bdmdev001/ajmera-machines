@@ -58,11 +58,11 @@ export default function SearchBar({ index, placeholder = 'Search machines, categ
     }));
     const cats = index.categories.map((c) => ({
       key: `c-${c}`, label: c, section: 'Categories' as Section,
-      href: `/products?category=${encodeURIComponent(c)}`,
+      href: `/pre-owned-machines?category=${encodeURIComponent(c)}`,
     }));
     const makes = index.makes.map((m) => ({
       key: `m-${m}`, label: m, section: 'Brands' as Section,
-      href: `/products?make=${encodeURIComponent(m)}`,
+      href: `/pre-owned-machines?make=${encodeURIComponent(m)}`,
     }));
     return [...products, ...cats, ...makes];
   }, [index]);
@@ -103,7 +103,7 @@ export default function SearchBar({ index, placeholder = 'Search machines, categ
     e.preventDefault();
     const q = query.trim();
     setOpen(false);
-    router.push(q ? `/products?search=${encodeURIComponent(q)}` : '/products');
+    router.push(q ? `/pre-owned-machines?search=${encodeURIComponent(q)}` : '/pre-owned-machines');
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -226,7 +226,7 @@ export default function SearchBar({ index, placeholder = 'Search machines, categ
 
           <button
             type="button"
-            onClick={() => go(query.trim() ? `/products?search=${encodeURIComponent(query.trim())}` : '/products')}
+            onClick={() => go(query.trim() ? `/pre-owned-machines?search=${encodeURIComponent(query.trim())}` : '/pre-owned-machines')}
             style={{ width: '100%', textAlign: 'center', borderTop: '1px solid var(--border-light)', background: 'var(--bg-surface-2)', border: 'none', padding: '11px 14px', cursor: 'pointer', fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13, color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
           >
             See all results for &ldquo;{query.trim()}&rdquo; <ArrowRight size={14} />

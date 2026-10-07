@@ -95,7 +95,7 @@ export default function MachineFinder({ categories }: Props) {
     const p = new URLSearchParams();
     if (cat) p.set('category', cat);
     if (specValue.trim()) p.set('spec', specValue.trim());
-    router.push(`/products${p.toString() ? `?${p.toString()}` : ''}`);
+    router.push(`/pre-owned-machines${p.toString() ? `?${p.toString()}` : ''}`);
   };
 
   const pick = (s: Suggestion) => {

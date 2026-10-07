@@ -127,7 +127,7 @@ export default function ShareProduct({ product, description, specs, notes, image
     description,
     specs,
     notes,
-    productUrl: `${SITE_URL}/products/${getProductSlug(product)}`,
+    productUrl: `${SITE_URL}/pre-owned-machines/${getProductSlug(product)}`,
     generatedDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
   }), [product, description, specs, notes]);
 

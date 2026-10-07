@@ -140,7 +140,7 @@ export default async function Home() {
               </Reveal>
               <Reveal delay={220}>
                 <div className="hero-cta" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 34 }}>
-                  <Link href="/products" className="btn btn-primary btn-lg">Browse Products <ArrowRight size={18} /></Link>
+                  <Link href="/pre-owned-machines" className="btn btn-primary btn-lg">Browse Pre-owned Machines <ArrowRight size={18} /></Link>
                   <Link href="/contact" className="btn btn-hot btn-lg">Get Best Price</Link>
                   <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-lg"><MessageCircle size={18} /> WhatsApp</a>
                 </div>
@@ -189,13 +189,13 @@ export default async function Home() {
                 <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 38px)' }}>Browse machine categories</h2>
               </div>
             </Reveal>
-            <Reveal delay={80}><Link href="/products" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>View all <ArrowRight size={16} /></Link></Reveal>
+            <Reveal delay={80}><Link href="/pre-owned-machines" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>View all <ArrowRight size={16} /></Link></Reveal>
           </div>
 
           <div className="cat-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
             {categories.map((cat, i) => (
               <Reveal key={cat.category} delay={i * 60}>
-                <Link href={`/products?category=${encodeURIComponent(cat.category)}`} className="category-card-hover surface" style={{ display: 'flex', alignItems: 'center', gap: 18, padding: 18, borderRadius: 'var(--radius-lg)', transition: 'all var(--transition-normal)' }}>
+                <Link href={`/pre-owned-machines?category=${encodeURIComponent(cat.category)}`} className="category-card-hover surface" style={{ display: 'flex', alignItems: 'center', gap: 18, padding: 18, borderRadius: 'var(--radius-lg)', transition: 'all var(--transition-normal)' }}>
                   <div style={{ width: 92, height: 92, borderRadius: 'var(--radius-md)', overflow: 'hidden', flexShrink: 0, background: '#eef1f4' }}>
                     {cat.image && (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -260,7 +260,7 @@ export default async function Home() {
           <div className="promo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22 }}>
             {[
               { icon: PackageCheck, kicker: 'Selling a machine?', title: 'We buy quality used machinery', body: 'Get a fair valuation for your surplus engineering equipment.', cta: 'Sell to us', href: '/contact', tone: 'var(--accent)' },
-              { icon: FileText, kicker: 'For buyers', title: 'Download the full product list', body: 'Specs, make, model and origin for every machine — in one PDF.', cta: 'Download Brochure', href: '/products', tone: 'var(--hot)' },
+              { icon: FileText, kicker: 'For buyers', title: 'Download the full product list', body: 'Specs, make, model and origin for every machine — in one PDF.', cta: 'Download Brochure', href: '/pre-owned-machines', tone: 'var(--hot)' },
             ].map((p, i) => (
               <Reveal key={i} delay={i * 90}>
                 <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--dark)', color: '#fff', padding: 'clamp(28px, 4vw, 44px)' }}>
@@ -314,7 +314,7 @@ export default async function Home() {
                   <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 38px)' }}>Latest arrivals</h2>
                 </div>
               </Reveal>
-              <Reveal delay={80}><Link href="/products" className="btn btn-secondary">View all inventory <ArrowRight size={16} /></Link></Reveal>
+              <Reveal delay={80}><Link href="/pre-owned-machines" className="btn btn-secondary">View all inventory <ArrowRight size={16} /></Link></Reveal>
             </div>
             <Reveal delay={80}>
               {/* Same carousel component, card and controls as Featured above. */}

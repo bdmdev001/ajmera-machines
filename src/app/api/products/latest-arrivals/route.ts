@@ -51,7 +51,7 @@ export async function PATCH(request: Request) {
 
     // The homepage section is cached (revalidate = 3600) — reflect the change now.
     revalidatePath('/');
-    revalidatePath('/products');
+    revalidatePath('/pre-owned-machines');
 
     return NextResponse.json({
       success: true,

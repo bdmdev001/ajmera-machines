@@ -32,18 +32,18 @@ const USPS = [
 const COMPANY: [string, string][] = [
   ['Home', '/'],
   ['About Us', '/about'],
-  ['Products', '/products'],
+  ['Pre-owned Machines', '/pre-owned-machines'],
   ['Contact Us', '/contact'],
 ];
 
 const CATEGORIES: [string, string][] = [
-  ['Surface Grinders', '/products?category=Grinder%20Surface'],
-  ['Vertical Turret Lathes', '/products?category=VTL'],
-  ['Press Brakes', '/products?category=Press%20Brake'],
-  ['Bed Milling', '/products?category=Milling%20Bed'],
-  ['Radial Drills', '/products?category=Drill%20Radial'],
-  ['Gear Hobbing', '/products?category=Gear%20Hobbing'],
-  ['View All Categories', '/products'],
+  ['Surface Grinders', '/pre-owned-machines?category=Grinder%20Surface'],
+  ['Vertical Turret Lathes', '/pre-owned-machines?category=VTL'],
+  ['Press Brakes', '/pre-owned-machines?category=Press%20Brake'],
+  ['Bed Milling', '/pre-owned-machines?category=Milling%20Bed'],
+  ['Radial Drills', '/pre-owned-machines?category=Drill%20Radial'],
+  ['Gear Hobbing', '/pre-owned-machines?category=Gear%20Hobbing'],
+  ['View All Categories', '/pre-owned-machines'],
 ];
 
 /* ---- Inline brand-social glyphs (this lucide build has no brand icons) ---- */
@@ -278,7 +278,7 @@ export default function Footer() {
             {/* <div className="footer-legal" style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: 'rgba(238,241,244,0.58)' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><Shield size={15} style={{ color: 'rgba(238,241,244,0.45)' }} /> Inspected &amp; Verified Stock</span>
               <span style={{ opacity: 0.35 }}>•</span>
-              <Link href="/products" className="footer-contact">Stocklist</Link>
+              <Link href="/pre-owned-machines" className="footer-contact">Stocklist</Link>
               <span style={{ opacity: 0.35 }}>•</span>
               <Link href="/contact" className="footer-contact">Contact</Link>
             </div> */}

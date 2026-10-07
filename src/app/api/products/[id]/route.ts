@@ -94,7 +94,7 @@ export async function PATCH(
     // Cached homepage (Featured + Latest Arrivals) + product list must reflect
     // this edit — e.g. toggling isFeatured — on the next visit, not an hour later.
     revalidatePath('/');
-    revalidatePath('/products');
+    revalidatePath('/pre-owned-machines');
 
     return NextResponse.json({ success: true, product: updatedProduct });
   } catch (error) {
@@ -128,7 +128,7 @@ export async function DELETE(
 
     // Drop the deleted machine from the cached homepage + product list.
     revalidatePath('/');
-    revalidatePath('/products');
+    revalidatePath('/pre-owned-machines');
 
     return NextResponse.json({ success: true, message: 'Machine deleted successfully' });
   } catch (error) {

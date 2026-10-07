@@ -329,7 +329,7 @@ export default function AdminEnquiriesList({ initialEnquiries }: Props) {
                       <strong style={{ color: 'var(--text-primary)' }}>{enq.productTitle}</strong>
                       <span style={{ color: 'var(--accent)', marginLeft: '10px', fontWeight: '700' }}>({enq.stockNo})</span>
                     </div>
-                    <a href={enq.stockNo ? getProductUrl({ title: enq.productTitle, stockNo: enq.stockNo }) : `/products/${enq.productId}`} target="_blank" rel="noreferrer" style={{ fontSize: '12px', color: 'var(--secondary)', fontWeight: '700', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <a href={enq.stockNo ? getProductUrl({ title: enq.productTitle, stockNo: enq.stockNo }) : `/pre-owned-machines/${enq.productId}`} target="_blank" rel="noreferrer" style={{ fontSize: '12px', color: 'var(--secondary)', fontWeight: '700', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                       View Specs <ExternalLink size={12} />
                     </a>
                   </div>

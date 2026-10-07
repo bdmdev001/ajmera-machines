@@ -3,9 +3,9 @@
    no node/DB/Cloudinary imports).
 
    Canonical URL shape:
-       /products/{descriptive-slug}-{identifier}
+       /pre-owned-machines/{descriptive-slug}-{identifier}
 
-   e.g. /products/amada-promecam-rg35-hydraulic-press-brake-stk0002010
+   e.g. /pre-owned-machines/amada-promecam-rg35-hydraulic-press-brake-stk0002010
 
    The trailing {identifier} is the product's stockNo (lowercased) — unique and
    immutable — so every product URL is unique regardless of the descriptive part,
@@ -92,7 +92,7 @@ export function getProductSlug(p: SluggableProduct): string {
 
 /** Root-relative canonical product URL. Use everywhere internal links are built. */
 export function getProductUrl(p: SluggableProduct): string {
-  return `/products/${getProductSlug(p)}`;
+  return `/pre-owned-machines/${getProductSlug(p)}`;
 }
 
 /**

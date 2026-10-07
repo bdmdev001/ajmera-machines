@@ -111,7 +111,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     const u = new URLSearchParams();
     for (const [k, v] of Object.entries(merged)) if (v) u.set(k, v);
     const qs = u.toString();
-    return `/products${qs ? `?${qs}` : ''}`;
+    return `/pre-owned-machines${qs ? `?${qs}` : ''}`;
   };
 
   // Shared props for the filter content, reused by the desktop sidebar and the
@@ -199,7 +199,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                 <p style={{ maxWidth: 460, fontSize: 14, margin: '0 auto 22px' }}>Tell us what you need — your required size, capacity or specification — and our team will help you find a suitable machine.</p>
                 <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
                   <Link href={requirementHref} className="btn btn-primary">Submit Your Requirement <ArrowRight size={16} /></Link>
-                  {hasFilters && <Link href="/products" className="btn btn-secondary">Clear all filters</Link>}
+                  {hasFilters && <Link href="/pre-owned-machines" className="btn btn-secondary">Clear all filters</Link>}
                 </div>
               </div>
             )}
