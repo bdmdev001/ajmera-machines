@@ -121,7 +121,7 @@ export default function MachineFinder({ categories }: Props) {
     <div className="surface" style={{ padding: 'clamp(18px, 3vw, 26px)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--shadow-lg)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
         <Search size={18} style={{ color: 'var(--accent)' }} />
-        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: 'var(--accent)' }}>Find your machine</span>
+        <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, color: 'var(--accent)' }}>Find the Right Used Machine</span>
         <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{specHint}</span>
       </div>
 

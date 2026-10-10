@@ -25,7 +25,7 @@ const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20woul
 const USPS = [
   // { Icon: ShieldCheck, title: 'Inspected & Verified', note: 'Every machine is quality checked before listing' },
   { Icon: Globe, title: 'Worldwide Import & Export', note: 'Importing and exporting machinery to 25+ countries globally' },
-  { Icon: Award, title: '40+ Years Trusted', note: 'Serving industries with excellence since 1990' },
+  { Icon: Award, title: '40+ Years of Machinery Experience', note: 'Serving industries with excellence since 1990' },
   { Icon: Headphones, title: 'Fast Enquiry Reply', note: 'Quick response within hours, every time' },
 ];
 

@@ -14,6 +14,12 @@ interface CounterProps {
 /**
  * Number count-up that fires once when scrolled into view.
  * Uses requestAnimationFrame with an ease-out curve.
+ *
+ * Initial state is the FINAL value, not 0: this is what the server renders,
+ * so the real number (e.g. "40+") is present in the HTML for crawlers and
+ * no-JS clients instead of a permanent "0+". Once the element scrolls into
+ * view, the rAF loop's first tick computes a value near 0 anyway (p≈0), so
+ * the animate-up effect for sighted users is unchanged.
  */
 export default function Counter({
   to,
@@ -23,7 +29,7 @@ export default function Counter({
   format = false,
 }: CounterProps) {
   const ref = useRef<HTMLSpanElement | null>(null);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(to);
   const started = useRef(false);
 
   useEffect(() => {

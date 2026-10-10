@@ -27,23 +27,23 @@ const CARDS: { Icon: typeof Search; title: string; text: string }[] = [
   },
   {
     Icon: MessagesSquare,
-    title: 'Get Guidance That Works for You',
+    title: 'Expert Machinery Guidance',
     text: 'Not sure which machine is right for your needs? Get practical guidance based on your specific requirement.',
   },
   {
     Icon: Globe,
-    title: 'Explore More Possibilities',
+    title: 'Global Sourcing & Export Support ',
     text: 'Whether you are looking for a machine from our available range or something specific, we help you explore the right opportunities.',
   },
   {
     Icon: Handshake,
-    title: 'Simple, Clear & Transparent Dealings',
+    title: 'Simple & Transparent Dealings',
     text: 'Straightforward communication and honest information to make your buying decision easier.',
   },
 ];
 
 export default function WhyChooseProducts({
-  heading = 'Why Choose Ajmera Machines?',
+  heading = 'Why Choose Ajmera Enterprise for Used Machinery?',
   eyebrow = 'The Ajmera Advantage',
 }: { heading?: string; eyebrow?: string }) {
   return (

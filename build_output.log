@@ -1,0 +1,73 @@
+
+> ajmera-machines-clone@0.1.0 build
+> next build
+
+▲ Next.js 16.2.10 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 52s
+  Running TypeScript ...
+  Finished TypeScript in 19.4s ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/26) ...
+  Generating static pages using 3 workers (6/26) 
+  Generating static pages using 3 workers (12/26) 
+[db] ✅ Connected to MongoDB (host: ac-z1zntdx-shard-00-01.su0jdh4.mongodb.net, db: ajmeramachines)
+[db] ✅ Connected to MongoDB (host: ac-z1zntdx-shard-00-02.su0jdh4.mongodb.net, db: ajmeramachines)
+  Generating static pages using 3 workers (19/26) 
+✓ Generating static pages using 3 workers (26/26) in 1132ms
+  Finalizing page optimization ...
+
+Route (app)                                       Revalidate  Expire
+┌ ○ /                                                     1h      1y
+├ ○ /_not-found
+├ ○ /about                                                1h      1y
+├ ƒ /admin
+├ ƒ /admin/categories
+├ ○ /admin/customers
+├ ƒ /admin/enquiries
+├ ƒ /admin/inventory
+├ ƒ /admin/leads
+├ ƒ /admin/leads/[id]
+├ ○ /admin/login
+├ ƒ /admin/subscribers
+├ ƒ /api/admin/crm/leads
+├ ƒ /api/admin/crm/leads/[id]
+├ ƒ /api/admin/crm/leads/[id]/activities
+├ ƒ /api/admin/crm/leads/[id]/activities/[actId]
+├ ƒ /api/admin/crm/leads/[id]/customer-group
+├ ƒ /api/admin/crm/leads/[id]/transition
+├ ƒ /api/admin/crm/leads/bulk-delete
+├ ƒ /api/admin/crm/leads/export
+├ ƒ /api/admin/crm/leads/import
+├ ƒ /api/admin/crm/leads/sample
+├ ƒ /api/admin/crm/lists
+├ ƒ /api/admin/crm/lists/[id]
+├ ƒ /api/admin/customers
+├ ƒ /api/admin/customers/[id]
+├ ƒ /api/admin/customers/export
+├ ƒ /api/admin/login
+├ ƒ /api/admin/subscribers
+├ ƒ /api/admin/subscribers/[id]
+├ ƒ /api/categories
+├ ƒ /api/categories/[id]
+├ ƒ /api/enquiries
+├ ƒ /api/enquiries/[id]
+├ ƒ /api/enquiries/convert
+├ ƒ /api/products
+├ ƒ /api/products/[id]
+├ ƒ /api/products/latest-arrivals
+├ ƒ /api/products/upload
+├ ƒ /api/spec-suggest
+├ ƒ /api/subscribe
+├ ƒ /contact
+├ ƒ /pre-owned-machines
+├ ƒ /pre-owned-machines/[slug]
+├ ƒ /search
+└ ○ /sitemap.xml                                          1h      1y
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

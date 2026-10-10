@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Fragment } from 'react';
 import {
@@ -10,6 +11,7 @@ import MachineFinder from '@/components/MachineFinder';
 import HeroSlider from '@/components/HeroSlider';
 import ProductCarousel from '@/components/ProductCarousel';
 import WhyChooseProducts from '@/components/WhyChooseProducts';
+import FAQSection from '@/components/FAQSection';
 import {
   getFeaturedProducts, getLatestArrivals, getCategoryStats, getTotalMachines, getProductCategories,
 } from '@/lib/products';
@@ -18,7 +20,12 @@ import { cldUrl, type ImageRef } from '@/lib/images';
 
 export const revalidate = 3600;
 
-const WA = 'https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20would%20like%20to%20enquire%20about%20a%20machine.';
+export const metadata: Metadata = {
+  title: 'Used Industrial Machinery in India | Ajmera Enterprise',
+  description: 'Buy quality used industrial machinery in India from Ajmera Machines. Explore pre-owned CNC, grinding, milling, drilling & more machines.',
+};
+
+const WA ='https://api.whatsapp.com/send?phone=919322401398&text=Hi,%20I%20would%20like%20to%20enquire%20about%20a%20machine.';
 
 /* Hero LCP photo (Cloudinary). It is the FIRST slide of the hero background
    carousel and is rendered as a real, eager <img> (see HeroSlider) so the
@@ -63,6 +70,47 @@ const INSIGHTS = [
   { tag: 'Export', title: 'Crating & documentation: moving multi-tonne machines across borders', read: '4 min read' },
   { tag: 'Maintenance', title: 'Geometry checks that tell you a grinder still holds tolerance', read: '6 min read' },
 ];
+
+/* Mirrors the Q&A rendered by <FAQSection/> — kept in sync manually since this
+   is static marketing copy, not data-driven. Powers the FAQPage rich result. */
+const FAQ_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      q: 'What types of used industrial machines do you sell?',
+      a: 'We deal in used industrial machinery, including CNC machines, lathes, grinders, VTLs, milling machines, drilling machines and gear-cutting equipment, subject to availability.',
+    },
+    {
+      q: 'Do you sell CNC and conventional machinery?',
+      a: 'Yes, we deal in both used CNC and conventional machines for various metalworking and manufacturing applications.',
+    },
+    {
+      q: 'Where can I buy used industrial machinery in India?',
+      a: 'You can purchase used industrial machinery from Ajmera Machines in Navi Mumbai, India. Contact us to check availability, specifications and pricing.',
+    },
+    {
+      q: 'Can you source a specific machine or specification?',
+      a: 'Yes, share your required machine type, make, model, capacity and specifications. Our team can help explore suitable options.',
+    },
+    {
+      q: 'Do you export used machinery internationally?',
+      a: 'Yes, we cater to international machinery enquiries. Contact us to discuss machine availability, export documentation and shipping arrangements.',
+    },
+    {
+      q: 'Can I request machine photos, videos and specifications?',
+      a: 'Yes, you can request available machine photos, videos and technical specifications to evaluate the equipment before purchasing.',
+    },
+    {
+      q: 'How can I sell my used industrial machinery?',
+      a: 'Contact Ajmera Machines with your machine details, make, model, condition and photos to discuss its valuation and potential resale.',
+    },
+  ].map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
+};
 
 export default async function Home() {
   const products = await getFeaturedProducts(12);
@@ -129,26 +177,26 @@ export default async function Home() {
                 <span className="badge badge-dark" style={{ marginBottom: 22, padding: '7px 14px', letterSpacing: '0.1em' }}>Ready To Use For Production</span>
               </Reveal>
               <Reveal delay={80}>
-                <h1 className="display" style={{ fontSize: 'clamp(40px, 6vw, 72px)', lineHeight: 1.02, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: 22 }}>
-                  Industrial Machines,<br /><span style={{ color: 'var(--accent)' }}>Ready To Run.</span>
+                <h1 className="display" style={{ fontSize: 'clamp(40px, 6vw, 45px)', lineHeight: 1.02, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: 22 }}>
+                  Used Industrial Machinery & <br /><span style={{ color: 'var(--accent)' }}>Machine Tools in India</span>
                 </h1>
               </Reveal>
               <Reveal delay={150}>
-                <p style={{ fontSize: 'clamp(16px, 1.6vw, 19px)', color: 'var(--text-secondary)', maxWidth: 540, marginBottom: 32, lineHeight: 1.6 }}>
-                  Premium industrial machinery sourced from renowned worldwide brands. Built to maximize precision, efficiency, and long-term value.
+                <p style={{ fontSize: 'clamp(16px, 1.6vw, 19px)', color: 'var(--text-secondary)', marginBottom: 32, lineHeight: 1.6 }}>
+                  Buy and sell quality pre-owned CNC, conventional and metalworking machinery from Ajmera Enterprise. Inspected machines sourced from trusted Indian and international brands.
                 </p>
               </Reveal>
               <Reveal delay={220}>
                 <div className="hero-cta" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 34 }}>
                   <Link href="/pre-owned-machines" className="btn btn-primary btn-lg">Browse Pre-Owned Machines <ArrowRight size={18} /></Link>
+                  <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-lg"><MessageCircle size={18} /> WhatsApp Us</a>
                   <Link href="/contact" className="btn btn-hot btn-lg">Get Best Price</Link>
-                  <a href={WA} target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp btn-lg"><MessageCircle size={18} /> WhatsApp</a>
                 </div>
               </Reveal>
               <Reveal delay={300}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '14px 22px' }}>
                   {[
-                    { Icon: ShieldCheck, a: 'Inspected', b: 'under power' },
+                    { Icon: ShieldCheck, a: 'Inspected & Tested', b: 'Under Power' },
                     { Icon: Globe, a: '25+', b: 'countries' },
                     { Icon: Truck, a: 'Worldwide', b: 'import/export' },
                   ].map(({ Icon, a, b }, i) => (
@@ -186,7 +234,7 @@ export default async function Home() {
             <Reveal>
               <div>
                 <span className="eyebrow" style={{ marginBottom: 10 }}>Shop by category</span>
-                <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 38px)' }}>Browse machine categories</h2>
+                <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 38px)' }}>Browse Used Industrial Machines by Category</h2>
               </div>
             </Reveal>
             <Reveal delay={80}><Link href="/pre-owned-machines" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-display)' }}>View all <ArrowRight size={16} /></Link></Reveal>
@@ -228,7 +276,7 @@ export default async function Home() {
           <Reveal>
             <div className="section-head">
               <span className="eyebrow" style={{ marginBottom: 10 }}>Best of the product list</span>
-              <h2>Featured machines</h2>
+              <h2>Featured Used Industrial Machinery</h2>
               <p>Freshly inspected arrivals across our most-requested categories.</p>
             </div>
           </Reveal>
@@ -248,56 +296,12 @@ export default async function Home() {
       </section>
 
       {/* ================= 3.5 — WHY CHOOSE OUR PRODUCTS ================= */}
-      <section className="section-sm band-paper">
+      <section
+        className="section-sm band-dark"
+        style={{ background: 'radial-gradient(70% 130% at 22% 0%, rgba(46,116,180,0.28), transparent 55%), linear-gradient(180deg, #0e2c49 0%, #0a1220 100%)' }}
+      >
         <div className="container">
           <Reveal><WhyChooseProducts /></Reveal>
-        </div>
-      </section>
-
-      {/* ================= 4 — PROMO BANNERS ================= */}
-      <section className="section-sm">
-        <div className="container">
-          <div className="promo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22 }}>
-            {[
-              { icon: PackageCheck, kicker: 'Selling a machine?', title: 'We buy quality used machinery', body: 'Get a fair valuation for your surplus engineering equipment.', cta: 'Sell to us', href: '/contact', tone: 'var(--accent)' },
-              { icon: FileText, kicker: 'For buyers', title: 'Download the full product list', body: 'Specs, make, model and origin for every machine — in one PDF.', cta: 'Download Brochure', href: '/pre-owned-machines', tone: 'var(--hot)' },
-            ].map((p, i) => (
-              <Reveal key={i} delay={i * 90}>
-                <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--dark)', color: '#fff', padding: 'clamp(28px, 4vw, 44px)' }}>
-                  <div style={{ position: 'absolute', top: -60, right: -40, width: 220, height: 220, borderRadius: '50%', background: p.tone, opacity: 0.16 }} />
-                  <span style={{ position: 'relative', display: 'grid', placeItems: 'center', width: 52, height: 52, borderRadius: 14, background: 'rgba(255,255,255,0.1)', color: p.tone, marginBottom: 18 }}><p.icon size={26} /></span>
-                  <div style={{ position: 'relative', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(238,241,244,0.6)', marginBottom: 8 }}>{p.kicker}</div>
-                  <h3 style={{ position: 'relative', color: '#fff', fontSize: 'clamp(20px, 2.4vw, 27px)', marginBottom: 10, maxWidth: 340 }}>{p.title}</h3>
-                  <p style={{ position: 'relative', color: 'rgba(238,241,244,0.7)', marginBottom: 22, maxWidth: 360 }}>{p.body}</p>
-                  <Link href={p.href} className="btn" style={{ position: 'relative', background: p.tone, color: '#fff' }}>{p.cta} <ArrowRight size={16} /></Link>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ================= 5 — STATS ================= */}
-      <section className="section-sm">
-        <div className="container">
-          <div className="stats-grid surface" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24, textAlign: 'center', padding: 'clamp(28px, 4vw, 48px)', borderRadius: 'var(--radius-xl)' }}>
-            {[
-              { icon: CalendarClock, to: 40, suffix: '+', label: 'Years in business' },
-              { icon: PackageCheck, to: total, suffix: '+', label: 'Machines catalogued' },
-              { icon: Globe, to: 25, suffix: '+', label: 'Countries served' },
-              { icon: Gauge, to: 1500, suffix: '+', label: 'Buyers served', format: true },
-            ].map((s, i) => (
-              <Reveal key={i} delay={i * 80}>
-                <div>
-                  <s.icon size={26} style={{ color: 'var(--accent)', marginBottom: 12 }} />
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1 }}>
-                    <Counter to={s.to} suffix={s.suffix} format={s.format} />
-                  </div>
-                  <p style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text-secondary)', marginTop: 8 }}>{s.label}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -311,7 +315,7 @@ export default async function Home() {
               <Reveal>
                 <div>
                   <span className="eyebrow" style={{ marginBottom: 10 }}>Just added</span>
-                  <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 38px)' }}>Latest arrivals</h2>
+                  <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 38px)' }}>Latest Used Machinery Arrivals</h2>
                 </div>
               </Reveal>
               <Reveal delay={80}><Link href="/pre-owned-machines" className="btn btn-secondary">View all inventory <ArrowRight size={16} /></Link></Reveal>
@@ -327,6 +331,59 @@ export default async function Home() {
           </div>
         </section>
       )}
+
+      {/* ================= 4 — PROMO BANNERS ================= */}
+      <section className="section-sm">
+        <div className="container">
+          <div className="promo-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22 }}>
+            {[
+              { icon: PackageCheck, kicker: 'Selling a machine?', title: 'Sell Your Used Industrial Machinery', body: 'Have surplus machinery or equipment? Get a fair valuation from Ajmera Enterprise for your used industrial machines.', cta: 'Sell Your Machine', href: '/contact', tone: 'var(--accent)' },
+              { icon: FileText, kicker: 'For buyers', title: 'Looking for a Used Industrial Machine?', body: 'Tell us your machine type, capacity, specifications or production requirement and our team will help you find suitable options.', cta: 'Request a Machine', href: '/pre-owned-machines', tone: 'var(--hot)' },
+            ].map((p, i) => (
+              <Reveal key={i} delay={i * 90}>
+                <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 'var(--radius-lg)', background: 'var(--dark)', color: '#fff', padding: 'clamp(28px, 4vw, 44px)' }}>
+                  <div style={{ position: 'absolute', top: -60, right: -40, width: 220, height: 220, borderRadius: '50%', background: p.tone, opacity: 0.16 }} />
+                  <span style={{ position: 'relative', display: 'grid', placeItems: 'center', width: 52, height: 52, borderRadius: 14, background: 'var(--canvas)', color: p.tone, marginBottom: 18 }}><p.icon size={26} /></span>
+                  <div style={{ position: 'relative', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(238,241,244,0.6)', marginBottom: 8 }}>{p.kicker}</div>
+                  <h3 style={{ position: 'relative', color: '#fff', fontSize: 'clamp(20px, 2.4vw, 27px)', marginBottom: 10, maxWidth: 340 }}>{p.title}</h3>
+                  <p style={{ position: 'relative', color: 'rgba(238,241,244,0.7)', marginBottom: 22, maxWidth: 360 }}>{p.body}</p>
+                  <Link href={p.href} className="btn" style={{ position: 'relative', background: p.tone, color: '#fff' }}>{p.cta} <ArrowRight size={16} /></Link>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= 5 — STATS ================= */}
+      <section
+        className="section-sm band-dark"
+        style={{ background: 'radial-gradient(60% 140% at 78% 100%, rgba(46,116,180,0.25), transparent 55%), linear-gradient(180deg, #0a1220 0%, #0e2c49 100%)' }}
+      >
+        <div className="container">
+          <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24, textAlign: 'center' }}>
+            {[
+              { icon: CalendarClock, to: 40, suffix: '+', label: 'Years in business' },
+              { icon: PackageCheck, to: total, suffix: '+', label: 'Machines catalogued' },
+              { icon: Globe, to: 25, suffix: '+', label: 'Countries served' },
+              { icon: Gauge, to: 1500, suffix: '+', label: 'Buyers served', format: true },
+            ].map((s, i) => (
+              <Reveal key={i} delay={i * 80}>
+                <div>
+                  <span style={{ display: 'grid', placeItems: 'center', width: 54, height: 54, borderRadius: '50%', border: '1px solid rgba(120,164,214,0.35)', background: 'rgba(120,164,214,0.08)', color: '#7ea6d8', margin: '0 auto 16px' }}>
+                    <s.icon size={24} strokeWidth={1.75} />
+                  </span>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 800, color: '#fff', lineHeight: 1, textShadow: '0 0 28px rgba(120,164,214,0.35)' }}>
+                    <Counter to={s.to} suffix={s.suffix} format={s.format} />
+                  </div>
+                  <p style={{ fontSize: 13.5, fontWeight: 600, color: 'rgba(238,241,244,0.65)', marginTop: 8 }}>{s.label}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       {/* ================= 7 — INSIGHTS ================= */}
       {/* <section className="section">
@@ -379,6 +436,17 @@ export default async function Home() {
           </div>
         </div>
       </section> */}
+
+      {/* ================= 9 — FAQ ================= */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSONLD) }}
+      />
+      <section className="section" style={{ borderTop: '1px solid var(--border-light)' }}>
+        <div className="container">
+          <FAQSection whatsappHref={WA} />
+        </div>
+      </section>
     </div>
   );
 }
